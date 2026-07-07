@@ -1,0 +1,19 @@
+{
+    "model_name": "Linear Regression (Baseline)",
+    "Best Test Loss": 0.47808249474606157,
+    "MSE": {
+        "cost": 12.840310652294686,
+        "cycle_time": 989809712.2047644,
+        "waiting_time": 1056239447.1644503
+    },
+    "Error": {
+        "cost": 3.5833379204722915,
+        "cycle_time": 31461.241428220284,
+        "waiting_time": 32499.837648278342
+    },
+    "Percentage": {
+        "cost": 13.690883271588866,
+        "cycle_time": 34.15905372672243,
+        "waiting_time": 36.294765542819405
+    }
+}

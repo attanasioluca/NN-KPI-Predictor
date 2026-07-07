@@ -1,0 +1,19 @@
+{
+    "model_name": "Complex Model - Hypertuned",
+    "Best Test Loss": 0.05738128133510288,
+    "MSE": {
+        "cost": 0.8339005230163528,
+        "cycle_time": 125822794.86769801,
+        "waiting_time": 136611794.97077885
+    },
+    "Error": {
+        "cost": 0.9131815389156489,
+        "cycle_time": 11217.076039133282,
+        "waiting_time": 11688.104849409028
+    },
+    "Percentage": {
+        "cost": 3.4889988420115876,
+        "cycle_time": 12.178944176493665,
+        "waiting_time": 13.052896747983104
+    }
+}
