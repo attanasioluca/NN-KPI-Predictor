@@ -62,7 +62,13 @@ class SimulatorEngine:
         self.start_datetime_obj = datetime.strptime(self.startDateTime, "%Y-%m-%dT%H:%M:%S")
 
         self.sequence_flows_dict = {item['elementId']: item for item in self.loader.extra_data['sequenceFlows']}
-        
+        self.flows_by_source = {}
+        for flow_id, flow in self.loader.process_data['sequence_flows'].items():
+            src = flow.get('sourceRef')
+            if src not in self.flows_by_source:
+                self.flows_by_source[src] = []
+            self.flows_by_source[src].append((flow_id, flow))   
+             
         self.timetables_dict = {}
         for t in self.loader.extra_data['timetables']:
             rules = t.get('rules', [])
@@ -100,8 +106,6 @@ class SimulatorEngine:
         #resources is a dict with name as key and a tuple made of simpy resource, cost and timetable.
         self.executed_nodes[self.num] = set() 
         self.timeUsedPerResource=timeUsedPerResource
-        for resource_name, resource_info in self.global_resources.items():
-            self.timeUsedPerResource[resource_name]=0.0
         
     def trigger_resource_release(self):
         if not hasattr(self.env, 'resource_released_event'):
@@ -221,6 +225,16 @@ class SimulatorEngine:
             return True
 
         return False
+    
+    def flush_logs(self):
+        import csv
+        filename = f'simulation_logs_chunked_{self.num}.csv'
+        with open(filename, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerows(self.rows)
+        self.rows.clear()
+
+    
     # add by LR
     def xeslog(self, node_id, status, nodeType, resourceid=None, taskCost=None, resource_cost_hour=None):
     #def xeslog(self, node_id, status, nodeType):
@@ -241,6 +255,9 @@ class SimulatorEngine:
             else:
                 self.rows.append([self.num, act_name, current_time, status, nodeType,self.name,self.instance_type,resourceid,taskCost,resource_cost_hour],)
             #rows.append([self.num, node_id, current_time, status, nodeType,self.name,self.instance_type],)
+            if len(self.rows) >= 10000:
+                self.flush_logs()
+    
 
     def printState(self, node, node_id, inSubProcess):
         node_copy = node.copy() #to avoid changing data in node due to the first if
@@ -271,7 +288,11 @@ class SimulatorEngine:
                 abss=abs(self.costThresholds[element_id])
                 #print(f"-------------------\n{element_id} has exceded his cost threshold by {abss}\n-------------------")
                 self.extraLog[f"{element_id} has exceded his COST threshold in instance {self.num} by:"]= abss
-
+        self.executed_nodes.pop(self.num, None)
+        self.terminateEndEvent.pop(self.num, None)
+        self.worklist_resources.pop(self.num, None)
+        self.subprocessTerminate.pop(self.num, None)
+        self.state_changed_event.pop(self.num, None)
         ##print(f"[SIM] Instance #{self.num} ({self.name}, type={self.instance_type}) completed at sim time {self.env.now:.1f}s", flush=True)
 
     def run_node(self, node_id, subprocess_node=None):
@@ -461,12 +482,12 @@ class SimulatorEngine:
                                     req.resource.release(req)
 
                     if not resources_allocated:
-                        if not hasattr(self.env, 'resource_released_event'):
-                            self.env.resource_released_event = self.env.event()
                         if failed_due_to_timetable:
-                            yield self.env.resource_released_event | self.env.timeout(3600)  # Polling only off shift
+                            # Wait until the next hour, plus a tiny random jitter to prevent clustering
+                            yield self.env.timeout(3600 + self.rng.uniform(1, 10))
                         else:
-                            yield self.env.resource_released_event  # Waiting fully for capacity
+                            # Staggered capacity polling: wait a short random time between 10 and 60 seconds
+                            yield self.env.timeout(self.rng.uniform(10, 60))
                     else:
                         break  # Break the while loop as resources are allocated
             #END resources
@@ -528,8 +549,7 @@ class SimulatorEngine:
         elif node['type'] == 'exclusiveGateway':
             # #print("Gateway Code Debug")
             # Get the flows from bpmn.json that start from the current XOR
-            flows_from_xor = [(flow_id, flow) for flow_id, flow in self.loader.process_data['sequence_flows'].items() if flow['sourceRef'] == node_id]
-            # Create a dictionary mapping target nodes to their probabilities
+            flows_from_xor = self.flows_by_source.get(node_id, [])            # Create a dictionary mapping target nodes to their probabilities
             node_probabilities = {}
             
             # add by LR

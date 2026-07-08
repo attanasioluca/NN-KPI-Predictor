@@ -1,7 +1,7 @@
 import simpy
 import numpy as np
 from collections import defaultdict
-from .simulator_engine_waiting_times_2 import SimulatorEngine
+from .simulator_engine_waiting_times import SimulatorEngine
 from datetime import timedelta
 
 
@@ -69,7 +69,7 @@ def tracked_instance(
         end_sim_sec=env.now, 
         start_datetime_obj=engine.start_datetime_obj
     )
-    durations.append(env.now - start_time)
+    durations.append(business_cycle_seconds)
     wait_times.append(engine.total_wait_time)
 
 def arrival_generator(

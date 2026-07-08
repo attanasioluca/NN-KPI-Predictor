@@ -33,8 +33,7 @@ class PharmacySurrogate(nn.Module):
         self.shared_entry = nn.Sequential(
             nn.Linear(input_size, 64),
             nn.BatchNorm1d(64),
-            nn.Mish(),
-            nn.Dropout(0.1),
+            nn.Mish()
         )
         self.shared_out = nn.Sequential(nn.Linear(64, 32), nn.Mish())
 
@@ -59,11 +58,11 @@ class PharmacySurrogate(nn.Module):
 # 3. MAIN TRAINING PIPELINE
 # ==========================================
 def main():
-    DATA_FILE = "data/real/sim_data_waiting_times.csv"
+    DATA_FILE = "data/synthetic/sim_data_waiting_times.csv"
     BATCH_SIZE = 64
     EPOCHS = 2500
     
-    LEARNING_RATE = 0.5e-4
+    LEARNING_RATE = 0.5e-3
     
     # Check for GPU (Apple Silicon MPS or Nvidia CUDA)
     if torch.backends.mps.is_available():
@@ -79,7 +78,7 @@ def main():
     df = pd.read_csv(DATA_FILE) 
     
     X_df = df.drop(columns=["scenario_id", "kpi_total_cost", "kpi_std_total_cost", "kpi_cycle_time", "kpi_std_cycle_time", "kpi_waiting_time", "kpi_std_waiting_time", "n_reps_used", "converged","converged_wait","converged_cost","converged_duration"])
-    y_df = df[["kpi_total_cost", "kpi_cycle_time", "kpi_waiting_time" ]]
+    y_df = df[["kpi_total_cost", "kpi_cycle_time", "kpi_waiting_time"]]
     
     input_size = X_df.shape[1]
     output_size = y_df.shape[1]

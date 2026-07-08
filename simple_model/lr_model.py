@@ -11,7 +11,7 @@ import time
 # LINEAR REGRESSION BASELINE
 # ==========================================
 def main():
-    DATA_FILE = "data/real/sim_data_waiting_times.csv"
+    DATA_FILE = "data/BIMP/sim_data_waiting_times.csv"
     
     print("Loading dataset...")
     # 1. Load the ENTIRE dataset (remove nrows)
@@ -66,7 +66,7 @@ def main():
     joblib.dump(model, 'simple_model/output/lr_model.pkl')
     
     train_time = time.time() - start_time
-    print(f"Training complete in {train_time:.4f} seconds! (Notice how fast that was?)")
+    print(f"Training complete in {train_time:.4f} seconds!")
 
     # ==========================================
     # EVALUATION & METRICS
