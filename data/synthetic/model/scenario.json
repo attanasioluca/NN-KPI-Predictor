@@ -4,8 +4,8 @@
         "startDateTime": "2026-05-20T09:20:00",
         "arrivalRateDistribution": {
             "type": "NORMAL",
-            "mean": "990",
-            "arg1": "240",
+            "mean": "9900",
+            "arg1": "2400",
             "arg2": "",
             "timeUnit": "seconds"
         },

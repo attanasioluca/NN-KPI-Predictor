@@ -29,16 +29,18 @@ def evaluate_scenario(scenario_data, full_model, process_details, num_reps=100):
 # ==========================================
 def main():
     # --- CONFIGURATION ---
-    TARGET_COST = 30.0
-    TARGET_DURATION = 10500.0
+    TARGET_COST = 45000.0
+    TARGET_DURATION = 70000.0
+    TARGET_WAITING_TIME = 100_000.0
     
-    BASE_FILE = "data/model/scenario.json"
-    MODEL_FILE = "data/model/model.json"
-    DATA_FILE = "data/sim_data_waiting_times.csv" 
+    BASE_FILE = "data/BIMP/model/scenario.json"
+    MODEL_FILE = "data/BIMP/model/model.json"
+    DATA_FILE = "data/BIMP/sim_data_waiting_times.csv" 
     
     print(f"--- TARGETS ---")
     print(f"Goal Cost:     ${TARGET_COST:.2f}")
-    print(f"Goal Duration: {TARGET_DURATION:.1f} seconds\n")
+    print(f"Goal Duration: {TARGET_DURATION:.1f} seconds")
+    print(f"Goal Waiting Time: {TARGET_WAITING_TIME:.1f} seconds\n")
 
     # STEP 0: LOAD FILES & PREP
     with open(BASE_FILE, 'r') as f: base_json = json.load(f)
