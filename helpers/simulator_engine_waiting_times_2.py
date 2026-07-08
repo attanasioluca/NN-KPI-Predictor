@@ -1,13 +1,12 @@
 from datetime import datetime, timedelta
 from datetime import time as dt_time
-from helpers import timeCalculator
-import numpy as np
+from .timeCalculator import convert_to_seconds
 import math
 
 
 class SimulatorEngine:
     def __init__(self, env, name, process_details, num, loader, global_resources, logging_opt, totalCost,
-     timeUsedPerResource, extraLog, rows, start_delay=0, instance_type="default"):
+     timeUsedPerResource, extraLog, rows, rng, start_delay=0, instance_type="default"):
         self.env = env
         self.name = name
         self.process_details = process_details
@@ -25,7 +24,7 @@ class SimulatorEngine:
         self.loader = loader
         self.extraLog = extraLog
         self.rows = rows
-
+        self.rng = rng
         self.timetables = self.loader.extra_data['timetables']
         self.catchEvents = self.loader.extra_data['catchEvents']
 
@@ -46,7 +45,7 @@ class SimulatorEngine:
 
         self.totalCost=totalCost
         self.totalCost[self.num]=0.0
-
+        self.total_wait_time = 0.0  
         self.worklist_resources={} #worklist resources are summed here
         self.worklist_resources[self.num]={}
 
@@ -63,7 +62,13 @@ class SimulatorEngine:
         self.start_datetime_obj = datetime.strptime(self.startDateTime, "%Y-%m-%dT%H:%M:%S")
 
         self.sequence_flows_dict = {item['elementId']: item for item in self.loader.extra_data['sequenceFlows']}
-        
+        self.flows_by_source = {}
+        for flow_id, flow in self.loader.process_data['sequence_flows'].items():
+            src = flow.get('sourceRef')
+            if src not in self.flows_by_source:
+                self.flows_by_source[src] = []
+            self.flows_by_source[src].append((flow_id, flow))   
+             
         self.timetables_dict = {}
         for t in self.loader.extra_data['timetables']:
             rules = t.get('rules', [])
@@ -101,8 +106,6 @@ class SimulatorEngine:
         #resources is a dict with name as key and a tuple made of simpy resource, cost and timetable.
         self.executed_nodes[self.num] = set() 
         self.timeUsedPerResource=timeUsedPerResource
-        for resource_name, resource_info in self.global_resources.items():
-            self.timeUsedPerResource[resource_name]=0.0
         
     def trigger_resource_release(self):
         if not hasattr(self.env, 'resource_released_event'):
@@ -151,7 +154,7 @@ class SimulatorEngine:
         elif instanceCambio==True:
             logg="instanceTypeChange"
 
-        setup_time = timeCalculator.convert_to_seconds(resource_tuple[4])
+        setup_time = convert_to_seconds(resource_tuple[4])
         # Update currentUsages
         for i, res_tuple in enumerate(self.global_resources[resource_name]):
 
@@ -186,8 +189,6 @@ class SimulatorEngine:
                         res_tuple[7]  
                     )                                                    
                 break
-
-
     
     def is_in_timetable(self, timetable_name): #this func is used when gathering resources for a task, to check if a res is in shift
         current_time = self.start_datetime_obj + timedelta(seconds=self.env.now)
@@ -224,6 +225,16 @@ class SimulatorEngine:
             return True
 
         return False
+    
+    def flush_logs(self):
+        import csv
+        filename = f'simulation_logs_chunked_{self.num}.csv'
+        with open(filename, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerows(self.rows)
+        self.rows.clear()
+
+    
     # add by LR
     def xeslog(self, node_id, status, nodeType, resourceid=None, taskCost=None, resource_cost_hour=None):
     #def xeslog(self, node_id, status, nodeType):
@@ -244,17 +255,20 @@ class SimulatorEngine:
             else:
                 self.rows.append([self.num, act_name, current_time, status, nodeType,self.name,self.instance_type,resourceid,taskCost,resource_cost_hour],)
             #rows.append([self.num, node_id, current_time, status, nodeType,self.name,self.instance_type],)
+            if len(self.rows) >= 10000:
+                self.flush_logs()
+    
 
     def printState(self, node, node_id, inSubProcess):
         node_copy = node.copy() #to avoid changing data in node due to the first if
         if node_copy['subtype'] is not None:
             node_copy['type']=node_copy['type']+"/"+node_copy['subtype']
         #if node_copy['type'] == 'subProcess':
-            #print(f"#{self.num}|{self.name}: {node_id} (subprocess {node_copy['name']} just started), instance_type:{self.instance_type}. time: {self.env.now}.")
+            ##print(f"#{self.num}|{self.name}: {node_id} (subprocess {node_copy['name']} just started), instance_type:{self.instance_type}. time: {self.env.now}.")
         #elif inSubProcess == True:
-            #print(f"#{self.num}|{self.name} (inside subprocess): {node_id} ({node_copy['name']}), type: {node_copy['type']}, instance_type:{self.instance_type}. time: {self.env.now}.")
+            ##print(f"#{self.num}|{self.name} (inside subprocess): {node_id} ({node_copy['name']}), type: {node_copy['type']}, instance_type:{self.instance_type}. time: {self.env.now}.")
         #else:
-            #print(f"#{self.num}|{self.name}: {node_id} ({node_copy['name']}), type: {node_copy['type']}, instance_type:{self.instance_type}. time: {self.env.now}.")
+            ##print(f"#{self.num}|{self.name}: {node_id} ({node_copy['name']}), type: {node_copy['type']}, instance_type:{self.instance_type}. time: {self.env.now}.")
 
     def run(self):
         yield self.env.timeout(self.start_delay) #delay start because of arrival rate.
@@ -274,9 +288,12 @@ class SimulatorEngine:
                 abss=abs(self.costThresholds[element_id])
                 #print(f"-------------------\n{element_id} has exceded his cost threshold by {abss}\n-------------------")
                 self.extraLog[f"{element_id} has exceded his COST threshold in instance {self.num} by:"]= abss
-
-        #print(f"[SIM] Instance #{self.num} ({self.name}, type={self.instance_type}) completed at sim time {self.env.now:.1f}s", flush=True)
-
+        self.executed_nodes.pop(self.num, None)
+        self.terminateEndEvent.pop(self.num, None)
+        self.worklist_resources.pop(self.num, None)
+        self.subprocessTerminate.pop(self.num, None)
+        self.state_changed_event.pop(self.num, None)
+        ##print(f"[SIM] Instance #{self.num} ({self.name}, type={self.instance_type}) completed at sim time {self.env.now:.1f}s", flush=True)
 
     def run_node(self, node_id, subprocess_node=None):
 
@@ -298,7 +315,7 @@ class SimulatorEngine:
                 fullType = node['type'] + '/' + node['subtype'] if node['subtype'] is not None else node['type']
                 
                 waitTime = self.catchEvents[node_id]
-                waitTimeSeconds=timeCalculator.convert_to_seconds(waitTime)
+                waitTimeSeconds= convert_to_seconds(waitTime)
                 self.xeslog(node_id,"start",fullType)
                 yield self.env.timeout(waitTimeSeconds)
             next_node_id = node['next'][0]
@@ -333,15 +350,16 @@ class SimulatorEngine:
                 while not all(prev_node in self.executed_nodes[self.num] for prev_node in node['previous']):
                     yield self.state_changed_event[self.num]
             self.xeslog(node_id,"assign",node['type'])
-            taskTime=timeCalculator.convert_to_seconds(self.task_durations[node_id]) # task duration is used here, it is passed before to a converter that transforms the type/mean/arg1/arg2 to a value in seconds, this value the task duration is always different in each instance
+            taskTime=convert_to_seconds(self.task_durations[node_id]) # task duration is used here, it is passed before to a converter that transforms the type/mean/arg1/arg2 to a value in seconds, this value the task duration is always different in each instance
             if self.durationThresholds[node_id] is not None:
                 self.durationThresholds[node_id] -= taskTime
                 ##print(self.durationThresholds)
 
 
             #RESOURCES zone
-
             # add by LR
+
+            wait_start_time = self.env.now
             resourceid_for_task = list()
             resource_cost_hour = list()
 
@@ -464,18 +482,19 @@ class SimulatorEngine:
                                     req.resource.release(req)
 
                     if not resources_allocated:
-                        if not hasattr(self.env, 'resource_released_event'):
-                            self.env.resource_released_event = self.env.event()
                         if failed_due_to_timetable:
-                            yield self.env.resource_released_event | self.env.timeout(60)  # Polling only off shift
+                            # Wait until the next hour, plus a tiny random jitter to prevent clustering
+                            yield self.env.timeout(3600 + self.rng.uniform(1, 10))
                         else:
-                            yield self.env.resource_released_event  # Waiting fully for capacity
+                            # Staggered capacity polling: wait a short random time between 10 and 60 seconds
+                            yield self.env.timeout(self.rng.uniform(10, 60))
                     else:
                         break  # Break the while loop as resources are allocated
             #END resources
 
             # add by LR
             #self.xeslog(node_id,"assign",node['type'],resourceid_for_task)
+            self.total_wait_time += (self.env.now - wait_start_time)
             self.xeslog(node_id,"start",node['type'])
 
             if not math.isfinite(taskTime):
@@ -530,8 +549,7 @@ class SimulatorEngine:
         elif node['type'] == 'exclusiveGateway':
             # #print("Gateway Code Debug")
             # Get the flows from bpmn.json that start from the current XOR
-            flows_from_xor = [(flow_id, flow) for flow_id, flow in self.loader.process_data['sequence_flows'].items() if flow['sourceRef'] == node_id]
-            # Create a dictionary mapping target nodes to their probabilities
+            flows_from_xor = self.flows_by_source.get(node_id, [])            # Create a dictionary mapping target nodes to their probabilities
             node_probabilities = {}
             
             # add by LR
@@ -603,7 +621,7 @@ class SimulatorEngine:
             elif forced_flow_target is not None:
                 next_node_id = forced_flow_target
             else:
-                next_node_id = np.random.choice(list(node_probabilities.keys()), p=list(node_probabilities.values()))
+                next_node_id = self.rng.choice(list(node_probabilities.keys()), p=list(node_probabilities.values()))
             self.xeslog(node_id,"complete",node['type'])
             self.printState(node,node_id,printFlag)
             yield from self.run_node(next_node_id, subprocess_node)
@@ -651,7 +669,8 @@ class SimulatorEngine:
                     # If the type didn't match, use probability 
                     if not type_matched: 
                         probability = float(diagbp_flow['executionProbability'])
-                        if np.random.rand() <= probability: 
+                        # Replace np.random with self.rng
+                        if self.rng.random() <= probability: 
                             paths_to_take.append(flow['targetRef'])
             events = []
             for next_node_id in paths_to_take:
@@ -729,7 +748,7 @@ class SimulatorEngine:
                 next_node_id = node['next'][0]
                 self.mark_node_executed(node_id)
                 waitTime = self.catchEvents[node_id]
-                waitTimeSeconds=timeCalculator.convert_to_seconds(waitTime)
+                waitTimeSeconds=convert_to_seconds(waitTime)
                 self.xeslog(node_id,"start",fullType)
                 yield self.env.timeout(waitTimeSeconds)
                 self.xeslog(node_id,"complete",fullType)
@@ -752,7 +771,7 @@ class SimulatorEngine:
                     nextNode = self.process_details['node_details'][subprocess_node]['subprocess_details'][next_node_id]
                     printFlag=True
                 if not nextNode['subtype'] == 'messageEventDefinition': #after event based gateway there is for sure intermediate catch events, if not message i save smallest timer
-                    timer=timeCalculator.convert_to_seconds(self.catchEvents[next_node_id])
+                    timer=convert_to_seconds(self.catchEvents[next_node_id])
                     if smallestTimer is None or timer < smallestTimer:
                         smallestTimer = timer
                         nextNodeToVisit=nextNode['next'][0] #sets this as next node to visit, can only be changed by a msg received later

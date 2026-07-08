@@ -1,7 +1,7 @@
 import simpy
 import numpy as np
 from collections import defaultdict
-from .simulator_engine_waiting_times import SimulatorEngine
+from .simulator_engine_waiting_times_2 import SimulatorEngine
 from datetime import timedelta
 
 

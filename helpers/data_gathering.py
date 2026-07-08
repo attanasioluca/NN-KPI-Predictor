@@ -83,11 +83,11 @@ def precision_reached(values, rel_target, abs_tol):
 # 3. SIMULATION LOGIC (WORKER NODE)
 # ==========================================
 
-WORKERS_NUM = 6
-MIN_REPS = 30
-MAX_REPS = 100
+WORKERS_NUM = 8
+MIN_REPS = 5
+MAX_REPS = 15
 TARGET_REL_ERROR = 0.02
-SIMULATION_TIME = 86400
+SIMULATION_TIME = 86400 * 90
 ABS_TOL_WAIT_SECONDS = 120
 ABS_TOL_DURATION_SECONDS = 120
 ABS_TOL_COST = 0.5
@@ -195,10 +195,10 @@ def worker_task(scenario_id):
 def main():
     BASE_FILE = "data/BIMP/model/scenario.json"
     MODEL_FILE = "data/BIMP/model/model.json"
-    OUTPUT_FILE = "data/BIMP/1_2_day_new_sim_data_waiting_times.csv"
-    START_ID = 12
+    OUTPUT_FILE = "data/BIMP/mac_90_day_new_sim_data_waiting_times_2.csv"
+    START_ID = 10_000
     NUM_SCENARIOS = 10_000
-    BATCH_SIZE = 1 
+    BATCH_SIZE = 100
     completed_ids = set()
     header_written = False
     if os.path.exists(OUTPUT_FILE):
