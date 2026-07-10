@@ -113,21 +113,29 @@ def main():
     best_global_loss = float('inf')
     best_x_optimal = None
 
+    # optimizer.py (Optimizer Loop)
+
     for epoch in range(10000):
         optimizer.zero_grad()
         predictions = model(x_optim)
         
-        # INVERSE TRANSFORM: Convert shape [500, 3] back to real KPIs
-        raw_preds = (predictions * y_scale_tensor) + y_mean_tensor
+        # 1. INVERSE TRANSFORM THE STANDARD SCALER
+        raw_log_preds = (predictions * y_scale_tensor) + y_mean_tensor
         
-        # The model only predicts the 3 averages
+        # 2. REVERSE THE LOG TRANSFORMATION (using PyTorch's expm1)
+        raw_preds = torch.expm1(raw_log_preds)
+        
+        # The model now represents real-world KPIs
         pred_avg_cost = raw_preds[:, 0]
         pred_dur      = raw_preds[:, 1]
         pred_wait     = raw_preds[:, 2]
         
+        # Calculate loss against targets normally
         loss_avg_cost = ((pred_avg_cost - TARGET_COST) / TARGET_COST) ** 2
         loss_avg_dur  = ((pred_dur - TARGET_DURATION) / TARGET_DURATION) ** 2
         loss_avg_wait = ((pred_wait - TARGET_WAIT_TIME) / TARGET_WAIT_TIME) ** 2
+        
+        # ... (rest of the loop remains exactly the same)
         
         kpi_loss = loss_avg_cost + loss_avg_dur + loss_avg_wait
         
@@ -189,11 +197,17 @@ def main():
                         el["durationDistribution"]["standardDeviation"] = str(round(val * (orig_std / orig_mean), 2))
         discretized_x_raw[i] = val
 
-    discretized_tensor = torch.tensor(x_scaler.transform(discretized_x_raw.reshape(1, -1)), dtype=torch.float32, device=device)
-    with torch.no_grad(): final_pred_scaled = model(discretized_tensor).cpu().numpy()
-    final_pred = y_scaler.inverse_transform(final_pred_scaled)[0]
+    # optimizer.py (Evaluation Step)
 
-    # COMPUTE NN PREDICTIONS CORRECTLY (Only 3 targets)
+    discretized_tensor = torch.tensor(x_scaler.transform(discretized_x_raw.reshape(1, -1)), dtype=torch.float32, device=device)
+    with torch.no_grad(): 
+        final_pred_scaled = model(discretized_tensor).cpu().numpy()
+        
+    # Reverse Scaler AND Log
+    final_pred_log = y_scaler.inverse_transform(final_pred_scaled)[0]
+    final_pred = np.expm1(final_pred_log)
+
+    # COMPUTE NN PREDICTIONS CORRECTLY
     nn_pred_avg_cost = final_pred[0]
     nn_pred_dur_mean = final_pred[1]
     nn_pred_wait_mean = final_pred[2]

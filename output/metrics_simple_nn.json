@@ -1,19 +1,20 @@
 {
+    "dataset": "data/synthetic/90_day_data.csv",
     "model_name": "Simple NN",
-    "Best Test Loss": 0.14967614991207845,
-    "MSE": {
-        "cost": 41250.270422007234,
-        "cycle_time": 232563.51717098482,
-        "waiting_time": 279111.84900872473
+    "Best Test Loss": 0.04369957186281681,
+    "MedAE": {
+        "cost": 2207.9587117850024,
+        "cycle_time": 347.7789260817408,
+        "waiting_time": 431.13056175480233
     },
-    "Error": {
-        "cost": 203.1016258477692,
-        "cycle_time": 482.24839778996136,
-        "waiting_time": 528.3103718542015
+    "MAE": {
+        "cost": 3086.988699152957,
+        "cycle_time": 5963.114430786219,
+        "waiting_time": 7683.392463322725
     },
-    "Percentage": {
-        "cost": 27.614042651982484,
-        "cycle_time": 5.419727396771882,
-        "waiting_time": 11.675064216515297
+    "MedAE_Percentage": {
+        "cost": 5.093018123204328,
+        "cycle_time": 1.528143059473026,
+        "waiting_time": 0.725979290212372
     }
 }

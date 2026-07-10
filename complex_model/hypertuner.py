@@ -50,11 +50,15 @@ df = pd.read_csv(DATA_FILE)
 X_df = df.drop(columns=["scenario_id", "kpi_total_cost", "kpi_std_total_cost", "kpi_cycle_time", "kpi_std_cycle_time", "kpi_waiting_time", "kpi_std_waiting_time", "n_reps_used", "converged","converged_wait","converged_cost","converged_duration"])
 y_df = df[["kpi_total_cost", "kpi_cycle_time", "kpi_waiting_time"]]
 
+# APPLY LOG TRANSFORMATION TO TARGETS
+y_log = np.log1p(y_df.values)
+
 input_size = X_df.shape[1]
-X_train, X_test, y_train, y_test = train_test_split(X_df.values, y_df.values, test_size=0.20, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_df.values, y_log, test_size=0.20, random_state=42)
 
 x_scaler = StandardScaler()
 y_scaler = StandardScaler()
+
 X_train_scaled = x_scaler.fit_transform(X_train)
 X_test_scaled = x_scaler.transform(X_test)
 y_train_scaled = y_scaler.fit_transform(y_train)

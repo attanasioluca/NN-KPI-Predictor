@@ -9,33 +9,39 @@ import pandas as pd
 import sys
 import os
 
-# 1. Get the absolute path of the parent directory (NN-KPI-Predictor)
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-# 2. Add it to the system path if it isn't already there
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-from simple_model.model import PharmacySurrogate 
+from simple_model.model import (
+    PharmacySurrogate,
+    NON_FEATURE_COLS,
+    CONVERGENCE_FLAGS,
+    inverse_transform_targets,
+    inverse_transform_targets_torch,
+)
 from helpers.simulator import ScenarioSimulator
 
-def evaluate_scenario(scenario_data, full_model, process_details, num_reps=100):
+def evaluate_scenario(scenario_data, full_model, process_details, num_reps=50):
     simulator = ScenarioSimulator(scenario_data, full_model, process_details, seed=42)
-    result = simulator.run_scenario(replications=num_reps)
-    return result.get("total_cost", 0.0), result.get("avg_duration", 0.0), result.get("completed", 0)
+    result = simulator.run_scenario(replications=num_reps, until = 86400 * 90)
+    
+    # Updated keys to match simulator.py
+    return result.get("total_cost", 0.0), result.get("avg_cycle_time", 0.0), result.get("avg_wait_time", 0.0)
 
 # ==========================================
 # MAIN PIPELINE
 # ==========================================
 def main():
     # --- CONFIGURATION ---
-    TARGET_COST = 45000.0
-    TARGET_DURATION = 70000.0
-    TARGET_WAITING_TIME = 100_000.0
+    TARGET_COST = 500
+    TARGET_DURATION = 10000
+    TARGET_WAITING_TIME = 30
     
-    BASE_FILE = "data/BIMP/model/scenario.json"
-    MODEL_FILE = "data/BIMP/model/model.json"
-    DATA_FILE = "data/BIMP/sim_data_waiting_times.csv" 
+    BASE_FILE = "data/synthetic/model/scenario.json"
+    MODEL_FILE = "data/synthetic/model/model.json"
+    DATA_FILE = "data/synthetic/sim_data.csv" 
     
     print(f"--- TARGETS ---")
     print(f"Goal Cost:     ${TARGET_COST:.2f}")
@@ -61,7 +67,7 @@ def main():
 
     # STEP 1: EVALUATE BASELINE SCENARIO
     print("[1/4] Running Ground-Truth SimPy Evaluation on BASELINE...")
-    base_true_cost, base_true_duration, base_true_completed = evaluate_scenario(
+    base_true_cost, base_true_cycle_time, base_true_wait_time = evaluate_scenario(
         baseline_scenario, full_model, process_details
     )
 
@@ -78,9 +84,16 @@ def main():
     for param in model.parameters(): param.requires_grad = False
 
     df = pd.read_csv(DATA_FILE)
-    
-    # Feature Alignment
-    X_df = df.drop(columns=["scenario_id", "kpi_total_cost", "kpi_std_total_cost", "kpi_cycle_time", "kpi_std_cycle_time", "kpi_waiting_time", "kpi_std_waiting_time"])
+
+    # Only keep fully-converged rows, matching training (unconverged KPI
+    # estimates shouldn't be used to set the search-space bounds either).
+    df = df[df[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
+
+    # Feature Alignment -- must drop EXACTLY the columns model.py dropped
+    # (NON_FEATURE_COLS), or x_scaler.transform() below will either raise a
+    # shape-mismatch error or, worse, silently misalign which raw column
+    # maps to which scaled feature.
+    X_df = df.drop(columns=NON_FEATURE_COLS)
     X_cols = X_df.columns.tolist()
     
     raw_min_array = X_df.min().values.reshape(1, -1)
@@ -121,25 +134,28 @@ def main():
         # Predictions shape is now [500, 3]
         predictions = model(x_optim) 
         
-        # INVERSE TRANSFORM
-        raw_preds = (predictions * y_scale_tensor) + y_mean_tensor
+        # INVERSE TRANSFORM (differentiable: unscale, then expm1 the two
+        # log-transformed columns -- must match model.py's LOG_COL_IDX or
+        # cycle_time/waiting_time predictions here are silently wrong).
+        raw_preds = inverse_transform_targets_torch(predictions, y_mean_tensor, y_scale_tensor)
         
-        # Extract the 3 raw metrics
-        pred_total_cost = raw_preds[:, 0]
-        pred_completed  = raw_preds[:, 1]
-        pred_avg_dur    = raw_preds[:, 2]
+        # The model has exactly 3 outputs, in this order: total_cost,
+        # cycle_time, waiting_time (see PharmacySurrogate.forward). There is
+        # no "completed count" branch -- an earlier version of this script
+        # divided cost by column 1 assuming it was a completed-instance
+        # count, but column 1 is cycle_time, so that division was nonsense
+        # (and TARGET_COST's scale matches total_cost directly anyway).
+        pred_total_cost  = raw_preds[:, 0]
+        pred_cycle_time  = raw_preds[:, 1]
+        pred_waiting_time = raw_preds[:, 2]
         
-        # ==========================================
-        # RECONSTRUCT THE TARGET METRIC OUTSIDE THE NN
-        # Add a tiny epsilon (1e-6) to prevent division by zero crashes 
-        # if the NN accidentally predicts 0 completed instances.
-        # ==========================================
-        pred_avg_cost = pred_total_cost / (pred_completed + 1e-6)
-        
-        # KPI LOSS
-        loss_avg_cost = ((pred_avg_cost - TARGET_COST) / TARGET_COST) ** 2
-        loss_avg_dur  = ((pred_avg_dur - TARGET_DURATION) / TARGET_DURATION) ** 2
-        kpi_loss = loss_avg_cost + loss_avg_dur
+        # KPI LOSS -- now uses all three targets the model actually predicts,
+        # including waiting time, which was defined at the top (TARGET_WAITING_TIME)
+        # but never previously used anywhere in the loss.
+        loss_cost    = ((pred_total_cost - TARGET_COST) / TARGET_COST) ** 2
+        loss_cycle   = ((pred_cycle_time - TARGET_DURATION) / TARGET_DURATION) ** 2
+        loss_waiting = ((pred_waiting_time - TARGET_WAITING_TIME) / TARGET_WAITING_TIME) ** 2
+        kpi_loss = loss_cost + loss_cycle + loss_waiting
         
         # GUARDRAILS
         x_raw_differentiable = (x_optim * x_scale_tensor) + x_mean_tensor
@@ -164,9 +180,9 @@ def main():
             x_optim.clamp_(min_scaled_bounds, max_scaled_bounds)
 
     # --- FIND THE BEST RESULT ---
-    # Out of the 500 paths, find the single index that reached the lowest loss
-    best_idx = torch.argmin(loss).item()
-    
+    # best_x_optimal was already tracked as the single best point seen across
+    # ALL epochs and ALL 500 starts (see best_global_loss update in the loop
+    # above) -- no need to re-derive it from the final epoch's loss tensor.
     optimized_x_raw = x_scaler.inverse_transform(best_x_optimal.cpu().numpy().reshape(1, -1))[0]
 
     # STEP 3: INJECT OPTIMIZED PARAMETERS WITH PHYSICAL CONSTRAINTS
@@ -220,7 +236,7 @@ def main():
     with torch.no_grad():
         final_pred_scaled = model(discretized_tensor).cpu().numpy()
 
-    final_pred = y_scaler.inverse_transform(final_pred_scaled)[0]
+    final_pred = inverse_transform_targets(final_pred_scaled, y_scaler)[0]
 
     # STEP 4: EVALUATE OPTIMIZED SCENARIO
     print("[4/4] Running Ground-Truth SimPy Evaluation on OPTIMIZED...")
@@ -228,27 +244,28 @@ def main():
         opt_scenario, full_model, process_details
     )
 
-    # RESULTS REPORTING - STRIPPED OF ALL STD DEVIATION
+
     print("\n=====================================================================")
     print("                    VALIDATION & ROI REPORT")
     print("=====================================================================")
-    print(f"                | COST (Average)       | DURATION (Average)")
+    print(f"                | COST (Total)         | CYCLE TIME (Avg)     | WAITING TIME (Avg)")
     print("---------------------------------------------------------------------")
-    print(f"TARGET GOAL     | ${TARGET_COST:<19.2f} | {TARGET_DURATION:.1f}s")
-    print(f"BASELINE (True) | ${(base_true_cost/base_true_completed):<19.2f} | {base_true_duration:.1f}s")
-    print(f"NN PREDICTED    | ${final_pred[0]/final_pred[1]:<19.2f} | {(final_pred[2]):.1f}s")
-    print(f"OPTIMIZED (True)| ${(opt_true_cost/opt_true_completed):<19.2f} | {opt_true_duration:.1f}s")
+    print(f"TARGET GOAL     | ${TARGET_COST:<19.2f} | {TARGET_DURATION:<19.1f}s | {TARGET_WAITING_TIME:.1f}s")
+    print(f"BASELINE (True) | ${base_true_cost:<19.2f} | {base_true_cycle_time:<19.1f}s | {base_true_wait_time:.1f}s")
+    print(f"NN PREDICTED    | ${final_pred[0]:<19.2f} | {final_pred[1]:<19.1f}s | {final_pred[2]:.1f}s")
+    print(f"OPTIMIZED (True)| ${opt_true_cost:<19.2f} | {opt_true_duration:<19.1f}s | {opt_true_completed:.1f}s")
     print("---------------------------------------------------------------------")
-    
-    start_cost_diff = round(base_true_cost/base_true_completed, 2) - TARGET_COST
-    start_dur_diff = base_true_duration - TARGET_DURATION
-    end_cost_diff = round(opt_true_cost/opt_true_completed, 2) - TARGET_COST
-    end_dur_diff = opt_true_duration - TARGET_DURATION
-    
-    print(f"STARTING DELTA      | {('+' if start_cost_diff > 0 else '')}${start_cost_diff:<19.2f} | {('+' if start_dur_diff > 0 else '')}{start_dur_diff:.1f}s")
-    print("=====================================================================")
 
-    print(f"FINISHING DELTA      | {('+' if end_cost_diff > 0 else '')}${end_cost_diff:<19.2f} | {('+' if end_dur_diff > 0 else '')}{end_dur_diff:.1f}s")
+    start_cost_diff = round(base_true_cost, 2) - TARGET_COST
+    start_cycle_diff = base_true_cycle_time - TARGET_DURATION
+    start_wait_diff = base_true_wait_time - TARGET_WAITING_TIME
+    end_cost_diff = round(opt_true_cost, 2) - TARGET_COST
+    end_cycle_diff = opt_true_duration - TARGET_DURATION
+    end_wait_diff = opt_true_completed - TARGET_WAITING_TIME
+
+    print(f"STARTING DELTA      | {('+' if start_cost_diff > 0 else '')}${start_cost_diff:<19.2f} | {('+' if start_cycle_diff > 0 else '')}{start_cycle_diff:.1f}s | {('+' if start_wait_diff > 0 else '')}{start_wait_diff:.1f}s")
+    print("=====================================================================")
+    print(f"FINISHING DELTA      | {('+' if end_cost_diff > 0 else '')}${end_cost_diff:<19.2f} | {('+' if end_cycle_diff > 0 else '')}{end_cycle_diff:.1f}s | {('+' if end_wait_diff > 0 else '')}{end_wait_diff:.1f}s")
     print("=====================================================================")
 
 if __name__ == "__main__":

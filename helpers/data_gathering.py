@@ -85,7 +85,7 @@ def precision_reached(values, rel_target, abs_tol):
 
 WORKERS_NUM = 22
 MIN_REPS = 5
-MAX_REPS = 15
+MAX_REPS = 75
 TARGET_REL_ERROR = 0.02
 SIMULATION_TIME = 86400 * 90
 ABS_TOL_WAIT_SECONDS = 120
@@ -198,7 +198,7 @@ def main():
     OUTPUT_FILE = "data/synthetic/90_day_data.csv"
     START_ID = 0
     NUM_SCENARIOS = 10_000
-    BATCH_SIZE = 1
+    BATCH_SIZE = 100
     completed_ids = set()
     header_written = False
     if os.path.exists(OUTPUT_FILE):

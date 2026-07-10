@@ -78,13 +78,13 @@ class PharmacySurrogate(nn.Module):
 # 3. MAIN TRAINING PIPELINE
 # ==========================================
 def main():
-    DATA_FILE = "data/real/sim_data_waiting_times.csv" 
+    DATA_FILE = "data/BIMP/sim_data_waiting_times.csv" 
     EPOCHS = 10000
 
     BATCH_SIZE = 256
-    LEARNING_RATE = 0.004970082133946468
+    LEARNING_RATE = 0.0004970082133946468
     WEIGHT_DECAY = 2.217485788658681e-06
-    DROPOUT_RATE = 0.21629303761709978
+    DROPOUT_RATE = 0.41629303761709978
     
     device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
     # --- A. Data Loading & Preprocessing ---
@@ -92,19 +92,24 @@ def main():
     # 1. Load the ENTIRE dataset (remove nrows)
     df = pd.read_csv(DATA_FILE)
 
+   # hypertuned_model.py (Data Loading Phase)
+    # ...
     X_df = df.drop(columns=["scenario_id", "kpi_total_cost", "kpi_std_total_cost", "kpi_cycle_time", "kpi_std_cycle_time", "kpi_waiting_time", "kpi_std_waiting_time", "n_reps_used", "converged","converged_wait","converged_cost","converged_duration"])
     y_df = df[["kpi_total_cost", "kpi_cycle_time", "kpi_waiting_time" ]]
+    
+    # APPLY LOG TRANSFORMATION TO TARGETS
+    y_log = np.log1p(y_df.values)
     
     input_size = X_df.shape[1]
     output_size = y_df.shape[1]
     print(f"Features: {input_size} | Targets: {output_size}")
 
-    # 2. Split the FULL dataset once to create a universal, locked test set
+    # 2. Split using y_log instead of y_df.values
     X_train_full, X_test, y_train_full, y_test = train_test_split(
-        X_df.values, y_df.values, test_size=0.20, random_state=42
+        X_df.values, y_log, test_size=0.20, random_state=42
     )
 
-    TRAIN_SAMPLES = 5000 
+    TRAIN_SAMPLES = 10000 
     
     # 4. Slice the training arrays down to the desired size
     X_train = X_train_full[:TRAIN_SAMPLES]
@@ -208,15 +213,23 @@ def main():
             all_preds.append(preds.cpu().numpy())
             all_targets.append(batch_y.numpy())
             
+    # hypertuned_model.py (Final Evaluation Phase)
     predictions_scaled = np.vstack(all_preds)
     y_test_scaled_eval = np.vstack(all_targets)
     
-    test_mse_scaled = np.mean((predictions_scaled - y_test_scaled_eval) ** 2, axis=0)
-    test_rmse_scaled = np.sqrt(test_mse_scaled)
+    # 1. Reverse the StandardScaler
+    predictions_log = y_scaler.inverse_transform(predictions_scaled)
+    y_test_log = y_scaler.inverse_transform(y_test_scaled_eval)
     
-    error_kpi = test_rmse_scaled * y_scaler.scale_                  
-    percentage_kpi = (error_kpi / np.abs(y_scaler.mean_)) * 100     
-    mse_kpi = error_kpi ** 2                                        
+    # 2. Reverse the Log Transformation (expm1)
+    predictions_true = np.expm1(predictions_log)
+    y_test_true = np.expm1(y_test_log)
+    
+    # 3. Calculate True Errors
+    error_kpi = np.sqrt(np.mean((predictions_true - y_test_true) ** 2, axis=0))
+    mean_true = np.mean(y_test_true, axis=0)
+    percentage_kpi = (error_kpi / np.abs(mean_true)) * 100     
+    mse_kpi = error_kpi ** 2                                       
     
     metrics = {
         "model_name": "Complex Model - Hypertuned",

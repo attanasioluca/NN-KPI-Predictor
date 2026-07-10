@@ -33,7 +33,8 @@ class PharmacySurrogate(nn.Module):
         self.shared_entry = nn.Sequential(
             nn.Linear(input_size, 64),
             nn.BatchNorm1d(64),
-            nn.Mish()
+            nn.Mish(),
+            nn.Dropout(0.2)
         )
         self.shared_out = nn.Sequential(nn.Linear(64, 32), nn.Mish())
 
@@ -67,24 +68,52 @@ TARGET_COLS = ["kpi_total_cost", "kpi_cycle_time", "kpi_waiting_time"]
 LOG_TRANSFORM_COLS = ["kpi_cycle_time", "kpi_waiting_time"]
 LOG_COL_IDX = [TARGET_COLS.index(c) for c in LOG_TRANSFORM_COLS]
 
+# Columns present in the raw CSV that are NOT model input features (either
+# targets, target-noise stats, or bookkeeping/convergence flags). Any script
+# that builds a feature vector for this model -- training or inference --
+# must drop exactly this list, or x_scaler.transform() will see the wrong
+# number of columns and either crash or silently misalign features.
+NON_FEATURE_COLS = [
+    "scenario_id",
+    "kpi_total_cost", "kpi_std_total_cost",
+    "kpi_cycle_time", "kpi_std_cycle_time",
+    "kpi_waiting_time", "kpi_std_waiting_time",
+    "n_reps_used",
+    "converged", "converged_wait", "converged_cost", "converged_duration",
+]
+CONVERGENCE_FLAGS = ["converged", "converged_wait", "converged_cost", "converged_duration"]
+
 
 def inverse_transform_targets(y_scaled, y_scaler):
     """Undo StandardScaler, then undo log1p on the columns that were logged.
-    Returns predictions/targets in real-world units (dollars, seconds)."""
+    Returns predictions/targets in real-world units (dollars, seconds).
+    Numpy-only -- use inverse_transform_targets_torch inside a gradient-based
+    optimization loop instead."""
     y_unscaled = y_scaler.inverse_transform(y_scaled)
     y_real = y_unscaled.copy()
     y_real[:, LOG_COL_IDX] = np.expm1(y_real[:, LOG_COL_IDX])
     return y_real
 
 
+def inverse_transform_targets_torch(y_scaled, y_mean_tensor, y_scale_tensor):
+    """Differentiable equivalent of inverse_transform_targets, for use inside
+    a torch optimization loop (e.g. gradient-based scenario search) where
+    predictions must stay attached to the autograd graph."""
+    y_unscaled = (y_scaled * y_scale_tensor) + y_mean_tensor
+    cols = []
+    for i in range(y_unscaled.shape[1]):
+        col = y_unscaled[:, i]
+        cols.append(torch.expm1(col) if i in LOG_COL_IDX else col)
+    return torch.stack(cols, dim=1)
+
+
 # ==========================================
 # 3. MAIN TRAINING PIPELINE
 # ==========================================
 def main():
-    DATA_FILE = "data/synthetic/sim_data_waiting_times.csv"
+    DATA_FILE = "data/synthetic/90_day_data.csv"
     BATCH_SIZE = 64
     EPOCHS = 2500
-    
     LEARNING_RATE = 0.5e-3
     
     # Check for GPU (Apple Silicon MPS or Nvidia CUDA)
@@ -102,12 +131,11 @@ def main():
 
     # 1b. Drop simulation runs that didn't converge -- their KPI estimates
     # aren't reliable ground truth, so they shouldn't be training targets.
-    conv_flags = ["converged", "converged_wait", "converged_cost", "converged_duration"]
     n_before = len(df)
-    df = df[df[conv_flags].all(axis=1)].reset_index(drop=True)
+    df = df[df[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
     print(f"Dropped {n_before - len(df)} unconverged rows ({len(df)} remain).")
 
-    X_df = df.drop(columns=["scenario_id", "kpi_total_cost", "kpi_std_total_cost", "kpi_cycle_time", "kpi_std_cycle_time", "kpi_waiting_time", "kpi_std_waiting_time", "n_reps_used", "converged","converged_wait","converged_cost","converged_duration"])
+    X_df = df.drop(columns=NON_FEATURE_COLS)
     y_df = df[TARGET_COLS]
 
     input_size = X_df.shape[1]
@@ -198,7 +226,6 @@ def main():
         model.eval()
         test_loss = 0.0
         test_preds_scaled = []
-        test_targets_scaled = []
         
         with torch.no_grad():
             for batch_X, batch_y in test_loader:
@@ -211,27 +238,32 @@ def main():
                 test_loss += loss.item() * batch_X.size(0)
 
                 test_preds_scaled.append(predictions.cpu().numpy())
-                test_targets_scaled.append(batch_y.cpu().numpy())
                 
         test_loss /= len(test_loader.dataset)
         
-        # Print progress every 5 epochs
+        # Print progress every 5 epochs using MedAE and MAE instead of RMSE
         if (epoch + 1) % 5 == 0 or epoch == 0:
             preds_scaled = np.vstack(test_preds_scaled)
 
             # Undo StandardScaler + log1p to get back to real-world units
-            # (dollars, seconds). NOTE: this is no longer a simple
-            # scale_-multiplication trick -- expm1 is nonlinear, so we
-            # reconstruct real values directly from predictions and compare
-            # against the untransformed y_test_raw.
             preds_real = inverse_transform_targets(preds_scaled, y_scaler)
-            rmse_raw = np.sqrt(np.mean((preds_real - y_test_raw) ** 2, axis=0))
-            rmse_pct = (rmse_raw / np.abs(y_test_raw.mean(axis=0))) * 100
             
-            print(f"Epoch [{epoch+1}/{EPOCHS}] | Train Loss: {train_loss**2:.4f} | Test Loss: {test_loss**2:.4f}")
-            print(f"   ↳ Test RMSE -> Cost: ${rmse_raw[0]:.2f} (±{rmse_pct[0]:.1f}%) | "
-                  f"Cycle Time: {rmse_raw[1]:.2f} (±{rmse_pct[1]:.1f}%) | "
-                  f"Waiting Time: {rmse_raw[2]:.1f}s (±{rmse_pct[2]:.1f}%)")
+            # Calculate Absolute Errors
+            absolute_errors = np.abs(preds_real - y_test_raw)
+            
+            # Calculate MedAE and MAE
+            medae_raw = np.median(absolute_errors, axis=0)
+            mae_raw = np.mean(absolute_errors, axis=0)
+            
+            # Calculate percentage based on MedAE vs the Median True Value
+            median_true_values = np.median(y_test_raw, axis=0)
+            medae_pct = (medae_raw / np.abs(median_true_values)) * 100
+            
+            print(f"Epoch [{epoch+1}/{EPOCHS}] | Train Loss: {train_loss:.4f} | Test Loss: {test_loss:.4f}")
+            print(f"   ↳ MedAE -> Cost: ${medae_raw[0]:.2f} (±{medae_pct[0]:.1f}%) | "
+                  f"Cycle Time: {medae_raw[1]:.1f}s (±{medae_pct[1]:.1f}%) | "
+                  f"Wait Time: {medae_raw[2]:.1f}s (±{medae_pct[2]:.1f}%)")
+            print(f"   ↳ MAE   -> Cost: ${mae_raw[0]:.2f} | Cycle Time: {mae_raw[1]:.1f}s | Wait Time: {mae_raw[2]:.1f}s")
 
         # --- EARLY STOPPING LOGIC ---
         if test_loss < best_test_loss:
@@ -244,7 +276,7 @@ def main():
             
         if patience_counter >= patience:
             print(f"\nEarly stopping triggered at Epoch {epoch+1}!")
-            print(f"Best Test Loss achieved: {best_test_loss**2:.4f}")
+            print(f"Best Test Loss achieved: {best_test_loss:.4f}")
             break 
 
     total_time = time.time() - start_time
@@ -261,40 +293,45 @@ def main():
     model.eval()
     
     all_preds = []
-    all_targets = []
     
     with torch.no_grad():
         for batch_X, batch_y in test_loader:
             batch_X = batch_X.to(device)
             preds = model(batch_X)
             all_preds.append(preds.cpu().numpy())
-            all_targets.append(batch_y.numpy())
             
     predictions_scaled = np.vstack(all_preds)
+
+    # Undo StandardScaler + log1p to get real-world-unit predictions
     predictions_real = inverse_transform_targets(predictions_scaled, y_scaler)
 
-    error_kpi = np.sqrt(np.mean((predictions_real - y_test_raw) ** 2, axis=0))      # RMSE in real units
-    percentage_kpi = (error_kpi / np.abs(y_test_raw.mean(axis=0))) * 100            # error / avg * 100
-    mse_kpi = error_kpi ** 2                                                        # MSE in real terms
+    # Calculate Absolute Errors for final JSON export
+    absolute_errors = np.abs(predictions_real - y_test_raw)
+    medae_kpi = np.median(absolute_errors, axis=0)
+    mae_kpi = np.mean(absolute_errors, axis=0)
     
+    median_true_values = np.median(y_test_raw, axis=0)
+    percentage_medae = (medae_kpi / np.abs(median_true_values)) * 100
+
     import json
     metrics = {
+        "dataset": DATA_FILE,
         "model_name": "Simple NN",
-        "Best Test Loss":float(best_test_loss),
-        "MSE": {
-            "cost": float(mse_kpi[0]), 
-            "cycle_time": float(mse_kpi[1]), 
-            "waiting_time": float(mse_kpi[2])
+        "Best Test Loss": float(best_test_loss),
+        "MedAE": {
+            "cost": float(medae_kpi[0]), 
+            "cycle_time": float(medae_kpi[1]), 
+            "waiting_time": float(medae_kpi[2])
         },
-        "Error": {
-            "cost": float(error_kpi[0]), 
-            "cycle_time": float(error_kpi[1]), 
-            "waiting_time": float(error_kpi[2])
+        "MAE": {
+            "cost": float(mae_kpi[0]), 
+            "cycle_time": float(mae_kpi[1]), 
+            "waiting_time": float(mae_kpi[2])
         },
-        "Percentage": {
-            "cost": float(percentage_kpi[0]), 
-            "cycle_time": float(percentage_kpi[1]), 
-            "waiting_time": float(percentage_kpi[2])
+        "MedAE_Percentage": {
+            "cost": float(percentage_medae[0]), 
+            "cycle_time": float(percentage_medae[1]), 
+            "waiting_time": float(percentage_medae[2])
         }
     }
     
