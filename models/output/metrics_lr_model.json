@@ -1,0 +1,62 @@
+[
+    {
+        "Data Source": "BIMP",
+        "Model Name": "Linear Regression Baseline",
+        "Best Test Loss": 0.6512704838796308,
+        "MedAE": {
+            "cost": 5425.205598692974,
+            "cycle_time": 1671.4803363664978,
+            "waiting_time": 2263.1318599502847
+        },
+        "MAE": {
+            "cost": 6894.051182268844,
+            "cycle_time": 2881.1619590775263,
+            "waiting_time": 3811.1933696387496
+        },
+        "MedAE_Percentage": {
+            "cost": 16.236379426877466,
+            "cycle_time": 2.965586609932721,
+            "waiting_time": 2.042855031097035
+        }
+    },
+    {
+        "Data Source": "real",
+        "Model Name": "Linear Regression Baseline",
+        "Best Test Loss": 0.49129750753838103,
+        "MedAE": {
+            "cost": 1.7668908237240766,
+            "cycle_time": 10784.31903847446,
+            "waiting_time": 11432.55323480568
+        },
+        "MAE": {
+            "cost": 2.2357924380239176,
+            "cycle_time": 17266.00934249987,
+            "waiting_time": 18454.206251560863
+        },
+        "MedAE_Percentage": {
+            "cost": 6.5760160816761974,
+            "cycle_time": 13.121534537388705,
+            "waiting_time": 14.22242392432483
+        }
+    },
+    {
+        "Data Source": "synthetic",
+        "Model Name": "Linear Regression Baseline",
+        "Best Test Loss": 0.47289842236439256,
+        "MedAE": {
+            "cost": 6606.169550322462,
+            "cycle_time": 4748.439838943852,
+            "waiting_time": 10474.35049383498
+        },
+        "MAE": {
+            "cost": 9240.773163677819,
+            "cycle_time": 22721.672807634186,
+            "waiting_time": 34922.60793812145
+        },
+        "MedAE_Percentage": {
+            "cost": 15.238211233376116,
+            "cycle_time": 20.86467821659144,
+            "waiting_time": 17.637723259513795
+        }
+    }
+]

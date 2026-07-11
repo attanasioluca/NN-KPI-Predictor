@@ -9,13 +9,14 @@ import torch.optim as optim
 import joblib
 import numpy as np
 import pandas as pd
-from pathlib import Path
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if parent_dir not in sys.path: sys.path.append(parent_dir)
 
-from complex_model.hypertuned_model import (
-    PharmacySurrogate,
+# Assumes deep network files sit in 'deep_network' folder. 
+# Make sure this import matches your exact module layout.
+from deep_network.deep_model import (
+    DeepPharmacySurrogate,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
     inverse_transform_targets,
@@ -36,9 +37,6 @@ def evaluate_scenario(scenario_data, full_model, process_details, num_reps=50):
     
     return avg_cost, std_cost, avg_dur, std_dur, avg_wait, std_wait
 
-# ==========================================
-# MAIN PIPELINE
-# ==========================================
 def main(SOURCE="real"):
     # --- TARGETS ---
     TARGET_COST = 27.0
@@ -79,23 +77,26 @@ def main(SOURCE="real"):
         baseline_scenario, full_model, process_details, num_reps=50
     )
 
-    print("\n[2/4] Running High-Speed Risk-Averse Neural Network Optimizer...")
-    x_scaler = joblib.load(f'models/complex_model/output/{SOURCE}/x_scaler.pkl')
-    y_scaler = joblib.load(f'models/complex_model/output/{SOURCE}/y_scaler.pkl')
+    print("\n[2/4] Running Deep Neural Network Optimizer...")
+    x_scaler = joblib.load(f'models/deep_network/output/{SOURCE}/x_scaler.pkl')
+    y_scaler = joblib.load(f'models/deep_network/output/{SOURCE}/y_scaler.pkl')
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     
-    model = PharmacySurrogate(x_scaler.n_features_in_, DROPOUT_RATE=0.21629303761709978).to(device)
-    model.load_state_dict(torch.load(f'models/complex_model/output/{SOURCE}/surrogate_model.pth', map_location=device, weights_only=True))
+    # Instantiate the Deep model with optimized hyperparameters
+    model = DeepPharmacySurrogate(
+        input_size=x_scaler.n_features_in_, 
+        hidden_dim=512, 
+        num_blocks=6, 
+        dropout_rate=0.3811733811859317
+    ).to(device)
+    
+    model.load_state_dict(torch.load(f'models/deep_network/output/{SOURCE}/surrogate_model.pth', map_location=device, weights_only=True))
     model.eval()
     for param in model.parameters(): param.requires_grad = False
 
     df = pd.read_csv(DATA_FILE)
-    
-    # 1. Filter unconverged rows
     df = df[df[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
-    
-    # 2. Strict feature alignment directly mapped from NON_FEATURE_COLS
     X_df = df.drop(columns=NON_FEATURE_COLS)
     X_cols = X_df.columns.tolist()
     
@@ -127,7 +128,6 @@ def main(SOURCE="real"):
         optimizer.zero_grad()
         predictions = model(x_optim)
         
-        # Proper inverse transform respecting log targets natively on GPU
         raw_preds = inverse_transform_targets_torch(predictions, y_mean_tensor, y_scale_tensor)
         
         pred_avg_cost = raw_preds[:, 0]
@@ -245,6 +245,6 @@ def main(SOURCE="real"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("source", nargs="?", default="real", help="Dataset source (default: real)")
+    parser.add_argument("source", nargs="?", default="synthetic", help="Dataset source")
     args = parser.parse_args()
     main(args.source)

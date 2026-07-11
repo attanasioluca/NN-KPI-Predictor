@@ -333,7 +333,6 @@ def main(SOURCE="synthetic", train_num=40000):
         json.dump(all_metrics, f, indent=4)
     
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
