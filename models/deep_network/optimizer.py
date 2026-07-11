@@ -10,12 +10,10 @@ import joblib
 import numpy as np
 import pandas as pd
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if parent_dir not in sys.path: sys.path.append(parent_dir)
 
-# Assumes deep network files sit in 'deep_network' folder. 
-# Make sure this import matches your exact module layout.
-from deep_network.deep_model import (
+from hypertuned_model import (
     DeepPharmacySurrogate,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
@@ -29,32 +27,33 @@ def evaluate_scenario(scenario_data, full_model, process_details, num_reps=50):
     result = simulator.run_scenario(replications=num_reps, until=86400 * 14)
     
     avg_cost = result.get("total_cost", 0.0)
-    std_cost = result.get("std_cost", 0.0)
     avg_dur  = result.get("avg_cycle_time", 0.0)
-    std_dur  = result.get("std_cycle_time", 0.0)
     avg_wait = result.get("avg_wait_time", 0.0)
-    std_wait = result.get("std_wait_time", 0.0)
     
-    return avg_cost, std_cost, avg_dur, std_dur, avg_wait, std_wait
+    return avg_cost, avg_dur, avg_wait
 
-def main(SOURCE="real"):
-    # --- TARGETS ---
-    TARGET_COST = 27.0
-    TARGET_DURATION = 70000.0
-    TARGET_WAIT_TIME = 1200.0
-    
-    RISK_AVERSION_WEIGHT = 0  
+def main(SOURCE="synthetic"):
+    # --- CONFIGURATION ---
     MAX_Z_SCORE = 3.0           
     
     BASE_FILE = f"data/{SOURCE}/model/scenario.json"
     MODEL_FILE = f"data/{SOURCE}/model/model.json"
     DATA_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
     
-    print(f"--- TARGETS ---")
+    # STEP 0: LOAD FILES & PREP DYNAMIC TARGETS
+    print("[0/4] Loading dataset to determine realistic targets...")
+    df_all = pd.read_csv(DATA_FILE)
+    
+    df = df_all[df_all[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
+    
+    TARGET_COST = df['total_cost'].quantile(0.05)
+    TARGET_DURATION = df['cycle_time'].quantile(0.05)
+    TARGET_WAIT_TIME = df['waiting_time'].quantile(0.05)
+    
+    print(f"--- DYNAMIC TARGETS (5th Percentile) ---")
     print(f"Goal Cost:       ${TARGET_COST:.2f}")
     print(f"Goal Cycle Time: {TARGET_DURATION:.1f} seconds")
-    print(f"Goal Wait Time:  {TARGET_WAIT_TIME:.1f} seconds")
-    print(f"Risk Aversion Weight: {RISK_AVERSION_WEIGHT}\n")
+    print(f"Goal Wait Time:  {TARGET_WAIT_TIME:.1f} seconds\n")
 
     with open(BASE_FILE, 'r') as f: base_json = json.load(f)
     with open(MODEL_FILE, 'r') as f: full_model = json.load(f)
@@ -73,7 +72,7 @@ def main(SOURCE="real"):
             node["previous"] = [p for p in node["previous"] if p in valid_node_ids]
 
     print("[1/4] Running Ground-Truth SimPy Evaluation on BASELINE...")
-    base_true_cost, base_true_std_cost, base_true_duration, base_true_std_duration, base_true_wait, base_true_std_wait = evaluate_scenario(
+    base_true_cost, base_true_duration, base_true_wait = evaluate_scenario(
         baseline_scenario, full_model, process_details, num_reps=50
     )
 
@@ -95,8 +94,6 @@ def main(SOURCE="real"):
     model.eval()
     for param in model.parameters(): param.requires_grad = False
 
-    df = pd.read_csv(DATA_FILE)
-    df = df[df[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
     X_df = df.drop(columns=NON_FEATURE_COLS)
     X_cols = X_df.columns.tolist()
     
@@ -139,7 +136,6 @@ def main(SOURCE="real"):
         loss_avg_wait = ((pred_wait - TARGET_WAIT_TIME) / TARGET_WAIT_TIME) ** 2
         
         kpi_loss = loss_avg_cost + loss_avg_dur + loss_avg_wait
-        risk_loss = 0.0 
         
         x_raw_diff = (x_optim * x_scale_tensor) + x_mean_tensor
         res_amounts = x_raw_diff[:, res_amount_indices]
@@ -147,7 +143,7 @@ def main(SOURCE="real"):
         z_score_penalty = torch.sum(torch.relu(torch.abs(x_optim) - MAX_Z_SCORE) ** 2, dim=1)
         
         integer_weight = max(0.0, (epoch - 5000) / 5000.0) * 1000.0 
-        loss = (10000.0 * kpi_loss) + (RISK_AVERSION_WEIGHT * risk_loss) + (integer_weight * fractional_penalty) + (0.5 * z_score_penalty)
+        loss = (10000.0 * kpi_loss) + (integer_weight * fractional_penalty) + (0.5 * z_score_penalty)
         
         min_loss_in_batch, min_idx = torch.min(loss), torch.argmin(loss)
         if min_loss_in_batch.item() < best_global_loss:
@@ -161,7 +157,7 @@ def main(SOURCE="real"):
 
     optimized_x_raw = x_scaler.inverse_transform(best_x_optimal.cpu().numpy().reshape(1, -1))[0]
 
-    print("[3/4] Injecting Optimized Parameters and Scaling CVs...")
+    print("[3/4] Injecting Optimized Parameters...")
     opt_scenario = copy.deepcopy(baseline_scenario)
     discretized_x_raw = np.copy(optimized_x_raw)
     
@@ -185,11 +181,9 @@ def main(SOURCE="real"):
             val = max(1.0, round(val, 2))
             for el in opt_scenario.get("elements", []):
                 if el["elementId"] == el_id:
-                    orig_mean = float(el["durationDistribution"]["mean"])
-                    orig_std = float(el.get("durationDistribution", {}).get("standardDeviation", 0))
                     el["durationDistribution"]["mean"] = str(val)
-                    if orig_mean > 0 and orig_std > 0:
-                        el["durationDistribution"]["standardDeviation"] = str(round(val * (orig_std / orig_mean), 2))
+                    if "standardDeviation" in el["durationDistribution"]:
+                        el["durationDistribution"]["standardDeviation"] = "0.0"
         discretized_x_raw[i] = val
 
     discretized_tensor = torch.tensor(x_scaler.transform(discretized_x_raw.reshape(1, -1)), dtype=torch.float32, device=device)
@@ -201,26 +195,22 @@ def main(SOURCE="real"):
     nn_pred_avg_cost = final_pred[0]
     nn_pred_dur_mean = final_pred[1]
     nn_pred_wait_mean = final_pred[2]
-    
-    nn_pred_std_cost = 0.0
-    nn_pred_dur_std = 0.0
-    nn_pred_wait_std = 0.0
 
     print("[4/4] Running Ground-Truth SimPy Evaluation on OPTIMIZED...")
-    opt_true_cost, opt_true_std_cost, opt_true_duration, opt_true_std_duration, opt_true_wait, opt_true_std_wait = evaluate_scenario(
+    opt_true_cost, opt_true_duration, opt_true_wait = evaluate_scenario(
         opt_scenario, full_model, process_details, num_reps=100
     )
 
-    print("\n=======================================================================================")
-    print("                 RISK-AWARE VALIDATION & ROI REPORT")
-    print("=======================================================================================")
-    print(f"                | COST (Avg ± Std)       | CYCLE TIME (Avg ± Std)| WAIT TIME (Avg ± Std)")
-    print("---------------------------------------------------------------------------------------")
-    print(f"TARGET GOAL     | ${TARGET_COST:<6.2f} ± MINIMIZE     | {TARGET_DURATION:<6.1f}s ± MINIMIZE   | {TARGET_WAIT_TIME:<6.1f}s ± MINIMIZE")
-    print(f"BASELINE (True) | ${base_true_cost:<6.2f} ± {base_true_std_cost:<11.2f} | {base_true_duration:<6.1f}s ± {base_true_std_duration:<8.1f}s| {base_true_wait:<6.1f}s ± {base_true_std_wait:.1f}s")
-    print(f"NN PREDICTED    | ${nn_pred_avg_cost:<6.2f} ± {nn_pred_std_cost:<11.2f} | {nn_pred_dur_mean:<6.1f}s ± {nn_pred_dur_std:<8.1f}s| {nn_pred_wait_mean:<6.1f}s ± {nn_pred_wait_std:.1f}s")
-    print(f"OPTIMIZED (True)| ${opt_true_cost:<6.2f} ± {opt_true_std_cost:<11.2f} | {opt_true_duration:<6.1f}s ± {opt_true_std_duration:<8.1f}s| {opt_true_wait:<6.1f}s ± {opt_true_std_wait:.1f}s")
-    print("---------------------------------------------------------------------------------------")
+    print("\n=====================================================================")
+    print("                    VALIDATION & ROI REPORT")
+    print("=====================================================================")
+    print(f"                | COST (Total)         | CYCLE TIME (Avg)     | WAITING TIME (Avg)")
+    print("---------------------------------------------------------------------")
+    print(f"TARGET GOAL     | ${TARGET_COST:<19.2f} | {TARGET_DURATION:<19.1f}s | {TARGET_WAIT_TIME:.1f}s")
+    print(f"BASELINE (True) | ${base_true_cost:<19.2f} | {base_true_duration:<19.1f}s | {base_true_wait:.1f}s")
+    print(f"NN PREDICTED    | ${nn_pred_avg_cost:<19.2f} | {nn_pred_dur_mean:<19.1f}s | {nn_pred_wait_mean:.1f}s")
+    print(f"OPTIMIZED (True)| ${opt_true_cost:<19.2f} | {opt_true_duration:<19.1f}s | {opt_true_wait:.1f}s")
+    print("---------------------------------------------------------------------")
 
     print("\n=====================================================================")
     print("                 RECOMMENDED CONFIGURATION CHANGES")

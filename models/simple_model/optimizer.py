@@ -1,3 +1,4 @@
+import argparse
 import json
 import copy
 from pathlib import Path
@@ -10,12 +11,12 @@ import pandas as pd
 import sys
 import os
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-from simple_model.model import (
+from model import (
     PharmacySurrogate,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
@@ -28,29 +29,35 @@ def evaluate_scenario(scenario_data, full_model, process_details, num_reps=15):
     simulator = ScenarioSimulator(scenario_data, full_model, process_details, seed=42)
     result = simulator.run_scenario(replications=num_reps, until = 86400 * 90)
     
-    # Updated keys to match simulator.py
     return result.get("total_cost", 0.0), result.get("avg_cycle_time", 0.0), result.get("avg_wait_time", 0.0)
 
 # ==========================================
 # MAIN PIPELINE
 # ==========================================
-def main():
+def main(SOURCE="synthetic"):
     # --- CONFIGURATION ---
-    TARGET_COST = 25000
-    TARGET_DURATION = 55000
-    TARGET_WAITING_TIME = 110000
-
-    BASE_FILE = "data/BIMP/model/scenario.json"
-    MODEL_FILE = "data/BIMP/model/model.json"
-    DATA_FILE = "data/BIMP/sim_data_waiting_times.csv" 
-    SOURCE = Path(DATA_FILE).parent.name
+    BASE_FILE = f"data/{SOURCE}/model/scenario.json"
+    MODEL_FILE = f"data/{SOURCE}/model/model.json"
+    DATA_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
     
-    print(f"--- TARGETS ---")
-    print(f"Goal Cost:     ${TARGET_COST:.2f}")
-    print(f"Goal Duration: {TARGET_DURATION:.1f} seconds")
+    # STEP 0: LOAD FILES & PREP DYNAMIC TARGETS
+    print("[0/4] Loading dataset to determine realistic targets...")
+    df_all = pd.read_csv(DATA_FILE)
+    
+    # Only keep fully-converged rows for both target-setting and bounds
+    df = df_all[df_all[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
+
+    # Use the 5th percentile (top 5% performance) of the converged dataset
+    # This guarantees the target is physically possible within the bounds.
+    TARGET_COST = df['kpi_total_cost'].quantile(0.05)
+    TARGET_DURATION = df['kpi_cycle_time'].quantile(0.05)
+    TARGET_WAITING_TIME = df['kpi_waiting_time'].quantile(0.05)
+    
+    print(f"--- DYNAMIC TARGETS (5th Percentile) ---")
+    print(f"Goal Cost:         ${TARGET_COST:.2f}")
+    print(f"Goal Duration:     {TARGET_DURATION:.1f} seconds")
     print(f"Goal Waiting Time: {TARGET_WAITING_TIME:.1f} seconds\n")
 
-    # STEP 0: LOAD FILES & PREP
     with open(BASE_FILE, 'r') as f: base_json = json.load(f)
     with open(MODEL_FILE, 'r') as f: full_model = json.load(f)
     
@@ -85,16 +92,7 @@ def main():
     model.eval()
     for param in model.parameters(): param.requires_grad = False
 
-    df = pd.read_csv(DATA_FILE)
-
-    # Only keep fully-converged rows, matching training (unconverged KPI
-    # estimates shouldn't be used to set the search-space bounds either).
-    df = df[df[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
-
-    # Feature Alignment -- must drop EXACTLY the columns model.py dropped
-    # (NON_FEATURE_COLS), or x_scaler.transform() below will either raise a
-    # shape-mismatch error or, worse, silently misalign which raw column
-    # maps to which scaled feature.
+    # Feature Alignment
     X_df = df.drop(columns=NON_FEATURE_COLS)
     X_cols = X_df.columns.tolist()
     
@@ -114,7 +112,6 @@ def main():
     base_x_raw = X_df.iloc[0].values.reshape(1, -1)
     base_tensor = torch.tensor(x_scaler.transform(base_x_raw), dtype=torch.float32, device=device)
     
-    # Combine into a massive [500, 20] tensor
     batch_x_init = torch.cat([rand_starts, base_tensor], dim=0)
     x_optim = nn.Parameter(batch_x_init, requires_grad=True)
 
@@ -133,27 +130,14 @@ def main():
     for epoch in range(10000):
         optimizer.zero_grad()
         
-        # Predictions shape is now [500, 3]
         predictions = model(x_optim) 
         
-        # INVERSE TRANSFORM (differentiable: unscale, then expm1 the two
-        # log-transformed columns -- must match model.py's LOG_COL_IDX or
-        # cycle_time/waiting_time predictions here are silently wrong).
         raw_preds = inverse_transform_targets_torch(predictions, y_mean_tensor, y_scale_tensor)
         
-        # The model has exactly 3 outputs, in this order: total_cost,
-        # cycle_time, waiting_time (see PharmacySurrogate.forward). There is
-        # no "completed count" branch -- an earlier version of this script
-        # divided cost by column 1 assuming it was a completed-instance
-        # count, but column 1 is cycle_time, so that division was nonsense
-        # (and TARGET_COST's scale matches total_cost directly anyway).
         pred_total_cost  = raw_preds[:, 0]
         pred_cycle_time  = raw_preds[:, 1]
         pred_waiting_time = raw_preds[:, 2]
         
-        # KPI LOSS -- now uses all three targets the model actually predicts,
-        # including waiting time, which was defined at the top (TARGET_WAITING_TIME)
-        # but never previously used anywhere in the loss.
         loss_cost    = ((pred_total_cost - TARGET_COST) / TARGET_COST) ** 2
         loss_cycle   = ((pred_cycle_time - TARGET_DURATION) / TARGET_DURATION) ** 2
         loss_waiting = ((pred_waiting_time - TARGET_WAITING_TIME) / TARGET_WAITING_TIME) ** 2
@@ -164,8 +148,7 @@ def main():
         res_amounts = x_raw_differentiable[:, res_amount_indices]
         fractional_penalty = torch.sum(torch.sin(np.pi * res_amounts) ** 2, dim=1)
         
-        # ANNEALING (Increase the integer weight significantly)
-        integer_weight = max(0.0, (epoch - 5000) / 5000.0) * 1000.0 # Increased to 1000.0
+        integer_weight = max(0.0, (epoch - 5000) / 5000.0) * 1000.0 
         
         loss = (10000.0 * kpi_loss) + (integer_weight * fractional_penalty)
         min_loss_in_batch, min_idx = torch.min(loss), torch.argmin(loss)
@@ -181,10 +164,6 @@ def main():
         with torch.no_grad():
             x_optim.clamp_(min_scaled_bounds, max_scaled_bounds)
 
-    # --- FIND THE BEST RESULT ---
-    # best_x_optimal was already tracked as the single best point seen across
-    # ALL epochs and ALL 500 starts (see best_global_loss update in the loop
-    # above) -- no need to re-derive it from the final epoch's loss tensor.
     optimized_x_raw = x_scaler.inverse_transform(best_x_optimal.cpu().numpy().reshape(1, -1))[0]
 
     # STEP 3: INJECT OPTIMIZED PARAMETERS WITH PHYSICAL CONSTRAINTS
@@ -218,17 +197,10 @@ def main():
             val = max(1.0, round(val, 2))
             for el in opt_scenario.get("elements", []):
                 if el["elementId"] == el_id:
-                    orig_mean = float(el["durationDistribution"]["mean"])
-                    orig_std = float(el.get("durationDistribution", {}).get("standardDeviation", 0))
-                    
                     el["durationDistribution"]["mean"] = str(val)
                     
-                    # Keep the CV scaling intact so the SimPy simulator doesn't crash, 
-                    # even though we aren't optimizing for it anymore.
-                    if orig_mean > 0 and orig_std > 0:
-                        cv = orig_std / orig_mean
-                        new_std = round(val * cv, 2)
-                        el["durationDistribution"]["standardDeviation"] = str(new_std)
+                    if "standardDeviation" in el["durationDistribution"]:
+                        el["durationDistribution"]["standardDeviation"] = "0.0"
         
         discretized_x_raw[i] = val
 
@@ -245,7 +217,6 @@ def main():
     opt_true_cost, opt_true_duration, opt_true_completed = evaluate_scenario(
         opt_scenario, full_model, process_details
     )
-
 
     print("\n=====================================================================")
     print("                    VALIDATION & ROI REPORT")
@@ -271,4 +242,13 @@ def main():
     print("=====================================================================")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "source",
+        nargs="?",
+        default="synthetic",
+        help="Dataset source (default: synthetic)"
+    )
+
+    args = parser.parse_args()
+    main(args.source)

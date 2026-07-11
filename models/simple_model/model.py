@@ -173,7 +173,7 @@ def main(SOURCE="synthetic", train_num=40000):
     start_time = time.time()
     
     best_test_loss = float('inf')
-    patience = 2  
+    patience = 200
     patience_counter = 0
     
     for epoch in range(EPOCHS):

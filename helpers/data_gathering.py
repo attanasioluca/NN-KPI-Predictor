@@ -1,4 +1,6 @@
+import argparse
 import os
+import sys
 import json
 import copy
 import math
@@ -8,6 +10,12 @@ import pandas as pd
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from scipy.stats import t as t_dist
 import time
+
+# Go up two levels to reach the root directory so 'helpers' resolves correctly
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+
 from helpers.simulator import ScenarioSimulator
 
 # ==========================================
@@ -16,10 +24,20 @@ from helpers.simulator import ScenarioSimulator
 _BASE_JSON = None
 _FULL_MODEL = None
 _PROCESS_DETAILS = None
+_ABS_TOL_WAIT = 120.0
+_ABS_TOL_DUR = 120.0
+_ABS_TOL_COST = 0.5
+_MAX_WAIT_THRESHOLD = 86400 * 7  # Fallback: 7 days
 
-def init_worker(base_file, model_file):
+def init_worker(base_file, model_file, tol_wait, tol_dur, tol_cost, max_wait):
     """Runs ONCE per CPU core when the pool starts."""
     global _BASE_JSON, _FULL_MODEL, _PROCESS_DETAILS
+    global _ABS_TOL_WAIT, _ABS_TOL_DUR, _ABS_TOL_COST, _MAX_WAIT_THRESHOLD
+
+    _ABS_TOL_WAIT = tol_wait
+    _ABS_TOL_DUR = tol_dur
+    _ABS_TOL_COST = tol_cost
+    _MAX_WAIT_THRESHOLD = max_wait
 
     with open(base_file, 'r') as f:
         _BASE_JSON = json.load(f)
@@ -48,7 +66,6 @@ def mutate_float_broad(rng, base_val, min_multiplier=0.4, max_multiplier=2.5):
 def mutate_arrival_rate(rng, base_val):
     val = float(base_val)
     new_val = rng.uniform(val * 0.5, val * 2.0)
-    # Prevent the simulator from spawning millions of instances
     return max(60.0, round(new_val, 2))
 
 def mutate_int_broad(rng, base_val, min_multiplier=0.4, max_multiplier=2.5, floor=1, hard_cap=None):
@@ -60,14 +77,13 @@ def mutate_int_broad(rng, base_val, min_multiplier=0.4, max_multiplier=2.5, floo
         low = min(low, high)
     if high <= low:
         high = low + 1
-    return int(rng.integers(low, high + 1))  # +1: rng.integers() upper bound is exclusive
+    return int(rng.integers(low, high + 1)) 
 
 # ==========================================
 # 2. PRECISION STOPPING RULE
 # ==========================================
 
 def precision_reached(values, rel_target, abs_tol):
-
     n = len(values)
     if n < 2:
         return False, float("inf")
@@ -83,14 +99,10 @@ def precision_reached(values, rel_target, abs_tol):
 # 3. SIMULATION LOGIC (WORKER NODE)
 # ==========================================
 
-WORKERS_NUM = 22
 MIN_REPS = 5
 MAX_REPS = 75
 TARGET_REL_ERROR = 0.02
 SIMULATION_TIME = 86400 * 90
-ABS_TOL_WAIT_SECONDS = 120
-ABS_TOL_DURATION_SECONDS = 120
-ABS_TOL_COST = 0.5
 
 def worker_task(scenario_id):
     try:
@@ -144,17 +156,24 @@ def worker_task(scenario_id):
 
         for rep in range(MAX_REPS):
             simulator.seed = rep_seeds[rep]
-            print(f"[Worker] Scenario {scenario_id} is running rep {rep}/{MAX_REPS}...", flush=True)
             rep_result = simulator.run_replication(until=SIMULATION_TIME)
+            
+            # EARLY DROPPING: If the queue immediately explodes past our dynamic threshold, 
+            # drop the simulation entirely to save time. It would be dropped by the model anyway.
+            if rep_result.get("wait_time", 0) > _MAX_WAIT_THRESHOLD:
+                print(f"[Worker] Scenario {scenario_id} hit saturated queue abort threshold on rep {rep}. Dropping.", flush=True)
+                return None
+                
             results.append(rep_result)
 
             if len(results) >= MIN_REPS:
                 wait_times = [r["wait_time"] for r in results]
                 costs = [r["total_cost"] for r in results]
                 durations = [r["duration"] for r in results]
-                converged_wait, _ = precision_reached(wait_times, TARGET_REL_ERROR, ABS_TOL_WAIT_SECONDS)
-                converged_cost, _ = precision_reached(costs, TARGET_REL_ERROR, ABS_TOL_COST)
-                converged_duration, _ = precision_reached(durations, TARGET_REL_ERROR, ABS_TOL_DURATION_SECONDS)
+                
+                converged_wait, _ = precision_reached(wait_times, TARGET_REL_ERROR, _ABS_TOL_WAIT)
+                converged_cost, _ = precision_reached(costs, TARGET_REL_ERROR, _ABS_TOL_COST)
+                converged_duration, _ = precision_reached(durations, TARGET_REL_ERROR, _ABS_TOL_DUR)
 
                 if converged_wait and converged_cost and converged_duration:
                     converged = True
@@ -166,16 +185,9 @@ def worker_task(scenario_id):
         wait_times = [r["wait_time"] for r in results]
 
         features["kpi_total_cost"] = float(np.mean(total_costs))
-        features["kpi_std_total_cost"] = float(np.std(total_costs, ddof=1)) if len(total_costs) > 1 else 0.0
-
         features["kpi_cycle_time"] = float(np.mean(durations))
-        features["kpi_std_cycle_time"] = float(np.std(durations, ddof=1)) if len(durations) > 1 else 0.0
-
         features["kpi_waiting_time"] = float(np.mean(wait_times))
-        features["kpi_std_waiting_time"] = float(np.std(wait_times, ddof=1)) if len(wait_times) > 1 else 0.0
 
-        # Diagnostics: lets you audit convergence behavior after the fact
-        # instead of guessing from aggregate stats alone.
         features["n_reps_used"] = len(results)
         features["converged"] = converged
         features["converged_wait"] = converged_wait
@@ -192,24 +204,49 @@ def worker_task(scenario_id):
 # 4. PARALLEL PIPELINE & BATCH WRITING
 # ==========================================
 
-def main():
-    BASE_FILE = "data/synthetic/model/scenario.json"
-    MODEL_FILE = "data/synthetic/model/model.json"
-    OUTPUT_FILE = "data/synthetic/2_90_day_data.csv"
-    START_ID = 0
-    NUM_SCENARIOS = 10_000
+def main(SOURCE="synthetic", START_ID=0, NUM_SCENARIOS=10_000, WORKERS_NUM=22):
     BATCH_SIZE = 100
+    BASE_FILE = f"data/{SOURCE}/model/scenario.json"
+    MODEL_FILE = f"data/{SOURCE}/model/model.json"
+    OUTPUT_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
+    
     completed_ids = set()
     header_written = False
+    
+    # Dynamic tolerance defaults
+    tol_wait = 120.0
+    tol_dur = 120.0
+    tol_cost = 0.5
+    max_wait_abort = 86400 * 7  # 7 days default
+    
     if os.path.exists(OUTPUT_FILE):
         try:
-            existing = pd.read_csv(OUTPUT_FILE, usecols=["scenario_id"])
-            completed_ids = set(existing["scenario_id"].astype(int).tolist())
-            header_written = True
-            print(f"Resuming: {len(completed_ids)} scenarios already in {OUTPUT_FILE}, skipping them.", flush=True)
+            existing = pd.read_csv(OUTPUT_FILE)
+            if "scenario_id" in existing.columns:
+                completed_ids = set(existing["scenario_id"].astype(int).tolist())
+                header_written = True
+                print(f"Resuming: {len(completed_ids)} scenarios already in {OUTPUT_FILE}, skipping them.", flush=True)
+            
+            # Calculate dynamic tolerances and thresholds from existing successful runs
+            valid_existing = existing[existing["converged"] == True] if "converged" in existing.columns else existing
+            if len(valid_existing) > 10:
+                tol_cost = float(valid_existing["kpi_total_cost"].median() * 0.05)
+                tol_dur = float(valid_existing["kpi_cycle_time"].median() * 0.05)
+                tol_wait = float(valid_existing["kpi_waiting_time"].median() * 0.05)
+                
+                # 5x the 95th percentile is our abort threshold for hopelessly skewed runs
+                max_wait_abort = float(valid_existing["kpi_waiting_time"].quantile(0.95) * 5)
+                
         except Exception as e:
             print(f"Could not read existing {OUTPUT_FILE} ({e}); starting fresh.", flush=True)
-            os.remove(OUTPUT_FILE)
+            if os.path.exists(OUTPUT_FILE):
+                os.remove(OUTPUT_FILE)
+
+    print(f"--- DYNAMIC BOUNDS CALCULATION ---")
+    print(f"Cost ABS_TOL:   ${tol_cost:.2f}")
+    print(f"Dur ABS_TOL:    {tol_dur:.2f}s")
+    print(f"Wait ABS_TOL:   {tol_wait:.2f}s")
+    print(f"Abort if wait exceeds: {max_wait_abort:.2f}s\n")
 
     scenario_ids = [i for i in range(START_ID, START_ID + NUM_SCENARIOS) if i not in completed_ids]
     if not scenario_ids:
@@ -220,7 +257,9 @@ def main():
     results_batch = []
     total_processed = 0
 
-    with ProcessPoolExecutor(max_workers=WORKERS_NUM, initializer=init_worker, initargs=(BASE_FILE, MODEL_FILE)) as executor:
+    init_args = (BASE_FILE, MODEL_FILE, tol_wait, tol_dur, tol_cost, max_wait_abort)
+
+    with ProcessPoolExecutor(max_workers=WORKERS_NUM, initializer=init_worker, initargs=init_args) as executor:
         futures = [executor.submit(worker_task, i) for i in scenario_ids]
 
         for future in as_completed(futures):
@@ -248,4 +287,11 @@ def main():
     print(f"Pipeline complete! {len(scenario_ids):,} scenarios processed in {total_time:.2f} seconds.", flush=True)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--source", default="synthetic", help="Dataset source directory name")
+    parser.add_argument("--start_id", type=int, default=0, help="Starting scenario ID")
+    parser.add_argument("--num_scenarios", type=int, default=10000, help="Total number of scenarios to target")
+    parser.add_argument("--workers", type=int, default=22, help="Number of CPU cores to allocate")
+    
+    args = parser.parse_args()
+    main(args.source, args.start_id, args.num_scenarios, args.workers)

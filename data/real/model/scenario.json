@@ -80,7 +80,7 @@
         "resources": [
             {
                 "name": "AML Investigator",
-                "totalAmount": "2",
+                "totalAmount": "5",
                 "costPerHour": "20",
                 "timetableName": "AML Investigator_profile_calendar",
                 "setupTime": {
@@ -94,7 +94,7 @@
             },
             {
                 "name": "Applicant",
-                "totalAmount": "1",
+                "totalAmount": "50",
                 "costPerHour": "20",
                 "timetableName": "Applicant_profile_calendar",
                 "setupTime": {
@@ -108,7 +108,7 @@
             },
             {
                 "name": "Appraiser",
-                "totalAmount": "2",
+                "totalAmount": "5",
                 "costPerHour": "20",
                 "timetableName": "Appraiser_profile_calendar",
                 "setupTime": {

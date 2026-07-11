@@ -152,7 +152,7 @@ def main(SOURCE="BIMP", train_num=10000):
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=EPOCHS, eta_min=1e-5)
     
     best_test_loss = float('inf')
-    patience = 450
+    patience = 200
     patience_counter = 0
     start_time = time.time()
     
