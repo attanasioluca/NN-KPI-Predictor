@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from datetime import time as dt_time
 from .timeCalculator import convert_to_seconds
 import math
+import numpy as np
 
 
 class SimulatorEngine:
@@ -107,6 +108,24 @@ class SimulatorEngine:
         self.executed_nodes[self.num] = set() 
         self.timeUsedPerResource=timeUsedPerResource
         
+    def get_business_duration(self, start_sim_sec, end_sim_sec):
+        """Calculates elapsed seconds excluding weekends."""
+        start_dt = self.start_datetime_obj + timedelta(seconds=start_sim_sec)
+        end_dt = self.start_datetime_obj + timedelta(seconds=end_sim_sec)
+        
+        calendar_seconds = (end_dt - start_dt).total_seconds()
+        
+        start_date = start_dt.date()
+        end_date = end_dt.date()
+        
+        total_days = (end_date - start_date).days
+        business_days = np.busday_count(start_date, end_date) 
+        weekend_days = total_days - business_days
+        
+        business_seconds = calendar_seconds - (weekend_days * 86400)
+        
+        return max(0.0, business_seconds)
+
     def trigger_resource_release(self):
         if not hasattr(self.env, 'resource_released_event'):
             self.env.resource_released_event = self.env.event()
@@ -494,7 +513,7 @@ class SimulatorEngine:
 
             # add by LR
             #self.xeslog(node_id,"assign",node['type'],resourceid_for_task)
-            self.total_wait_time += (self.env.now - wait_start_time)
+            self.total_wait_time += self.get_business_duration(wait_start_time, self.env.now)
             self.xeslog(node_id,"start",node['type'])
 
             if not math.isfinite(taskTime):

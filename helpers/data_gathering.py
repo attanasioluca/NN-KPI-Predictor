@@ -195,7 +195,7 @@ def worker_task(scenario_id):
 def main():
     BASE_FILE = "data/synthetic/model/scenario.json"
     MODEL_FILE = "data/synthetic/model/model.json"
-    OUTPUT_FILE = "data/synthetic/90_day_data.csv"
+    OUTPUT_FILE = "data/synthetic/2_90_day_data.csv"
     START_ID = 0
     NUM_SCENARIOS = 10_000
     BATCH_SIZE = 100
