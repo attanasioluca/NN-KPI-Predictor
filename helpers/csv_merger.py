@@ -1,6 +1,6 @@
 import pandas as pd
 
-df1 = pd.read_csv("data/real/2_90_day_data.csv")
+df1 = pd.read_csv("data/synthetic/sim_data_waiting_times.csv")
 df2 = pd.read_csv("data/synthetic/3_sim_data_waiting_times.csv")
 
 df = pd.concat([df1, df2], ignore_index=True)
