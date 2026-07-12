@@ -208,7 +208,7 @@ def main(SOURCE="synthetic", START_ID=0, NUM_SCENARIOS=10_000, WORKERS_NUM=22):
     BATCH_SIZE = 100
     BASE_FILE = f"data/{SOURCE}/model/scenario.json"
     MODEL_FILE = f"data/{SOURCE}/model/model.json"
-    OUTPUT_FILE = f"data/{SOURCE}/3_sim_data_waiting_times.csv" 
+    OUTPUT_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
     
     completed_ids = set()
     header_written = False
@@ -235,7 +235,7 @@ def main(SOURCE="synthetic", START_ID=0, NUM_SCENARIOS=10_000, WORKERS_NUM=22):
                 tol_wait = float(valid_existing["kpi_waiting_time"].median() * 0.05)
                 
                 # 5x the 95th percentile is our abort threshold for hopelessly skewed runs
-                max_wait_abort = float(valid_existing["kpi_waiting_time"].quantile(0.95) * 5)
+                max_wait_abort = float(min(_MAX_WAIT_THRESHOLD,valid_existing["kpi_waiting_time"].quantile(0.95) * 5))
                 
         except Exception as e:
             print(f"Could not read existing {OUTPUT_FILE} ({e}); starting fresh.", flush=True)
