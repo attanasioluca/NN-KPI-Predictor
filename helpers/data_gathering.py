@@ -208,7 +208,7 @@ def main(SOURCE="synthetic", START_ID=0, NUM_SCENARIOS=10_000, WORKERS_NUM=22):
     BATCH_SIZE = 100
     BASE_FILE = f"data/{SOURCE}/model/scenario.json"
     MODEL_FILE = f"data/{SOURCE}/model/model.json"
-    OUTPUT_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
+    OUTPUT_FILE = f"data/{SOURCE}/3_sim_data_waiting_times.csv" 
     
     completed_ids = set()
     header_written = False
