@@ -2,21 +2,21 @@
     {
         "Data Source": "BIMP",
         "Model Name": "Simple NN",
-        "Best Test Loss": 0.08848903387784958,
+        "Best Test Loss": 0.04131783646211695,
         "MedAE": {
-            "cost": 1138.5969804567067,
-            "cycle_time": 140.87518435268794,
-            "waiting_time": 242.88107241956095
+            "cost": 1125.4817733711297,
+            "cycle_time": 143.55782358516262,
+            "waiting_time": 239.60002398420693
         },
         "MAE": {
-            "cost": 1660.7528976325802,
-            "cycle_time": 652.2510347200282,
-            "waiting_time": 846.2605766346345
+            "cost": 1576.661098316027,
+            "cycle_time": 456.4294428486702,
+            "waiting_time": 620.4885768458017
         },
         "MedAE_Percentage": {
-            "cost": 3.3158637850236787,
-            "cycle_time": 0.7883092380897655,
-            "waiting_time": 0.7046370691451156
+            "cost": 3.4613563105273695,
+            "cycle_time": 0.8032704817290173,
+            "waiting_time": 0.695124050197787
         }
     },
     {
