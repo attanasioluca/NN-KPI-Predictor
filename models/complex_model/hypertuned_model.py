@@ -20,9 +20,9 @@ LOG_TRANSFORM_COLS = ["kpi_cycle_time", "kpi_waiting_time"]
 LOG_COL_IDX = [TARGET_COLS.index(c) for c in LOG_TRANSFORM_COLS]
 NON_FEATURE_COLS = [
     "scenario_id",
-    "kpi_total_cost", "kpi_std_total_cost",
-    "kpi_cycle_time", "kpi_std_cycle_time",
-    "kpi_waiting_time", "kpi_std_waiting_time",
+    "kpi_total_cost",
+    "kpi_cycle_time",
+    "kpi_waiting_time",
     "n_reps_used",
     "converged", "converged_wait", "converged_cost", "converged_duration",
 ]
@@ -93,9 +93,9 @@ def main(SOURCE="BIMP", train_num=10000):
     EPOCHS = 10000
 
     BATCH_SIZE = 256
-    LEARNING_RATE = 0.0004970082133946468
-    WEIGHT_DECAY = 2.217485788658681e-06
-    DROPOUT_RATE = 0.41629303761709978
+    LEARNING_RATE = 0.004265960261793243
+    WEIGHT_DECAY = 9.158756799141484e-05
+    DROPOUT_RATE = 0.3475318590103991
     
     device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
     print("Loading dataset from source:", SOURCE)

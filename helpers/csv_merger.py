@@ -5,7 +5,6 @@ df2 = pd.read_csv("data/synthetic/3_sim_data_waiting_times.csv")
 
 df = pd.concat([df1, df2], ignore_index=True)
 
-# Drop unwanted columns (ignore errors in case one is missing)
 df = df.drop(
     columns=[
         "kpi_std_total_cost",
@@ -15,9 +14,12 @@ df = df.drop(
     errors="ignore",
 )
 
-# Sort by scenario_id
+# Remove duplicate scenario_ids
+df = df.drop_duplicates(subset="scenario_id", keep="first")
+
+# Sort
 df = df.sort_values(by="scenario_id").reset_index(drop=True)
 
-df.to_csv("data/synthetic/sim_data_waiting_times.csv", index=False)
+df.to_csv("data/synthetic/2_sim_data_waiting_times.csv", index=False)
 
 print(len(df))

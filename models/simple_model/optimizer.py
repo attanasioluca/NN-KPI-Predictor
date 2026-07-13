@@ -50,8 +50,8 @@ def main(SOURCE="synthetic"):
     # Use the 5th percentile (top 5% performance) of the converged dataset
     # This guarantees the target is physically possible within the bounds.
     TARGET_COST = df['kpi_total_cost'].quantile(0.05)
-    TARGET_DURATION = df['kpi_cycle_time'].quantile(0.05)
-    TARGET_WAITING_TIME = df['kpi_waiting_time'].quantile(0.05)
+    TARGET_DURATION = df['kpi_cycle_time'].quantile(0.010)
+    TARGET_WAITING_TIME = df['kpi_waiting_time'].quantile(0.10)
     
     print(f"--- DYNAMIC TARGETS (5th Percentile) ---")
     print(f"Goal Cost:         ${TARGET_COST:.2f}")
@@ -240,6 +240,27 @@ def main(SOURCE="synthetic"):
     print("=====================================================================")
     print(f"FINISHING DELTA      | {('+' if end_cost_diff > 0 else '')}${end_cost_diff:<19.2f} | {('+' if end_cycle_diff > 0 else '')}{end_cycle_diff:.1f}s | {('+' if end_wait_diff > 0 else '')}{end_wait_diff:.1f}s")
     print("=====================================================================")
+    print("\n=====================================================================")
+    print("                 RECOMMENDED CONFIGURATION CHANGES")
+    print("=====================================================================")
+    
+    base_x_raw = X_df.iloc[0].values
+    changes_found = False
+    
+    for i, col in enumerate(X_cols):
+        b_val = base_x_raw[i]
+        o_val = discretized_x_raw[i]
+        
+        if abs(b_val - o_val) > 0.01:
+            changes_found = True
+            if col.endswith("_amount"):
+                print(f"{col:<30} | Baseline: {int(b_val):<4} -> Optimized: {int(o_val)}")
+            else:
+                print(f"{col:<30} | Baseline: {b_val:<7.2f} -> Optimized: {o_val:.2f}")
+                
+    if not changes_found:
+        print("No changes required. The baseline scenario already hits your targets.")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

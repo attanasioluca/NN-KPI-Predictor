@@ -14,7 +14,7 @@ from pathlib import Path
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if parent_dir not in sys.path: sys.path.append(parent_dir)
 
-from complex_model.hypertuned_model import (
+from hypertuned_model import (
     PharmacySurrogate,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
@@ -50,9 +50,9 @@ def main(SOURCE="real"):
     
     df = df_all[df_all[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
     
-    TARGET_COST = df['total_cost'].quantile(0.05)
-    TARGET_DURATION = df['cycle_time'].quantile(0.05)
-    TARGET_WAIT_TIME = df['waiting_time'].quantile(0.05)
+    TARGET_COST = df['kpi_total_cost'].quantile(0.05)
+    TARGET_DURATION = df['kpi_cycle_time'].quantile(0.05)
+    TARGET_WAIT_TIME = df['kpi_waiting_time'].quantile(0.5)
     
     print(f"--- DYNAMIC TARGETS (5th Percentile) ---")
     print(f"Goal Cost:       ${TARGET_COST:.2f}")

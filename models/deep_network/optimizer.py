@@ -46,9 +46,9 @@ def main(SOURCE="synthetic"):
     
     df = df_all[df_all[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
     
-    TARGET_COST = df['total_cost'].quantile(0.05)
-    TARGET_DURATION = df['cycle_time'].quantile(0.05)
-    TARGET_WAIT_TIME = df['waiting_time'].quantile(0.05)
+    TARGET_COST = df['kpi_total_cost'].quantile(0.05)
+    TARGET_DURATION = df['kpi_cycle_time'].quantile(0.05)
+    TARGET_WAIT_TIME = df['kpi_waiting_time'].quantile(0.05)
     
     print(f"--- DYNAMIC TARGETS (5th Percentile) ---")
     print(f"Goal Cost:       ${TARGET_COST:.2f}")
