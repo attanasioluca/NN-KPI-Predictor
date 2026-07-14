@@ -2,21 +2,21 @@
     {
         "Data Source": "BIMP",
         "Model Name": "Simple NN",
-        "Best Test Loss": 0.05598928073605338,
+        "Best Test Loss": 0.03335004405142788,
         "MedAE": {
-            "cost": 1032.4639586270132,
-            "cycle_time": 141.23755478593193,
-            "waiting_time": 223.62607052830936
+            "cost": 1219.294222773021,
+            "cycle_time": 134.40443639096338,
+            "waiting_time": 233.68895109730147
         },
         "MAE": {
-            "cost": 1555.241820366187,
-            "cycle_time": 516.9858980550516,
-            "waiting_time": 679.922813865117
+            "cost": 1645.6948548795647,
+            "cycle_time": 420.7480358665166,
+            "waiting_time": 572.104458021545
         },
         "MedAE_Percentage": {
-            "cost": 3.082814141461707,
-            "cycle_time": 0.7903411085795552,
-            "waiting_time": 0.6487557856339217
+            "cost": 3.623861259232007,
+            "cycle_time": 0.7521310210125827,
+            "waiting_time": 0.6788347633289291
         }
     },
     {
@@ -42,21 +42,21 @@
     {
         "Data Source": "synthetic",
         "Model Name": "Simple NN",
-        "Best Test Loss": 0.03907301166883396,
+        "Best Test Loss": 0.05250873046568953,
         "MedAE": {
-            "cost": 2268.1902816574584,
-            "cycle_time": 526.7647681537601,
-            "waiting_time": 376.3625199741291
+            "cost": 2704.0817165189947,
+            "cycle_time": 502.9309925575053,
+            "waiting_time": 414.2024132316019
         },
         "MAE": {
-            "cost": 3017.922259207383,
-            "cycle_time": 7038.015196400369,
-            "waiting_time": 6464.9596980332135
+            "cost": 3492.878416785054,
+            "cycle_time": 11858.342687888797,
+            "waiting_time": 11722.474371957795
         },
         "MedAE_Percentage": {
-            "cost": 4.999654288192022,
-            "cycle_time": 2.2517380870450783,
-            "waiting_time": 1.9704888213179061
+            "cost": 6.050210146506138,
+            "cycle_time": 2.1442739754080327,
+            "waiting_time": 2.1569922467225227
         }
     }
 ]

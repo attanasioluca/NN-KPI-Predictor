@@ -2,21 +2,21 @@
     {
         "Data Source": "BIMP",
         "Model Name": "Linear Regression Baseline",
-        "Best Test Loss": 0.6512704838796308,
+        "Best Test Loss": 0.4866525248998721,
         "MedAE": {
-            "cost": 5425.205598692974,
-            "cycle_time": 1671.4803363664978,
-            "waiting_time": 2263.1318599502847
+            "cost": 5692.953589676712,
+            "cycle_time": 1087.1366317216234,
+            "waiting_time": 1544.2763116075312
         },
         "MAE": {
-            "cost": 6894.051182268844,
-            "cycle_time": 2881.1619590775263,
-            "waiting_time": 3811.1933696387496
+            "cost": 7078.361651798805,
+            "cycle_time": 1848.330974679084,
+            "waiting_time": 2448.094246271808
         },
         "MedAE_Percentage": {
-            "cost": 16.236379426877466,
-            "cycle_time": 2.965586609932721,
-            "waiting_time": 2.042855031097035
+            "cost": 16.920012888534547,
+            "cycle_time": 6.08364728689819,
+            "waiting_time": 4.485913602599397
         }
     },
     {
@@ -42,21 +42,21 @@
     {
         "Data Source": "synthetic",
         "Model Name": "Linear Regression Baseline",
-        "Best Test Loss": 0.47289842236439256,
+        "Best Test Loss": 0.4447546436113566,
         "MedAE": {
-            "cost": 6606.169550322462,
-            "cycle_time": 4748.439838943852,
-            "waiting_time": 10474.35049383498
+            "cost": 7166.027855525896,
+            "cycle_time": 6800.594801126643,
+            "waiting_time": 6210.582680279147
         },
         "MAE": {
-            "cost": 9240.773163677819,
-            "cycle_time": 22721.672807634186,
-            "waiting_time": 34922.60793812145
+            "cost": 10165.684644530911,
+            "cycle_time": 36141.74652567843,
+            "waiting_time": 35622.67696974417
         },
         "MedAE_Percentage": {
-            "cost": 15.238211233376116,
-            "cycle_time": 20.86467821659144,
-            "waiting_time": 17.637723259513795
+            "cost": 16.03352967360069,
+            "cycle_time": 28.99471033828498,
+            "waiting_time": 32.34210680829812
         }
     }
 ]
