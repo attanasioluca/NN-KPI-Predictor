@@ -160,7 +160,7 @@ def main(SOURCE="synthetic", train_num=40000):
     train_dataset = SimulationDataset(X_train_scaled, y_train_scaled)
     test_dataset = SimulationDataset(X_test_scaled, y_test_scaled)
     
-    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
     # --- C. Model Initialization ---
