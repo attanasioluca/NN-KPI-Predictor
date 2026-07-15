@@ -7,7 +7,7 @@ import math
 import traceback
 import numpy as np
 import pandas as pd
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 from scipy.stats import t as t_dist
 import time
 
@@ -235,7 +235,7 @@ def main(SOURCE="synthetic", START_ID=0, NUM_SCENARIOS=10_000, WORKERS_NUM=22):
                 tol_wait = float(valid_existing["kpi_waiting_time"].median() * 0.05)
                 
                 # 5x the 95th percentile is our abort threshold for hopelessly skewed runs
-                max_wait_abort = float(min(_MAX_WAIT_THRESHOLD,valid_existing["kpi_waiting_time"].quantile(0.95) * 5))
+                max_wait_abort = float(min(_MAX_WAIT_THRESHOLD, valid_existing["kpi_waiting_time"].quantile(0.95) * 5))
                 
         except Exception as e:
             print(f"Could not read existing {OUTPUT_FILE} ({e}); starting fresh.", flush=True)
@@ -248,43 +248,77 @@ def main(SOURCE="synthetic", START_ID=0, NUM_SCENARIOS=10_000, WORKERS_NUM=22):
     print(f"Wait ABS_TOL:   {tol_wait:.2f}s")
     print(f"Abort if wait exceeds: {max_wait_abort:.2f}s\n")
 
-    scenario_ids = [i for i in range(START_ID, START_ID + NUM_SCENARIOS) if i not in completed_ids]
-    if not scenario_ids:
-        print("All scenarios already completed. Nothing to do.", flush=True)
+    if NUM_SCENARIOS <= 0:
+        print("NUM_SCENARIOS is 0 or less. Nothing to do.", flush=True)
         return
 
     start_time = time.time()
     results_batch = []
-    total_processed = 0
-
+    
+    successful_new = 0
+    current_id = START_ID
+    
     init_args = (BASE_FILE, MODEL_FILE, tol_wait, tol_dur, tol_cost, max_wait_abort)
 
     with ProcessPoolExecutor(max_workers=WORKERS_NUM, initializer=init_worker, initargs=init_args) as executor:
-        futures = [executor.submit(worker_task, i) for i in scenario_ids]
+        active_futures = set()
+        
+        # Helper function to queue up the next unprocessed ID
+        def submit_next():
+            nonlocal current_id
+            while current_id in completed_ids:
+                current_id += 1
+            fut = executor.submit(worker_task, current_id)
+            active_futures.add(fut)
+            current_id += 1
+            
+        # Initially fill the pool queue (double the worker count keeps cores fed)
+        for _ in range(WORKERS_NUM * 2):
+            submit_next()
+            
+        while active_futures and successful_new < NUM_SCENARIOS:
+            # Wait for at least one scenario to finish
+            done, active_futures = wait(active_futures, return_when=FIRST_COMPLETED)
+            
+            for future in done:
+                result = future.result()
+                
+                # Only count towards the total if the worker didn't return None
+                if result is not None:
+                    results_batch.append(result)
+                    successful_new += 1
+                    
+                    if successful_new % 5 == 0:
+                        print(f"Successful new scenarios this run: {successful_new}/{NUM_SCENARIOS}", flush=True)
+                        
+                    if len(results_batch) >= BATCH_SIZE:
+                        df = pd.DataFrame(results_batch)
+                        df.to_csv(OUTPUT_FILE, mode='a', index=False, header=not header_written)
+                        header_written = True
+                        results_batch = []
+                        elapsed = time.time() - start_time
+                        print(f"--- SAVED BATCH --- | {successful_new:,}/{NUM_SCENARIOS:,} this run | Elapsed: {elapsed:.2f}s", flush=True)
 
-        for future in as_completed(futures):
-            result = future.result()
-            if result is not None:
-                results_batch.append(result)
+                if successful_new >= NUM_SCENARIOS:
+                    break
+            
+            # If we haven't hit the target, keep feeding the pool up to its capacity limit
+            # This ensures we keep trying new IDs even if many fail
+            if successful_new < NUM_SCENARIOS:
+                while len(active_futures) < (WORKERS_NUM * 2):
+                    submit_next()
 
-            total_processed += 1
-            if total_processed % 5 == 0:
-                print(f"Scenarios completed this run: {total_processed}/{len(scenario_ids)}", flush=True)
+        # Cancel any remaining pending futures so the script can exit cleanly
+        for fut in active_futures:
+            fut.cancel()
 
-            if len(results_batch) >= BATCH_SIZE:
-                df = pd.DataFrame(results_batch)
-                df.to_csv(OUTPUT_FILE, mode='a', index=False, header=not header_written)
-                header_written = True
-                results_batch = []
-                elapsed = time.time() - start_time
-                print(f"--- SAVED BATCH --- | {total_processed:,}/{len(scenario_ids):,} this run | Elapsed: {elapsed:.2f}s", flush=True)
-
+    # Save any remaining data in the final batch
     if results_batch:
         df = pd.DataFrame(results_batch)
         df.to_csv(OUTPUT_FILE, mode='a', index=False, header=not header_written)
 
     total_time = time.time() - start_time
-    print(f"Pipeline complete! {len(scenario_ids):,} scenarios processed in {total_time:.2f} seconds.", flush=True)
+    print(f"Pipeline complete! {successful_new:,} new scenarios successfully generated in {total_time:.2f} seconds.", flush=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
