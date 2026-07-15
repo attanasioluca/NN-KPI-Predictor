@@ -22,9 +22,9 @@ from hypertuned_model import (
 )
 from helpers.simulator import ScenarioSimulator
 
-def evaluate_scenario(scenario_data, full_model, process_details, num_reps=50):
+def evaluate_scenario(scenario_data, full_model, process_details, num_reps=15):
     simulator = ScenarioSimulator(scenario_data, full_model, process_details, seed=42)
-    result = simulator.run_scenario(replications=num_reps, until=86400 * 14)
+    result = simulator.run_scenario(replications=num_reps, until=86400 * 90)
     
     avg_cost = result.get("total_cost", 0.0)
     avg_dur  = result.get("avg_cycle_time", 0.0)
@@ -73,7 +73,7 @@ def main(SOURCE="synthetic"):
 
     print("[1/4] Running Ground-Truth SimPy Evaluation on BASELINE...")
     base_true_cost, base_true_duration, base_true_wait = evaluate_scenario(
-        baseline_scenario, full_model, process_details, num_reps=50
+        baseline_scenario, full_model, process_details, num_reps=15
     )
 
     print("\n[2/4] Running Deep Neural Network Optimizer...")
@@ -198,7 +198,7 @@ def main(SOURCE="synthetic"):
 
     print("[4/4] Running Ground-Truth SimPy Evaluation on OPTIMIZED...")
     opt_true_cost, opt_true_duration, opt_true_wait = evaluate_scenario(
-        opt_scenario, full_model, process_details, num_reps=100
+        opt_scenario, full_model, process_details, num_reps=15
     )
 
     print("\n=====================================================================")

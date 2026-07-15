@@ -4,7 +4,7 @@
         "startDateTime": "2026-07-01T00:00:00",
         "arrivalRateDistribution": {
             "type": "FIXED",
-            "mean": "3600",
+            "mean": "2760",
             "arg1": "",
             "arg2": "",
             "timeUnit": "seconds"

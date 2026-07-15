@@ -18,6 +18,7 @@ from hypertuned_model import (
     PharmacySurrogate,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
+    DROPOUT_RATE,
     inverse_transform_targets,
     inverse_transform_targets_torch
 )
@@ -25,7 +26,7 @@ from helpers.simulator import ScenarioSimulator
 
 def evaluate_scenario(scenario_data, full_model, process_details, num_reps=50):
     simulator = ScenarioSimulator(scenario_data, full_model, process_details, seed=42)
-    result = simulator.run_scenario(replications=num_reps, until=86400 * 14)
+    result = simulator.run_scenario(replications=num_reps, until=86400 * 90)
     
     avg_cost = result.get("total_cost", 0.0)
     avg_dur  = result.get("avg_cycle_time", 0.0)
@@ -86,7 +87,7 @@ def main(SOURCE="real"):
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     
-    model = PharmacySurrogate(x_scaler.n_features_in_, DROPOUT_RATE=0.21629303761709978).to(device)
+    model = PharmacySurrogate(x_scaler.n_features_in_, DROPOUT_RATE=DROPOUT_RATE).to(device)
     model.load_state_dict(torch.load(f'models/complex_model/output/{SOURCE}/surrogate_model.pth', map_location=device, weights_only=True))
     model.eval()
     for param in model.parameters(): param.requires_grad = False
@@ -195,7 +196,7 @@ def main(SOURCE="real"):
 
     print("[4/4] Running Ground-Truth SimPy Evaluation on OPTIMIZED...")
     opt_true_cost, opt_true_duration, opt_true_wait = evaluate_scenario(
-        opt_scenario, full_model, process_details, num_reps=100
+        opt_scenario, full_model, process_details, num_reps=50
     )
 
     print("\n=====================================================================")

@@ -27,6 +27,10 @@ NON_FEATURE_COLS = [
     "converged", "converged_wait", "converged_cost", "converged_duration",
 ]
 CONVERGENCE_FLAGS = ["converged", "converged_wait", "converged_cost", "converged_duration"]
+BATCH_SIZE = 256
+LEARNING_RATE = 0.002339450979342906
+WEIGHT_DECAY = 0.001434655249400119
+DROPOUT_RATE = 0.2089979509176319
 
 def inverse_transform_targets(y_scaled, y_scaler):
     y_unscaled = y_scaler.inverse_transform(y_scaled)
@@ -92,10 +96,7 @@ def main(SOURCE="BIMP", train_num=10000):
     DATA_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
     EPOCHS = 10000
 
-    BATCH_SIZE = 256
-    LEARNING_RATE = 0.004265960261793243
-    WEIGHT_DECAY = 9.158756799141484e-05
-    DROPOUT_RATE = 0.3475318590103991
+
     
     device = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu")
     print("Loading dataset from source:", SOURCE)
