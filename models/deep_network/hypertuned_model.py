@@ -109,11 +109,12 @@ def main(SOURCE="real", train_num=5000):
     EPOCHS = 10000
    
     BATCH_SIZE = 128
-    LEARNING_RATE = 0.00046142434963251597
-    WEIGHT_DECAY = 0.0005719568296419129
+    LEARNING_RATE = 0.00048787444136057484
+    WEIGHT_DECAY = 0.0003548797950247993
     HIDDEN_DIM = 512
-    NUM_BLOCKS = 6
-    DROPOUT_RATE = 0.28000105352585786
+    NUM_BLOCKS = 7
+    DROPOUT_RATE = 0.2869346217240727
+    #Real params
     
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     print("Loading dataset from source:", SOURCE)

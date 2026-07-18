@@ -20,6 +20,26 @@
         }
     },
     {
+        "Data Source": "real",
+        "Model Name": "Complex NN - Hypertuned",
+        "Best Test Loss": 0.09970098236707578,
+        "MedAE": {
+            "cost": 1980.9913326564856,
+            "cycle_time": 649.6373726305428,
+            "waiting_time": 651.0877050262716
+        },
+        "MAE": {
+            "cost": 2697.1348938915753,
+            "cycle_time": 4980.028356689902,
+            "waiting_time": 5039.587770348443
+        },
+        "MedAE_Percentage": {
+            "cost": 2.7015452690430677,
+            "cycle_time": 2.2629193070817415,
+            "waiting_time": 2.7654292010541672
+        }
+    },
+    {
         "Data Source": "synthetic",
         "Model Name": "Complex NN - Hypertuned",
         "Best Test Loss": 0.003739341265249815,
