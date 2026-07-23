@@ -83,6 +83,7 @@ def arrival_generator(
     durations,
     wait_time,
     rng,
+    max_instances=None  # <-- 1. Add this parameter
 ):
     instance_id = 0
 
@@ -90,6 +91,10 @@ def arrival_generator(
     arr_mean = float(arrival_dist.get("mean", 10.0))
 
     while True:
+        # <-- 2. Add this break condition
+        if max_instances is not None and instance_id >= max_instances:
+            break
+
         env.process(
             tracked_instance(
                 env,
@@ -109,11 +114,9 @@ def arrival_generator(
 
         if arr_type == "fixed":
             yield env.timeout(arr_mean)
-
         elif arr_type == "normal":
             std_dev = float(arrival_dist.get("arg1", arr_mean * 0.15))
             yield env.timeout(max(0, rng.normal(arr_mean, std_dev)))
-
         else:
             yield env.timeout(rng.exponential(arr_mean))
 
@@ -165,7 +168,7 @@ class ScenarioSimulator:
 
         return global_resources
 
-    def run_replication(self, until=86400):
+    def run_replication(self, until=86400, max_instances=None):
 
         rng = np.random.default_rng(self.seed)
 
@@ -195,10 +198,14 @@ class ScenarioSimulator:
                 durations,
                 wait_times,
                 rng,
+                max_instances=max_instances
             )
         )
 
-        env.run(until=until)
+        if max_instances is not None:
+            env.run()
+        else:
+            env.run(until=until)
 
         completed = len(durations)
 

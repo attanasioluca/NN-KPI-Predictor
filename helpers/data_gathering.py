@@ -103,6 +103,7 @@ MIN_REPS = 5
 MAX_REPS = 75
 TARGET_REL_ERROR = 0.02
 SIMULATION_TIME = 86400 * 90
+MAX_INSTANCES = None
 
 def worker_task(scenario_id):
     try:
@@ -156,7 +157,7 @@ def worker_task(scenario_id):
 
         for rep in range(MAX_REPS):
             simulator.seed = rep_seeds[rep]
-            rep_result = simulator.run_replication(until=SIMULATION_TIME)
+            rep_result = simulator.run_replication(until=SIMULATION_TIME, max_instances=MAX_INSTANCES)
             
             # EARLY DROPPING: If the queue immediately explodes past our dynamic threshold, 
             # drop the simulation entirely to save time. It would be dropped by the model anyway.
