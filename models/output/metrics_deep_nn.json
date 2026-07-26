@@ -20,6 +20,26 @@
         }
     },
     {
+        "Data Source": "real",
+        "Model Name": "Deep Network - Hypertuned",
+        "Best Test Loss": 0.019140586510350166,
+        "MedAE": {
+            "cost": 607.8874121559493,
+            "cycle_time": 286.3924399211246,
+            "waiting_time": 335.39649830494454
+        },
+        "MAE": {
+            "cost": 858.9001476688353,
+            "cycle_time": 1727.0442968233056,
+            "waiting_time": 1827.088451032427
+        },
+        "MedAE_Percentage": {
+            "cost": 0.8369713654375232,
+            "cycle_time": 0.9966497679909158,
+            "waiting_time": 1.4208790083861904
+        }
+    },
+    {
         "Data Source": "synthetic",
         "Model Name": "Deep Network - Hypertuned",
         "Best Test Loss": 0.006589406797519097,

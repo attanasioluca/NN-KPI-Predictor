@@ -28,10 +28,10 @@ NON_FEATURE_COLS = [
 ]
 CONVERGENCE_FLAGS = ["converged", "converged_wait", "converged_cost", "converged_duration"]
 
-BATCH_SIZE = 256
-LEARNING_RATE = 0.004958873493098821
-WEIGHT_DECAY = 0.0001012349687661536
-DROPOUT_RATE = 0.2939647351070084
+BATCH_SIZE = 128
+LEARNING_RATE = 0.003762055405219111
+WEIGHT_DECAY = 3.4659127733948095e-05
+DROPOUT_RATE = 0.3873774479725938
 
 def inverse_transform_targets(y_scaled, y_scaler):
     y_unscaled = y_scaler.inverse_transform(y_scaled)

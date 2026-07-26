@@ -22,21 +22,21 @@
     {
         "Data Source": "real",
         "Model Name": "Linear Regression Baseline",
-        "Best Test Loss": 0.5101460386881471,
+        "Best Test Loss": 0.44192012884562526,
         "MedAE": {
-            "cost": 9340.876884158584,
-            "cycle_time": 4334.907142423119,
-            "waiting_time": 4446.386160304273
+            "cost": 9196.116119704326,
+            "cycle_time": 3911.9032420104086,
+            "waiting_time": 4057.9291865540436
         },
         "MAE": {
-            "cost": 11250.74085470402,
-            "cycle_time": 11545.069353865058,
-            "waiting_time": 11809.490581874288
+            "cost": 11185.344026660414,
+            "cycle_time": 8742.919491938137,
+            "waiting_time": 9079.686435891803
         },
         "MedAE_Percentage": {
-            "cost": 12.738471561747222,
-            "cycle_time": 15.100031925925897,
-            "waiting_time": 18.88557567889014
+            "cost": 12.66169641205922,
+            "cycle_time": 13.613478971813478,
+            "waiting_time": 17.191075124016248
         }
     },
     {

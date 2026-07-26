@@ -109,11 +109,11 @@ def main(SOURCE="real", train_num=5000):
     EPOCHS = 10000
    
     BATCH_SIZE = 128
-    LEARNING_RATE = 0.00048787444136057484
-    WEIGHT_DECAY = 0.0003548797950247993
+    LEARNING_RATE = 0.0004942350005629194
+    WEIGHT_DECAY = 0.00969342764145206
     HIDDEN_DIM = 512
-    NUM_BLOCKS = 7
-    DROPOUT_RATE = 0.2869346217240727
+    NUM_BLOCKS = 6
+    DROPOUT_RATE = 0.32274561809704083
     #Real params
     
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")

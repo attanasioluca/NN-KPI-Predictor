@@ -22,21 +22,21 @@
     {
         "Data Source": "real",
         "Model Name": "Simple NN",
-        "Best Test Loss": 0.19986457254582576,
+        "Best Test Loss": 0.12148243405460184,
         "MedAE": {
-            "cost": 2960.1827903093945,
-            "cycle_time": 1104.4008689162802,
-            "waiting_time": 1085.5972287753211
+            "cost": 3117.7133463139908,
+            "cycle_time": 903.7370172417614,
+            "waiting_time": 859.1074475881105
         },
         "MAE": {
-            "cost": 4053.160465239814,
-            "cycle_time": 7896.194926647754,
-            "waiting_time": 7972.7356009680425
+            "cost": 4194.518765288369,
+            "cycle_time": 4910.215634657137,
+            "waiting_time": 4995.516928239175
         },
         "MedAE_Percentage": {
-            "cost": 4.036901969651265,
-            "cycle_time": 3.847023207591556,
-            "waiting_time": 4.610964473546029
+            "cost": 4.2926317346373635,
+            "cycle_time": 3.1450176855466863,
+            "waiting_time": 3.6395363231142883
         }
     },
     {
