@@ -96,10 +96,5 @@ The main architecture is a **deep feed-forward surrogate network** with:
 
 This design allows the model to learn common process dynamics while specializing for each target metric.
 
----
-
-## Example Use Case
-
-Given a process scenario:
 
 <Code value=
