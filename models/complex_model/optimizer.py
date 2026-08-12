@@ -19,6 +19,7 @@ from hypertuned_model import (
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
     DROPOUT_RATE,
+    load_hyperparameters,
     inverse_transform_targets,
     inverse_transform_targets_torch
 )
@@ -84,10 +85,10 @@ def main(SOURCE="real"):
     print("\n[2/4] Running High-Speed Neural Network Optimizer...")
     x_scaler = joblib.load(f'models/complex_model/output/{SOURCE}/x_scaler.pkl')
     y_scaler = joblib.load(f'models/complex_model/output/{SOURCE}/y_scaler.pkl')
-    
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
-    
-    model = PharmacySurrogate(x_scaler.n_features_in_, DROPOUT_RATE=DROPOUT_RATE).to(device)
+
+    params = load_hyperparameters(source=SOURCE)
+    model = PharmacySurrogate(x_scaler.n_features_in_, DROPOUT_RATE=params["dropout_rate"]).to(device)
     model.load_state_dict(torch.load(f'models/complex_model/output/{SOURCE}/surrogate_model.pth', map_location=device, weights_only=True))
     model.eval()
     for param in model.parameters(): param.requires_grad = False

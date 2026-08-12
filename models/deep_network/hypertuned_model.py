@@ -29,6 +29,76 @@ NON_FEATURE_COLS = [
 ]
 CONVERGENCE_FLAGS = ["converged", "converged_wait", "converged_cost", "converged_duration"]
 
+def load_hyperparameters(source=None, base_dir=None):
+    """
+    Loads hyperparameter settings using precedence:
+    1. Environment variables (BATCH_SIZE, LEARNING_RATE/LR, WEIGHT_DECAY, HIDDEN_DIM, NUM_BLOCKS, DROPOUT_RATE)
+    2. Source-specific JSON config (output/{source}/best_params.json)
+    3. Global model JSON config (best_params.json)
+    4. Default fallbacks
+    """
+    if base_dir is None:
+        base_dir = Path(__file__).parent
+
+    defaults = {
+        "batch_size": 128,
+        "learning_rate": 0.0004942350005629194,
+        "weight_decay": 0.00969342764145206,
+        "hidden_dim": 512,
+        "num_blocks": 6,
+        "dropout_rate": 0.32274561809704083
+    }
+    params = defaults.copy()
+
+    # 1. Source-specific JSON file
+    if source:
+        source_json = base_dir / f"output/{source}/best_params.json"
+        if source_json.exists():
+            try:
+                with open(source_json, "r") as f:
+                    params.update(json.load(f))
+            except Exception:
+                pass
+
+    # 2. Global model JSON file (if source JSON did not exist)
+    generic_json = base_dir / "best_params.json"
+    if generic_json.exists():
+        try:
+            with open(generic_json, "r") as f:
+                loaded = json.load(f)
+                for k, v in loaded.items():
+                    if source and (base_dir / f"output/{source}/best_params.json").exists():
+                        continue
+                    params[k] = v
+        except Exception:
+            pass
+
+    # 3. Environment Variables Override
+    if os.environ.get("BATCH_SIZE"):
+        params["batch_size"] = int(os.environ["BATCH_SIZE"])
+    if os.environ.get("LEARNING_RATE"):
+        params["learning_rate"] = float(os.environ["LEARNING_RATE"])
+    elif os.environ.get("LR"):
+        params["learning_rate"] = float(os.environ["LR"])
+    if os.environ.get("WEIGHT_DECAY"):
+        params["weight_decay"] = float(os.environ["WEIGHT_DECAY"])
+    if os.environ.get("HIDDEN_DIM"):
+        params["hidden_dim"] = int(os.environ["HIDDEN_DIM"])
+    if os.environ.get("NUM_BLOCKS"):
+        params["num_blocks"] = int(os.environ["NUM_BLOCKS"])
+    if os.environ.get("DROPOUT_RATE"):
+        params["dropout_rate"] = float(os.environ["DROPOUT_RATE"])
+
+    return params
+
+DEFAULT_PARAMS = load_hyperparameters()
+BATCH_SIZE = int(DEFAULT_PARAMS["batch_size"])
+LEARNING_RATE = float(DEFAULT_PARAMS.get("learning_rate", DEFAULT_PARAMS.get("lr", 0.00049)))
+WEIGHT_DECAY = float(DEFAULT_PARAMS["weight_decay"])
+HIDDEN_DIM = int(DEFAULT_PARAMS["hidden_dim"])
+NUM_BLOCKS = int(DEFAULT_PARAMS["num_blocks"])
+DROPOUT_RATE = float(DEFAULT_PARAMS["dropout_rate"])
+
 def inverse_transform_targets(y_scaled, y_scaler):
     y_unscaled = y_scaler.inverse_transform(y_scaled)
     y_real = y_unscaled.copy()
@@ -107,15 +177,17 @@ class DeepPharmacySurrogate(nn.Module):
 def main(SOURCE="real", train_num=5000):
     DATA_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
     EPOCHS = 10000
-   
-    BATCH_SIZE = 128
-    LEARNING_RATE = 0.0004942350005629194
-    WEIGHT_DECAY = 0.00969342764145206
-    HIDDEN_DIM = 512
-    NUM_BLOCKS = 6
-    DROPOUT_RATE = 0.32274561809704083
-    #Real params
-    
+
+    params = load_hyperparameters(source=SOURCE)
+    batch_size = int(params["batch_size"])
+    learning_rate = float(params.get("learning_rate", params.get("lr")))
+    weight_decay = float(params["weight_decay"])
+    hidden_dim = int(params["hidden_dim"])
+    num_blocks = int(params["num_blocks"])
+    dropout_rate = float(params["dropout_rate"])
+
+    print(f"Hyperparameters loaded for source '{SOURCE}': BATCH_SIZE={batch_size}, LEARNING_RATE={learning_rate}, WEIGHT_DECAY={weight_decay}, HIDDEN_DIM={hidden_dim}, NUM_BLOCKS={num_blocks}, DROPOUT_RATE={dropout_rate}")
+
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     print("Loading dataset from source:", SOURCE)
     df = pd.read_csv(DATA_FILE)
@@ -161,12 +233,12 @@ def main(SOURCE="real", train_num=5000):
     train_dataset = SimulationDataset(X_train_scaled, y_train_scaled)
     test_dataset = SimulationDataset(X_test_scaled, y_test_scaled)
     
-    train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-    model = DeepPharmacySurrogate(input_size, HIDDEN_DIM, NUM_BLOCKS, DROPOUT_RATE).to(device)
+    model = DeepPharmacySurrogate(input_size, hidden_dim, num_blocks, dropout_rate).to(device)
     criterion = nn.MSELoss() 
-    optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+    optimizer = optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=EPOCHS, eta_min=1e-5)
     
     best_test_loss = float('inf')
@@ -289,6 +361,6 @@ def main(SOURCE="real", train_num=5000):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("source", nargs="?", default="synthetic", help="Dataset source")
-    parser.add_argument("--train_num", type=int, default=40000, help="Number of training samples")
+    parser.add_argument("--train_num", type=int, default=100000, help="Number of training samples")
     args = parser.parse_args()
     main(args.source, train_num=args.train_num)

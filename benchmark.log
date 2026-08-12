@@ -1,0 +1,2093 @@
+==================================================
+ Starting Full NN-KPI-Predictor Benchmark Test
+==================================================
+
+[1/12] Running LR Model (synthetic)...
+Loading dataset from source: synthetic
+Dropped 1440 unconverged rows (48558 remain).
+Features: 20 | Targets: 3
+--> Training on 38846 samples.
+--> Testing on 9712 consistent samples.
+Scaling data...
+Saved lr_x_scaler.pkl and lr_y_scaler.pkl
+
+Training Linear Regression Model...
+Training complete in 0.0127 seconds.
+Saved trained model to lr_model.pkl
+
+Evaluating on Test Set...
+
+=====================================================================
+                    LINEAR REGRESSION RESULTS
+=====================================================================
+Test Loss (Scaled MSE): 0.3917
+   ↳ MedAE -> Cost: $6572.94 (±14.6%) | Cycle Time: 3035.5s (±13.1%) | Wait Time: 2953.8s (±15.6%)
+   ↳ MAE   -> Cost: $9124.98 | Cycle Time: 7470.0s | Wait Time: 7476.0s
+=====================================================================
+Updated metrics saved to models/output/metrics_lr_model.json
+
+[2/12] Running LR Model (BIMP)...
+Loading dataset from source: BIMP
+Dropped 30 unconverged rows (80411 remain).
+Features: 13 | Targets: 3
+--> Training on 64328 samples.
+--> Testing on 16083 consistent samples.
+Scaling data...
+Saved lr_x_scaler.pkl and lr_y_scaler.pkl
+
+Training Linear Regression Model...
+Training complete in 0.0110 seconds.
+Saved trained model to lr_model.pkl
+
+Evaluating on Test Set...
+
+=====================================================================
+                    LINEAR REGRESSION RESULTS
+=====================================================================
+Test Loss (Scaled MSE): 0.4887
+   ↳ MedAE -> Cost: $5452.82 (±16.5%) | Cycle Time: 1130.9s (±6.3%) | Wait Time: 1610.0s (±4.7%)
+   ↳ MAE   -> Cost: $6901.45 | Cycle Time: 1923.2s | Wait Time: 2548.2s
+=====================================================================
+Updated metrics saved to models/output/metrics_lr_model.json
+
+[3/12] Running Simple Model (synthetic)...
+Training on device: mps
+Loading dataset from source: synthetic
+Dropped 1440 unconverged rows (48558 remain).
+Features: 20 | Targets: 3
+--> Training on 38846 samples.
+--> Testing on 9712 consistent samples.
+Scaling data...
+Saved x_scaler.pkl and y_scaler.pkl
+Starting training for up to 2500 epochs...
+Epoch [1/2500] | Train Loss: 0.4051 | Test Loss: 0.1744
+   ↳ MedAE -> Cost: $3400.38 (±7.6%) | Cycle Time: 708.3s (±3.1%) | Wait Time: 581.2s (±3.1%)
+   ↳ MAE   -> Cost: $4567.98 | Cycle Time: 5341.1s | Wait Time: 5230.0s
+Epoch [5/2500] | Train Loss: 0.1719 | Test Loss: 0.0872
+   ↳ MedAE -> Cost: $2299.35 (±5.1%) | Cycle Time: 461.4s (±2.0%) | Wait Time: 393.6s (±2.1%)
+   ↳ MAE   -> Cost: $3253.36 | Cycle Time: 4287.6s | Wait Time: 4201.0s
+Epoch [10/2500] | Train Loss: 0.1391 | Test Loss: 0.0676
+   ↳ MedAE -> Cost: $2335.05 (±5.2%) | Cycle Time: 385.8s (±1.7%) | Wait Time: 315.7s (±1.7%)
+   ↳ MAE   -> Cost: $3129.23 | Cycle Time: 3515.8s | Wait Time: 3548.3s
+Epoch [15/2500] | Train Loss: 0.1243 | Test Loss: 0.0760
+   ↳ MedAE -> Cost: $2464.48 (±5.5%) | Cycle Time: 358.2s (±1.5%) | Wait Time: 299.6s (±1.6%)
+   ↳ MAE   -> Cost: $3480.19 | Cycle Time: 3568.7s | Wait Time: 3634.9s
+Epoch [20/2500] | Train Loss: 0.1162 | Test Loss: 0.0559
+   ↳ MedAE -> Cost: $2370.12 (±5.3%) | Cycle Time: 369.8s (±1.6%) | Wait Time: 300.3s (±1.6%)
+   ↳ MAE   -> Cost: $3101.30 | Cycle Time: 3283.9s | Wait Time: 3225.5s
+Epoch [25/2500] | Train Loss: 0.1091 | Test Loss: 0.0539
+   ↳ MedAE -> Cost: $2157.55 (±4.8%) | Cycle Time: 315.0s (±1.4%) | Wait Time: 265.3s (±1.4%)
+   ↳ MAE   -> Cost: $3076.84 | Cycle Time: 3169.6s | Wait Time: 3104.0s
+Epoch [30/2500] | Train Loss: 0.1133 | Test Loss: 0.0455
+   ↳ MedAE -> Cost: $2225.96 (±5.0%) | Cycle Time: 405.7s (±1.8%) | Wait Time: 358.5s (±1.9%)
+   ↳ MAE   -> Cost: $2924.03 | Cycle Time: 3639.9s | Wait Time: 3625.8s
+Epoch [35/2500] | Train Loss: 0.1039 | Test Loss: 0.0405
+   ↳ MedAE -> Cost: $2132.56 (±4.7%) | Cycle Time: 324.8s (±1.4%) | Wait Time: 275.5s (±1.5%)
+   ↳ MAE   -> Cost: $2803.65 | Cycle Time: 3129.6s | Wait Time: 3096.0s
+Epoch [40/2500] | Train Loss: 0.0957 | Test Loss: 0.0547
+   ↳ MedAE -> Cost: $2018.65 (±4.5%) | Cycle Time: 329.8s (±1.4%) | Wait Time: 261.1s (±1.4%)
+   ↳ MAE   -> Cost: $2699.44 | Cycle Time: 3076.9s | Wait Time: 3115.9s
+Epoch [45/2500] | Train Loss: 0.1027 | Test Loss: 0.0445
+   ↳ MedAE -> Cost: $2009.70 (±4.5%) | Cycle Time: 362.9s (±1.6%) | Wait Time: 273.8s (±1.4%)
+   ↳ MAE   -> Cost: $2699.51 | Cycle Time: 2845.2s | Wait Time: 2817.5s
+Epoch [50/2500] | Train Loss: 0.0951 | Test Loss: 0.0361
+   ↳ MedAE -> Cost: $2040.62 (±4.5%) | Cycle Time: 374.7s (±1.6%) | Wait Time: 278.9s (±1.5%)
+   ↳ MAE   -> Cost: $2689.71 | Cycle Time: 2911.8s | Wait Time: 2808.1s
+Epoch [55/2500] | Train Loss: 0.1022 | Test Loss: 0.0424
+   ↳ MedAE -> Cost: $1953.22 (±4.3%) | Cycle Time: 319.5s (±1.4%) | Wait Time: 243.4s (±1.3%)
+   ↳ MAE   -> Cost: $2589.10 | Cycle Time: 2747.7s | Wait Time: 2636.3s
+Epoch [60/2500] | Train Loss: 0.0952 | Test Loss: 0.0358
+   ↳ MedAE -> Cost: $1990.01 (±4.4%) | Cycle Time: 364.2s (±1.6%) | Wait Time: 272.2s (±1.4%)
+   ↳ MAE   -> Cost: $2615.46 | Cycle Time: 2439.9s | Wait Time: 2416.6s
+Epoch [65/2500] | Train Loss: 0.0925 | Test Loss: 0.0391
+   ↳ MedAE -> Cost: $1986.64 (±4.4%) | Cycle Time: 317.9s (±1.4%) | Wait Time: 266.6s (±1.4%)
+   ↳ MAE   -> Cost: $2633.75 | Cycle Time: 2325.5s | Wait Time: 2274.4s
+Epoch [70/2500] | Train Loss: 0.0807 | Test Loss: 0.0271
+   ↳ MedAE -> Cost: $1990.65 (±4.4%) | Cycle Time: 342.5s (±1.5%) | Wait Time: 255.4s (±1.3%)
+   ↳ MAE   -> Cost: $2651.51 | Cycle Time: 2090.2s | Wait Time: 2024.2s
+Epoch [75/2500] | Train Loss: 0.0894 | Test Loss: 0.0330
+   ↳ MedAE -> Cost: $1990.81 (±4.4%) | Cycle Time: 350.8s (±1.5%) | Wait Time: 277.0s (±1.5%)
+   ↳ MAE   -> Cost: $2629.49 | Cycle Time: 2361.1s | Wait Time: 2380.9s
+Epoch [80/2500] | Train Loss: 0.0864 | Test Loss: 0.0300
+   ↳ MedAE -> Cost: $2004.97 (±4.5%) | Cycle Time: 325.6s (±1.4%) | Wait Time: 267.1s (±1.4%)
+   ↳ MAE   -> Cost: $2591.00 | Cycle Time: 2114.9s | Wait Time: 2094.6s
+Epoch [85/2500] | Train Loss: 0.0853 | Test Loss: 0.0337
+   ↳ MedAE -> Cost: $2087.33 (±4.6%) | Cycle Time: 340.1s (±1.5%) | Wait Time: 279.3s (±1.5%)
+   ↳ MAE   -> Cost: $2684.86 | Cycle Time: 2175.2s | Wait Time: 2116.3s
+Epoch [90/2500] | Train Loss: 0.0859 | Test Loss: 0.0396
+   ↳ MedAE -> Cost: $2004.07 (±4.5%) | Cycle Time: 311.9s (±1.3%) | Wait Time: 249.3s (±1.3%)
+   ↳ MAE   -> Cost: $2566.61 | Cycle Time: 2250.2s | Wait Time: 2230.3s
+Epoch [95/2500] | Train Loss: 0.0777 | Test Loss: 0.0338
+   ↳ MedAE -> Cost: $1951.26 (±4.3%) | Cycle Time: 308.3s (±1.3%) | Wait Time: 245.0s (±1.3%)
+   ↳ MAE   -> Cost: $2561.06 | Cycle Time: 1989.9s | Wait Time: 2017.6s
+Epoch [100/2500] | Train Loss: 0.0865 | Test Loss: 0.0211
+   ↳ MedAE -> Cost: $2014.33 (±4.5%) | Cycle Time: 348.8s (±1.5%) | Wait Time: 269.5s (±1.4%)
+   ↳ MAE   -> Cost: $2645.42 | Cycle Time: 1711.7s | Wait Time: 1687.2s
+Epoch [105/2500] | Train Loss: 0.0865 | Test Loss: 0.0221
+   ↳ MedAE -> Cost: $1963.27 (±4.4%) | Cycle Time: 348.1s (±1.5%) | Wait Time: 258.8s (±1.4%)
+   ↳ MAE   -> Cost: $2601.35 | Cycle Time: 1728.1s | Wait Time: 1692.8s
+Epoch [110/2500] | Train Loss: 0.0877 | Test Loss: 0.0257
+   ↳ MedAE -> Cost: $2147.23 (±4.8%) | Cycle Time: 357.9s (±1.5%) | Wait Time: 282.0s (±1.5%)
+   ↳ MAE   -> Cost: $2756.47 | Cycle Time: 1829.8s | Wait Time: 1822.9s
+Epoch [115/2500] | Train Loss: 0.0800 | Test Loss: 0.0260
+   ↳ MedAE -> Cost: $1947.50 (±4.3%) | Cycle Time: 299.4s (±1.3%) | Wait Time: 228.6s (±1.2%)
+   ↳ MAE   -> Cost: $2580.67 | Cycle Time: 1804.3s | Wait Time: 1791.7s
+Epoch [120/2500] | Train Loss: 0.0859 | Test Loss: 0.0264
+   ↳ MedAE -> Cost: $1998.09 (±4.4%) | Cycle Time: 376.5s (±1.6%) | Wait Time: 271.7s (±1.4%)
+   ↳ MAE   -> Cost: $2600.32 | Cycle Time: 1800.1s | Wait Time: 1758.6s
+Epoch [125/2500] | Train Loss: 0.0880 | Test Loss: 0.0244
+   ↳ MedAE -> Cost: $1986.55 (±4.4%) | Cycle Time: 374.8s (±1.6%) | Wait Time: 267.5s (±1.4%)
+   ↳ MAE   -> Cost: $2566.88 | Cycle Time: 2175.2s | Wait Time: 2234.2s
+Epoch [130/2500] | Train Loss: 0.0765 | Test Loss: 0.0255
+   ↳ MedAE -> Cost: $2081.70 (±4.6%) | Cycle Time: 372.2s (±1.6%) | Wait Time: 258.5s (±1.4%)
+   ↳ MAE   -> Cost: $2649.48 | Cycle Time: 1923.4s | Wait Time: 1942.0s
+Epoch [135/2500] | Train Loss: 0.0829 | Test Loss: 0.0231
+   ↳ MedAE -> Cost: $2084.14 (±4.6%) | Cycle Time: 333.5s (±1.4%) | Wait Time: 257.9s (±1.4%)
+   ↳ MAE   -> Cost: $2678.38 | Cycle Time: 1676.7s | Wait Time: 1668.4s
+Epoch [140/2500] | Train Loss: 0.0820 | Test Loss: 0.0253
+   ↳ MedAE -> Cost: $2003.14 (±4.5%) | Cycle Time: 358.4s (±1.5%) | Wait Time: 235.4s (±1.2%)
+   ↳ MAE   -> Cost: $2575.91 | Cycle Time: 1793.7s | Wait Time: 1715.1s
+Epoch [145/2500] | Train Loss: 0.0797 | Test Loss: 0.0349
+   ↳ MedAE -> Cost: $2156.32 (±4.8%) | Cycle Time: 339.9s (±1.5%) | Wait Time: 237.8s (±1.3%)
+   ↳ MAE   -> Cost: $2803.49 | Cycle Time: 2106.6s | Wait Time: 2029.9s
+Epoch [150/2500] | Train Loss: 0.0723 | Test Loss: 0.0405
+   ↳ MedAE -> Cost: $2189.60 (±4.9%) | Cycle Time: 468.4s (±2.0%) | Wait Time: 295.4s (±1.6%)
+   ↳ MAE   -> Cost: $2745.87 | Cycle Time: 2298.1s | Wait Time: 2193.9s
+Epoch [155/2500] | Train Loss: 0.0752 | Test Loss: 0.0293
+   ↳ MedAE -> Cost: $2217.61 (±4.9%) | Cycle Time: 413.9s (±1.8%) | Wait Time: 270.4s (±1.4%)
+   ↳ MAE   -> Cost: $2960.73 | Cycle Time: 1780.0s | Wait Time: 1685.8s
+Epoch [160/2500] | Train Loss: 0.0838 | Test Loss: 0.0242
+   ↳ MedAE -> Cost: $2058.36 (±4.6%) | Cycle Time: 352.8s (±1.5%) | Wait Time: 239.9s (±1.3%)
+   ↳ MAE   -> Cost: $2687.71 | Cycle Time: 1786.5s | Wait Time: 1683.5s
+Epoch [165/2500] | Train Loss: 0.0784 | Test Loss: 0.0439
+   ↳ MedAE -> Cost: $2109.00 (±4.7%) | Cycle Time: 379.4s (±1.6%) | Wait Time: 259.9s (±1.4%)
+   ↳ MAE   -> Cost: $2716.92 | Cycle Time: 2221.4s | Wait Time: 2145.9s
+Epoch [170/2500] | Train Loss: 0.0770 | Test Loss: 0.0403
+   ↳ MedAE -> Cost: $1904.91 (±4.2%) | Cycle Time: 352.1s (±1.5%) | Wait Time: 235.5s (±1.2%)
+   ↳ MAE   -> Cost: $2438.03 | Cycle Time: 2200.4s | Wait Time: 2154.4s
+Epoch [175/2500] | Train Loss: 0.0766 | Test Loss: 0.0313
+   ↳ MedAE -> Cost: $1963.08 (±4.4%) | Cycle Time: 351.2s (±1.5%) | Wait Time: 235.2s (±1.2%)
+   ↳ MAE   -> Cost: $2543.17 | Cycle Time: 1819.7s | Wait Time: 1802.8s
+Epoch [180/2500] | Train Loss: 0.0812 | Test Loss: 0.0204
+   ↳ MedAE -> Cost: $2010.04 (±4.5%) | Cycle Time: 320.7s (±1.4%) | Wait Time: 221.5s (±1.2%)
+   ↳ MAE   -> Cost: $2597.04 | Cycle Time: 2147.0s | Wait Time: 2108.1s
+Epoch [185/2500] | Train Loss: 0.0802 | Test Loss: 0.0243
+   ↳ MedAE -> Cost: $2024.79 (±4.5%) | Cycle Time: 338.9s (±1.5%) | Wait Time: 234.7s (±1.2%)
+   ↳ MAE   -> Cost: $2589.57 | Cycle Time: 1919.4s | Wait Time: 1858.0s
+Epoch [190/2500] | Train Loss: 0.0791 | Test Loss: 0.0243
+   ↳ MedAE -> Cost: $2068.24 (±4.6%) | Cycle Time: 337.3s (±1.5%) | Wait Time: 239.4s (±1.3%)
+   ↳ MAE   -> Cost: $2739.74 | Cycle Time: 1792.4s | Wait Time: 1777.9s
+Epoch [195/2500] | Train Loss: 0.0746 | Test Loss: 0.0272
+   ↳ MedAE -> Cost: $2031.08 (±4.5%) | Cycle Time: 334.4s (±1.4%) | Wait Time: 239.7s (±1.3%)
+   ↳ MAE   -> Cost: $2684.74 | Cycle Time: 1813.2s | Wait Time: 1751.3s
+Epoch [200/2500] | Train Loss: 0.0751 | Test Loss: 0.0312
+   ↳ MedAE -> Cost: $2046.61 (±4.6%) | Cycle Time: 364.3s (±1.6%) | Wait Time: 236.1s (±1.2%)
+   ↳ MAE   -> Cost: $2594.83 | Cycle Time: 1963.1s | Wait Time: 1982.3s
+Epoch [205/2500] | Train Loss: 0.0720 | Test Loss: 0.0241
+   ↳ MedAE -> Cost: $1966.19 (±4.4%) | Cycle Time: 308.6s (±1.3%) | Wait Time: 251.2s (±1.3%)
+   ↳ MAE   -> Cost: $2491.00 | Cycle Time: 1779.7s | Wait Time: 1787.8s
+Epoch [210/2500] | Train Loss: 0.0786 | Test Loss: 0.0319
+   ↳ MedAE -> Cost: $2067.31 (±4.6%) | Cycle Time: 426.4s (±1.8%) | Wait Time: 320.8s (±1.7%)
+   ↳ MAE   -> Cost: $2699.17 | Cycle Time: 1936.3s | Wait Time: 1860.5s
+Epoch [215/2500] | Train Loss: 0.0806 | Test Loss: 0.0291
+   ↳ MedAE -> Cost: $1965.43 (±4.4%) | Cycle Time: 307.3s (±1.3%) | Wait Time: 227.6s (±1.2%)
+   ↳ MAE   -> Cost: $2551.17 | Cycle Time: 1746.7s | Wait Time: 1715.8s
+Epoch [220/2500] | Train Loss: 0.0758 | Test Loss: 0.0257
+   ↳ MedAE -> Cost: $2037.71 (±4.5%) | Cycle Time: 403.4s (±1.7%) | Wait Time: 269.0s (±1.4%)
+   ↳ MAE   -> Cost: $2589.16 | Cycle Time: 1728.1s | Wait Time: 1649.5s
+Epoch [225/2500] | Train Loss: 0.0793 | Test Loss: 0.0283
+   ↳ MedAE -> Cost: $2147.47 (±4.8%) | Cycle Time: 512.5s (±2.2%) | Wait Time: 348.3s (±1.8%)
+   ↳ MAE   -> Cost: $2721.49 | Cycle Time: 1892.7s | Wait Time: 1805.8s
+Epoch [230/2500] | Train Loss: 0.0813 | Test Loss: 0.0401
+   ↳ MedAE -> Cost: $2051.30 (±4.6%) | Cycle Time: 467.5s (±2.0%) | Wait Time: 319.0s (±1.7%)
+   ↳ MAE   -> Cost: $2670.95 | Cycle Time: 2080.9s | Wait Time: 2004.6s
+Epoch [235/2500] | Train Loss: 0.0715 | Test Loss: 0.0387
+   ↳ MedAE -> Cost: $2079.86 (±4.6%) | Cycle Time: 355.3s (±1.5%) | Wait Time: 246.1s (±1.3%)
+   ↳ MAE   -> Cost: $2639.52 | Cycle Time: 1995.9s | Wait Time: 2000.4s
+Epoch [240/2500] | Train Loss: 0.0778 | Test Loss: 0.0278
+   ↳ MedAE -> Cost: $1996.26 (±4.4%) | Cycle Time: 420.3s (±1.8%) | Wait Time: 273.4s (±1.4%)
+   ↳ MAE   -> Cost: $2642.81 | Cycle Time: 1827.0s | Wait Time: 1820.5s
+Epoch [245/2500] | Train Loss: 0.0725 | Test Loss: 0.0194
+   ↳ MedAE -> Cost: $2171.06 (±4.8%) | Cycle Time: 386.3s (±1.7%) | Wait Time: 240.3s (±1.3%)
+   ↳ MAE   -> Cost: $2792.54 | Cycle Time: 1549.0s | Wait Time: 1532.4s
+Epoch [250/2500] | Train Loss: 0.0772 | Test Loss: 0.0386
+   ↳ MedAE -> Cost: $2078.20 (±4.6%) | Cycle Time: 372.6s (±1.6%) | Wait Time: 236.9s (±1.2%)
+   ↳ MAE   -> Cost: $2624.87 | Cycle Time: 2014.9s | Wait Time: 2029.3s
+Epoch [255/2500] | Train Loss: 0.0749 | Test Loss: 0.0279
+   ↳ MedAE -> Cost: $2126.72 (±4.7%) | Cycle Time: 320.5s (±1.4%) | Wait Time: 228.9s (±1.2%)
+   ↳ MAE   -> Cost: $2773.85 | Cycle Time: 1784.3s | Wait Time: 1796.3s
+Epoch [260/2500] | Train Loss: 0.0804 | Test Loss: 0.0206
+   ↳ MedAE -> Cost: $1943.51 (±4.3%) | Cycle Time: 323.3s (±1.4%) | Wait Time: 213.2s (±1.1%)
+   ↳ MAE   -> Cost: $2516.58 | Cycle Time: 1665.8s | Wait Time: 1573.2s
+Epoch [265/2500] | Train Loss: 0.0683 | Test Loss: 0.0277
+   ↳ MedAE -> Cost: $2008.83 (±4.5%) | Cycle Time: 369.6s (±1.6%) | Wait Time: 258.1s (±1.4%)
+   ↳ MAE   -> Cost: $2567.81 | Cycle Time: 1935.9s | Wait Time: 1814.1s
+Epoch [270/2500] | Train Loss: 0.0773 | Test Loss: 0.0299
+   ↳ MedAE -> Cost: $1994.29 (±4.4%) | Cycle Time: 414.9s (±1.8%) | Wait Time: 281.4s (±1.5%)
+   ↳ MAE   -> Cost: $2524.95 | Cycle Time: 2004.2s | Wait Time: 2008.2s
+Epoch [275/2500] | Train Loss: 0.0671 | Test Loss: 0.0247
+   ↳ MedAE -> Cost: $2135.18 (±4.7%) | Cycle Time: 376.5s (±1.6%) | Wait Time: 255.7s (±1.3%)
+   ↳ MAE   -> Cost: $2656.10 | Cycle Time: 1631.0s | Wait Time: 1554.4s
+Epoch [280/2500] | Train Loss: 0.0687 | Test Loss: 0.0272
+   ↳ MedAE -> Cost: $1990.88 (±4.4%) | Cycle Time: 377.9s (±1.6%) | Wait Time: 246.6s (±1.3%)
+   ↳ MAE   -> Cost: $2601.50 | Cycle Time: 1706.5s | Wait Time: 1736.2s
+Epoch [285/2500] | Train Loss: 0.0748 | Test Loss: 0.0223
+   ↳ MedAE -> Cost: $2098.16 (±4.7%) | Cycle Time: 379.5s (±1.6%) | Wait Time: 252.9s (±1.3%)
+   ↳ MAE   -> Cost: $2646.60 | Cycle Time: 1701.4s | Wait Time: 1571.4s
+Epoch [290/2500] | Train Loss: 0.0738 | Test Loss: 0.0509
+   ↳ MedAE -> Cost: $1947.34 (±4.3%) | Cycle Time: 343.6s (±1.5%) | Wait Time: 252.0s (±1.3%)
+   ↳ MAE   -> Cost: $2558.98 | Cycle Time: 2242.4s | Wait Time: 2233.5s
+Epoch [295/2500] | Train Loss: 0.0735 | Test Loss: 0.0295
+   ↳ MedAE -> Cost: $2088.64 (±4.6%) | Cycle Time: 398.9s (±1.7%) | Wait Time: 273.2s (±1.4%)
+   ↳ MAE   -> Cost: $2643.11 | Cycle Time: 1800.7s | Wait Time: 1746.8s
+Epoch [300/2500] | Train Loss: 0.0763 | Test Loss: 0.0292
+   ↳ MedAE -> Cost: $1957.95 (±4.4%) | Cycle Time: 307.2s (±1.3%) | Wait Time: 228.7s (±1.2%)
+   ↳ MAE   -> Cost: $2522.31 | Cycle Time: 1936.4s | Wait Time: 1832.0s
+Epoch [305/2500] | Train Loss: 0.0785 | Test Loss: 0.0371
+   ↳ MedAE -> Cost: $2071.74 (±4.6%) | Cycle Time: 409.5s (±1.8%) | Wait Time: 256.0s (±1.3%)
+   ↳ MAE   -> Cost: $2685.23 | Cycle Time: 2021.0s | Wait Time: 1894.4s
+Epoch [310/2500] | Train Loss: 0.0762 | Test Loss: 0.0370
+   ↳ MedAE -> Cost: $1956.89 (±4.4%) | Cycle Time: 322.7s (±1.4%) | Wait Time: 229.2s (±1.2%)
+   ↳ MAE   -> Cost: $2579.14 | Cycle Time: 1943.0s | Wait Time: 1953.3s
+Epoch [315/2500] | Train Loss: 0.0745 | Test Loss: 0.0240
+   ↳ MedAE -> Cost: $2021.81 (±4.5%) | Cycle Time: 337.3s (±1.5%) | Wait Time: 234.4s (±1.2%)
+   ↳ MAE   -> Cost: $2625.55 | Cycle Time: 1623.4s | Wait Time: 1516.9s
+Epoch [320/2500] | Train Loss: 0.0736 | Test Loss: 0.0316
+   ↳ MedAE -> Cost: $1983.51 (±4.4%) | Cycle Time: 404.1s (±1.7%) | Wait Time: 268.6s (±1.4%)
+   ↳ MAE   -> Cost: $2484.21 | Cycle Time: 1938.0s | Wait Time: 1915.0s
+Epoch [325/2500] | Train Loss: 0.0776 | Test Loss: 0.0318
+   ↳ MedAE -> Cost: $2170.74 (±4.8%) | Cycle Time: 389.2s (±1.7%) | Wait Time: 249.7s (±1.3%)
+   ↳ MAE   -> Cost: $2910.75 | Cycle Time: 1857.6s | Wait Time: 1811.5s
+Epoch [330/2500] | Train Loss: 0.0729 | Test Loss: 0.0359
+   ↳ MedAE -> Cost: $1986.19 (±4.4%) | Cycle Time: 453.5s (±2.0%) | Wait Time: 323.6s (±1.7%)
+   ↳ MAE   -> Cost: $2525.29 | Cycle Time: 1945.0s | Wait Time: 1860.8s
+Epoch [335/2500] | Train Loss: 0.0724 | Test Loss: 0.0309
+   ↳ MedAE -> Cost: $2099.83 (±4.7%) | Cycle Time: 373.3s (±1.6%) | Wait Time: 243.7s (±1.3%)
+   ↳ MAE   -> Cost: $2724.27 | Cycle Time: 1844.4s | Wait Time: 1794.4s
+Epoch [340/2500] | Train Loss: 0.0685 | Test Loss: 0.0421
+   ↳ MedAE -> Cost: $2038.28 (±4.5%) | Cycle Time: 510.4s (±2.2%) | Wait Time: 357.1s (±1.9%)
+   ↳ MAE   -> Cost: $2721.74 | Cycle Time: 2069.9s | Wait Time: 1994.1s
+Epoch [345/2500] | Train Loss: 0.0725 | Test Loss: 0.0326
+   ↳ MedAE -> Cost: $2004.35 (±4.5%) | Cycle Time: 352.1s (±1.5%) | Wait Time: 239.6s (±1.3%)
+   ↳ MAE   -> Cost: $2579.19 | Cycle Time: 1892.3s | Wait Time: 1815.1s
+Epoch [350/2500] | Train Loss: 0.0728 | Test Loss: 0.0468
+   ↳ MedAE -> Cost: $2018.09 (±4.5%) | Cycle Time: 379.5s (±1.6%) | Wait Time: 253.5s (±1.3%)
+   ↳ MAE   -> Cost: $2601.49 | Cycle Time: 2163.0s | Wait Time: 2158.8s
+Epoch [355/2500] | Train Loss: 0.0640 | Test Loss: 0.0230
+   ↳ MedAE -> Cost: $2010.28 (±4.5%) | Cycle Time: 338.6s (±1.5%) | Wait Time: 234.1s (±1.2%)
+   ↳ MAE   -> Cost: $2585.38 | Cycle Time: 1651.8s | Wait Time: 1560.2s
+Epoch [360/2500] | Train Loss: 0.0662 | Test Loss: 0.0288
+   ↳ MedAE -> Cost: $2053.72 (±4.6%) | Cycle Time: 478.1s (±2.1%) | Wait Time: 380.3s (±2.0%)
+   ↳ MAE   -> Cost: $2586.98 | Cycle Time: 1900.5s | Wait Time: 1920.0s
+Epoch [365/2500] | Train Loss: 0.0754 | Test Loss: 0.0361
+   ↳ MedAE -> Cost: $2014.82 (±4.5%) | Cycle Time: 357.5s (±1.5%) | Wait Time: 243.3s (±1.3%)
+   ↳ MAE   -> Cost: $2566.42 | Cycle Time: 2030.7s | Wait Time: 2072.1s
+Epoch [370/2500] | Train Loss: 0.0728 | Test Loss: 0.0307
+   ↳ MedAE -> Cost: $2028.62 (±4.5%) | Cycle Time: 483.9s (±2.1%) | Wait Time: 350.4s (±1.8%)
+   ↳ MAE   -> Cost: $2587.42 | Cycle Time: 1927.7s | Wait Time: 1899.6s
+Epoch [375/2500] | Train Loss: 0.0687 | Test Loss: 0.0312
+   ↳ MedAE -> Cost: $2130.59 (±4.7%) | Cycle Time: 395.1s (±1.7%) | Wait Time: 282.2s (±1.5%)
+   ↳ MAE   -> Cost: $2721.58 | Cycle Time: 1778.2s | Wait Time: 1719.1s
+Epoch [380/2500] | Train Loss: 0.0653 | Test Loss: 0.0296
+   ↳ MedAE -> Cost: $2169.60 (±4.8%) | Cycle Time: 377.4s (±1.6%) | Wait Time: 241.5s (±1.3%)
+   ↳ MAE   -> Cost: $2778.60 | Cycle Time: 1821.3s | Wait Time: 1702.6s
+Epoch [385/2500] | Train Loss: 0.0704 | Test Loss: 0.0369
+   ↳ MedAE -> Cost: $2074.35 (±4.6%) | Cycle Time: 391.7s (±1.7%) | Wait Time: 287.3s (±1.5%)
+   ↳ MAE   -> Cost: $2644.46 | Cycle Time: 1797.2s | Wait Time: 1785.4s
+Epoch [390/2500] | Train Loss: 0.0683 | Test Loss: 0.0319
+   ↳ MedAE -> Cost: $2053.21 (±4.6%) | Cycle Time: 433.9s (±1.9%) | Wait Time: 288.8s (±1.5%)
+   ↳ MAE   -> Cost: $2674.22 | Cycle Time: 1838.6s | Wait Time: 1771.2s
+Epoch [395/2500] | Train Loss: 0.0679 | Test Loss: 0.0329
+   ↳ MedAE -> Cost: $1983.30 (±4.4%) | Cycle Time: 328.0s (±1.4%) | Wait Time: 225.3s (±1.2%)
+   ↳ MAE   -> Cost: $2553.25 | Cycle Time: 1935.0s | Wait Time: 1859.7s
+Epoch [400/2500] | Train Loss: 0.0724 | Test Loss: 0.0309
+   ↳ MedAE -> Cost: $2076.69 (±4.6%) | Cycle Time: 341.1s (±1.5%) | Wait Time: 228.3s (±1.2%)
+   ↳ MAE   -> Cost: $2688.18 | Cycle Time: 2163.4s | Wait Time: 2103.5s
+Epoch [405/2500] | Train Loss: 0.0668 | Test Loss: 0.0391
+   ↳ MedAE -> Cost: $1984.34 (±4.4%) | Cycle Time: 362.1s (±1.6%) | Wait Time: 233.5s (±1.2%)
+   ↳ MAE   -> Cost: $2578.49 | Cycle Time: 1893.3s | Wait Time: 1859.2s
+Epoch [410/2500] | Train Loss: 0.0741 | Test Loss: 0.0460
+   ↳ MedAE -> Cost: $2170.89 (±4.8%) | Cycle Time: 346.0s (±1.5%) | Wait Time: 243.2s (±1.3%)
+   ↳ MAE   -> Cost: $2744.26 | Cycle Time: 2427.6s | Wait Time: 2370.6s
+Epoch [415/2500] | Train Loss: 0.0677 | Test Loss: 0.0294
+   ↳ MedAE -> Cost: $2047.24 (±4.6%) | Cycle Time: 383.9s (±1.7%) | Wait Time: 237.7s (±1.3%)
+   ↳ MAE   -> Cost: $2636.14 | Cycle Time: 1874.8s | Wait Time: 1793.5s
+Epoch [420/2500] | Train Loss: 0.0693 | Test Loss: 0.0361
+   ↳ MedAE -> Cost: $2051.11 (±4.6%) | Cycle Time: 364.7s (±1.6%) | Wait Time: 224.2s (±1.2%)
+   ↳ MAE   -> Cost: $2589.84 | Cycle Time: 1962.6s | Wait Time: 1892.6s
+Epoch [425/2500] | Train Loss: 0.0705 | Test Loss: 0.0334
+   ↳ MedAE -> Cost: $2006.60 (±4.5%) | Cycle Time: 427.8s (±1.8%) | Wait Time: 252.1s (±1.3%)
+   ↳ MAE   -> Cost: $2570.28 | Cycle Time: 1938.2s | Wait Time: 1743.9s
+Epoch [430/2500] | Train Loss: 0.0685 | Test Loss: 0.0317
+   ↳ MedAE -> Cost: $2079.88 (±4.6%) | Cycle Time: 528.7s (±2.3%) | Wait Time: 305.6s (±1.6%)
+   ↳ MAE   -> Cost: $2675.90 | Cycle Time: 1944.6s | Wait Time: 1707.1s
+Epoch [435/2500] | Train Loss: 0.0742 | Test Loss: 0.0377
+   ↳ MedAE -> Cost: $1960.38 (±4.4%) | Cycle Time: 427.7s (±1.8%) | Wait Time: 265.2s (±1.4%)
+   ↳ MAE   -> Cost: $2547.87 | Cycle Time: 2167.9s | Wait Time: 2145.2s
+Epoch [440/2500] | Train Loss: 0.0675 | Test Loss: 0.0351
+   ↳ MedAE -> Cost: $2101.82 (±4.7%) | Cycle Time: 357.6s (±1.5%) | Wait Time: 230.5s (±1.2%)
+   ↳ MAE   -> Cost: $2665.60 | Cycle Time: 2202.8s | Wait Time: 2180.7s
+Epoch [445/2500] | Train Loss: 0.0658 | Test Loss: 0.0357
+   ↳ MedAE -> Cost: $2028.70 (±4.5%) | Cycle Time: 488.2s (±2.1%) | Wait Time: 285.8s (±1.5%)
+   ↳ MAE   -> Cost: $2594.67 | Cycle Time: 1984.4s | Wait Time: 1856.2s
+
+Early stopping triggered at Epoch 448!
+Best Test Loss achieved: 0.0192
+Training complete in 1682.18 seconds.
+Saved the BEST trained model weights to surrogate_model.pth
+
+Evaluating BEST model for JSON export...
+
+[4/12] Running Simple Model (BIMP)...
+Training on device: mps
+Loading dataset from source: BIMP
+Dropped 30 unconverged rows (80411 remain).
+Features: 13 | Targets: 3
+--> Training on 64328 samples.
+--> Testing on 16083 consistent samples.
+Scaling data...
+Saved x_scaler.pkl and y_scaler.pkl
+Starting training for up to 2500 epochs...
+Epoch [1/2500] | Train Loss: 0.3453 | Test Loss: 0.1772
+   ↳ MedAE -> Cost: $1440.65 (±4.4%) | Cycle Time: 254.1s (±1.4%) | Wait Time: 422.6s (±1.2%)
+   ↳ MAE   -> Cost: $2279.81 | Cycle Time: 1032.4s | Wait Time: 1354.9s
+Epoch [5/2500] | Train Loss: 0.1708 | Test Loss: 0.0737
+   ↳ MedAE -> Cost: $1137.39 (±3.4%) | Cycle Time: 194.1s (±1.1%) | Wait Time: 330.3s (±1.0%)
+   ↳ MAE   -> Cost: $1769.89 | Cycle Time: 678.9s | Wait Time: 933.6s
+Epoch [10/2500] | Train Loss: 0.1424 | Test Loss: 0.0694
+   ↳ MedAE -> Cost: $1334.68 (±4.0%) | Cycle Time: 154.8s (±0.9%) | Wait Time: 262.5s (±0.8%)
+   ↳ MAE   -> Cost: $1787.41 | Cycle Time: 630.6s | Wait Time: 823.4s
+Epoch [15/2500] | Train Loss: 0.1245 | Test Loss: 0.0479
+   ↳ MedAE -> Cost: $1065.08 (±3.2%) | Cycle Time: 147.2s (±0.8%) | Wait Time: 249.3s (±0.7%)
+   ↳ MAE   -> Cost: $1576.28 | Cycle Time: 546.1s | Wait Time: 725.2s
+Epoch [20/2500] | Train Loss: 0.1249 | Test Loss: 0.0492
+   ↳ MedAE -> Cost: $893.47 (±2.7%) | Cycle Time: 149.9s (±0.8%) | Wait Time: 255.8s (±0.7%)
+   ↳ MAE   -> Cost: $1328.82 | Cycle Time: 561.8s | Wait Time: 734.8s
+Epoch [25/2500] | Train Loss: 0.1248 | Test Loss: 0.0395
+   ↳ MedAE -> Cost: $1215.70 (±3.7%) | Cycle Time: 147.6s (±0.8%) | Wait Time: 253.9s (±0.7%)
+   ↳ MAE   -> Cost: $1850.26 | Cycle Time: 505.0s | Wait Time: 675.2s
+Epoch [30/2500] | Train Loss: 0.1201 | Test Loss: 0.0404
+   ↳ MedAE -> Cost: $1108.54 (±3.4%) | Cycle Time: 140.9s (±0.8%) | Wait Time: 240.3s (±0.7%)
+   ↳ MAE   -> Cost: $1580.79 | Cycle Time: 503.1s | Wait Time: 666.4s
+Epoch [35/2500] | Train Loss: 0.1180 | Test Loss: 0.0352
+   ↳ MedAE -> Cost: $1077.82 (±3.3%) | Cycle Time: 147.5s (±0.8%) | Wait Time: 242.5s (±0.7%)
+   ↳ MAE   -> Cost: $1494.93 | Cycle Time: 472.7s | Wait Time: 636.2s
+Epoch [40/2500] | Train Loss: 0.1120 | Test Loss: 0.0448
+   ↳ MedAE -> Cost: $921.65 (±2.8%) | Cycle Time: 143.4s (±0.8%) | Wait Time: 247.0s (±0.7%)
+   ↳ MAE   -> Cost: $1312.08 | Cycle Time: 529.6s | Wait Time: 694.0s
+Epoch [45/2500] | Train Loss: 0.1165 | Test Loss: 0.0347
+   ↳ MedAE -> Cost: $1115.92 (±3.4%) | Cycle Time: 146.6s (±0.8%) | Wait Time: 250.5s (±0.7%)
+   ↳ MAE   -> Cost: $1546.01 | Cycle Time: 461.1s | Wait Time: 631.2s
+Epoch [50/2500] | Train Loss: 0.1155 | Test Loss: 0.0374
+   ↳ MedAE -> Cost: $917.03 (±2.8%) | Cycle Time: 145.1s (±0.8%) | Wait Time: 249.8s (±0.7%)
+   ↳ MAE   -> Cost: $1332.03 | Cycle Time: 484.3s | Wait Time: 646.9s
+Epoch [55/2500] | Train Loss: 0.1091 | Test Loss: 0.0284
+   ↳ MedAE -> Cost: $1100.98 (±3.3%) | Cycle Time: 146.8s (±0.8%) | Wait Time: 245.9s (±0.7%)
+   ↳ MAE   -> Cost: $1428.02 | Cycle Time: 438.6s | Wait Time: 589.0s
+Epoch [60/2500] | Train Loss: 0.1079 | Test Loss: 0.0252
+   ↳ MedAE -> Cost: $1283.32 (±3.9%) | Cycle Time: 140.0s (±0.8%) | Wait Time: 241.2s (±0.7%)
+   ↳ MAE   -> Cost: $1864.33 | Cycle Time: 392.8s | Wait Time: 541.4s
+Epoch [65/2500] | Train Loss: 0.1045 | Test Loss: 0.0364
+   ↳ MedAE -> Cost: $1034.25 (±3.1%) | Cycle Time: 142.4s (±0.8%) | Wait Time: 247.7s (±0.7%)
+   ↳ MAE   -> Cost: $1703.56 | Cycle Time: 466.0s | Wait Time: 628.1s
+Epoch [70/2500] | Train Loss: 0.1057 | Test Loss: 0.0284
+   ↳ MedAE -> Cost: $1338.60 (±4.1%) | Cycle Time: 141.1s (±0.8%) | Wait Time: 241.4s (±0.7%)
+   ↳ MAE   -> Cost: $1761.72 | Cycle Time: 417.3s | Wait Time: 574.8s
+Epoch [75/2500] | Train Loss: 0.1036 | Test Loss: 0.0262
+   ↳ MedAE -> Cost: $845.03 (±2.6%) | Cycle Time: 165.0s (±0.9%) | Wait Time: 276.8s (±0.8%)
+   ↳ MAE   -> Cost: $1232.08 | Cycle Time: 427.2s | Wait Time: 587.3s
+Epoch [80/2500] | Train Loss: 0.1030 | Test Loss: 0.0230
+   ↳ MedAE -> Cost: $947.65 (±2.9%) | Cycle Time: 137.6s (±0.8%) | Wait Time: 236.5s (±0.7%)
+   ↳ MAE   -> Cost: $1317.64 | Cycle Time: 392.8s | Wait Time: 532.1s
+Epoch [85/2500] | Train Loss: 0.0997 | Test Loss: 0.0235
+   ↳ MedAE -> Cost: $836.11 (±2.5%) | Cycle Time: 136.1s (±0.8%) | Wait Time: 232.1s (±0.7%)
+   ↳ MAE   -> Cost: $1237.54 | Cycle Time: 396.3s | Wait Time: 531.6s
+Epoch [90/2500] | Train Loss: 0.1054 | Test Loss: 0.0317
+   ↳ MedAE -> Cost: $840.45 (±2.5%) | Cycle Time: 137.8s (±0.8%) | Wait Time: 232.3s (±0.7%)
+   ↳ MAE   -> Cost: $1237.48 | Cycle Time: 443.0s | Wait Time: 589.1s
+Epoch [95/2500] | Train Loss: 0.0998 | Test Loss: 0.0451
+   ↳ MedAE -> Cost: $859.90 (±2.6%) | Cycle Time: 149.6s (±0.8%) | Wait Time: 250.5s (±0.7%)
+   ↳ MAE   -> Cost: $1260.84 | Cycle Time: 522.7s | Wait Time: 712.6s
+Epoch [100/2500] | Train Loss: 0.1035 | Test Loss: 0.0261
+   ↳ MedAE -> Cost: $942.34 (±2.9%) | Cycle Time: 135.6s (±0.8%) | Wait Time: 234.6s (±0.7%)
+   ↳ MAE   -> Cost: $1257.49 | Cycle Time: 411.6s | Wait Time: 566.6s
+Epoch [105/2500] | Train Loss: 0.0986 | Test Loss: 0.0217
+   ↳ MedAE -> Cost: $797.83 (±2.4%) | Cycle Time: 135.1s (±0.8%) | Wait Time: 244.4s (±0.7%)
+   ↳ MAE   -> Cost: $1116.10 | Cycle Time: 384.8s | Wait Time: 532.1s
+Epoch [110/2500] | Train Loss: 0.1021 | Test Loss: 0.0243
+   ↳ MedAE -> Cost: $1249.92 (±3.8%) | Cycle Time: 142.6s (±0.8%) | Wait Time: 241.4s (±0.7%)
+   ↳ MAE   -> Cost: $1552.79 | Cycle Time: 393.9s | Wait Time: 535.6s
+Epoch [115/2500] | Train Loss: 0.1014 | Test Loss: 0.0225
+   ↳ MedAE -> Cost: $840.76 (±2.5%) | Cycle Time: 134.5s (±0.8%) | Wait Time: 233.4s (±0.7%)
+   ↳ MAE   -> Cost: $1190.98 | Cycle Time: 386.8s | Wait Time: 526.7s
+Epoch [120/2500] | Train Loss: 0.0994 | Test Loss: 0.0781
+   ↳ MedAE -> Cost: $1908.54 (±5.8%) | Cycle Time: 181.9s (±1.0%) | Wait Time: 291.1s (±0.8%)
+   ↳ MAE   -> Cost: $3051.95 | Cycle Time: 687.9s | Wait Time: 920.4s
+Epoch [125/2500] | Train Loss: 0.1067 | Test Loss: 0.0231
+   ↳ MedAE -> Cost: $1121.44 (±3.4%) | Cycle Time: 130.5s (±0.7%) | Wait Time: 227.0s (±0.7%)
+   ↳ MAE   -> Cost: $1564.53 | Cycle Time: 378.2s | Wait Time: 508.4s
+Epoch [130/2500] | Train Loss: 0.0993 | Test Loss: 0.0230
+   ↳ MedAE -> Cost: $1098.82 (±3.3%) | Cycle Time: 132.3s (±0.7%) | Wait Time: 230.9s (±0.7%)
+   ↳ MAE   -> Cost: $1689.34 | Cycle Time: 370.5s | Wait Time: 520.8s
+Epoch [135/2500] | Train Loss: 0.1020 | Test Loss: 0.0292
+   ↳ MedAE -> Cost: $1058.31 (±3.2%) | Cycle Time: 142.8s (±0.8%) | Wait Time: 238.4s (±0.7%)
+   ↳ MAE   -> Cost: $1448.02 | Cycle Time: 427.8s | Wait Time: 573.8s
+Epoch [140/2500] | Train Loss: 0.1026 | Test Loss: 0.0255
+   ↳ MedAE -> Cost: $994.70 (±3.0%) | Cycle Time: 137.7s (±0.8%) | Wait Time: 231.3s (±0.7%)
+   ↳ MAE   -> Cost: $1354.61 | Cycle Time: 407.8s | Wait Time: 551.2s
+Epoch [145/2500] | Train Loss: 0.1004 | Test Loss: 0.0208
+   ↳ MedAE -> Cost: $1051.29 (±3.2%) | Cycle Time: 127.4s (±0.7%) | Wait Time: 218.4s (±0.6%)
+   ↳ MAE   -> Cost: $1358.94 | Cycle Time: 359.9s | Wait Time: 493.0s
+Epoch [150/2500] | Train Loss: 0.0989 | Test Loss: 0.0215
+   ↳ MedAE -> Cost: $1124.52 (±3.4%) | Cycle Time: 131.5s (±0.7%) | Wait Time: 225.2s (±0.7%)
+   ↳ MAE   -> Cost: $1492.52 | Cycle Time: 367.3s | Wait Time: 504.8s
+Epoch [155/2500] | Train Loss: 0.0982 | Test Loss: 0.0238
+   ↳ MedAE -> Cost: $774.36 (±2.3%) | Cycle Time: 131.2s (±0.7%) | Wait Time: 231.9s (±0.7%)
+   ↳ MAE   -> Cost: $1151.82 | Cycle Time: 391.2s | Wait Time: 531.2s
+Epoch [160/2500] | Train Loss: 0.0971 | Test Loss: 0.0222
+   ↳ MedAE -> Cost: $837.10 (±2.5%) | Cycle Time: 130.5s (±0.7%) | Wait Time: 227.2s (±0.7%)
+   ↳ MAE   -> Cost: $1269.82 | Cycle Time: 365.2s | Wait Time: 506.5s
+Epoch [165/2500] | Train Loss: 0.0992 | Test Loss: 0.0379
+   ↳ MedAE -> Cost: $951.55 (±2.9%) | Cycle Time: 147.0s (±0.8%) | Wait Time: 255.3s (±0.7%)
+   ↳ MAE   -> Cost: $1368.39 | Cycle Time: 464.5s | Wait Time: 654.1s
+Epoch [170/2500] | Train Loss: 0.0960 | Test Loss: 0.0255
+   ↳ MedAE -> Cost: $1460.05 (±4.4%) | Cycle Time: 152.0s (±0.9%) | Wait Time: 256.8s (±0.7%)
+   ↳ MAE   -> Cost: $1763.92 | Cycle Time: 406.3s | Wait Time: 563.9s
+Epoch [175/2500] | Train Loss: 0.0941 | Test Loss: 0.0328
+   ↳ MedAE -> Cost: $1100.66 (±3.3%) | Cycle Time: 138.9s (±0.8%) | Wait Time: 239.1s (±0.7%)
+   ↳ MAE   -> Cost: $1568.89 | Cycle Time: 443.0s | Wait Time: 591.5s
+Epoch [180/2500] | Train Loss: 0.0945 | Test Loss: 0.0752
+   ↳ MedAE -> Cost: $847.98 (±2.6%) | Cycle Time: 161.2s (±0.9%) | Wait Time: 270.7s (±0.8%)
+   ↳ MAE   -> Cost: $1206.33 | Cycle Time: 626.9s | Wait Time: 860.6s
+Epoch [185/2500] | Train Loss: 0.0992 | Test Loss: 0.0318
+   ↳ MedAE -> Cost: $941.54 (±2.9%) | Cycle Time: 139.4s (±0.8%) | Wait Time: 237.4s (±0.7%)
+   ↳ MAE   -> Cost: $1300.71 | Cycle Time: 453.4s | Wait Time: 603.9s
+Epoch [190/2500] | Train Loss: 0.0968 | Test Loss: 0.0277
+   ↳ MedAE -> Cost: $903.08 (±2.7%) | Cycle Time: 137.4s (±0.8%) | Wait Time: 243.5s (±0.7%)
+   ↳ MAE   -> Cost: $1221.04 | Cycle Time: 416.6s | Wait Time: 580.0s
+Epoch [195/2500] | Train Loss: 0.0998 | Test Loss: 0.0405
+   ↳ MedAE -> Cost: $965.34 (±2.9%) | Cycle Time: 141.3s (±0.8%) | Wait Time: 242.3s (±0.7%)
+   ↳ MAE   -> Cost: $1393.47 | Cycle Time: 489.1s | Wait Time: 667.6s
+Epoch [200/2500] | Train Loss: 0.0990 | Test Loss: 0.0227
+   ↳ MedAE -> Cost: $1009.12 (±3.1%) | Cycle Time: 125.8s (±0.7%) | Wait Time: 218.4s (±0.6%)
+   ↳ MAE   -> Cost: $1307.38 | Cycle Time: 374.3s | Wait Time: 510.2s
+Epoch [205/2500] | Train Loss: 0.0997 | Test Loss: 0.0184
+   ↳ MedAE -> Cost: $982.41 (±3.0%) | Cycle Time: 125.7s (±0.7%) | Wait Time: 216.3s (±0.6%)
+   ↳ MAE   -> Cost: $1367.43 | Cycle Time: 338.2s | Wait Time: 471.9s
+Epoch [210/2500] | Train Loss: 0.1001 | Test Loss: 0.0222
+   ↳ MedAE -> Cost: $1300.18 (±3.9%) | Cycle Time: 135.7s (±0.8%) | Wait Time: 233.1s (±0.7%)
+   ↳ MAE   -> Cost: $1740.04 | Cycle Time: 372.6s | Wait Time: 519.5s
+Epoch [215/2500] | Train Loss: 0.0920 | Test Loss: 0.0189
+   ↳ MedAE -> Cost: $1872.35 (±5.7%) | Cycle Time: 133.7s (±0.7%) | Wait Time: 228.7s (±0.7%)
+   ↳ MAE   -> Cost: $2101.31 | Cycle Time: 334.2s | Wait Time: 472.0s
+Epoch [220/2500] | Train Loss: 0.0972 | Test Loss: 0.0341
+   ↳ MedAE -> Cost: $1043.30 (±3.2%) | Cycle Time: 140.5s (±0.8%) | Wait Time: 243.8s (±0.7%)
+   ↳ MAE   -> Cost: $1448.14 | Cycle Time: 452.0s | Wait Time: 620.1s
+Epoch [225/2500] | Train Loss: 0.0979 | Test Loss: 0.0187
+   ↳ MedAE -> Cost: $1081.44 (±3.3%) | Cycle Time: 125.8s (±0.7%) | Wait Time: 217.8s (±0.6%)
+   ↳ MAE   -> Cost: $1600.88 | Cycle Time: 333.7s | Wait Time: 465.6s
+Epoch [230/2500] | Train Loss: 0.0975 | Test Loss: 0.0226
+   ↳ MedAE -> Cost: $1237.41 (±3.7%) | Cycle Time: 133.7s (±0.7%) | Wait Time: 230.5s (±0.7%)
+   ↳ MAE   -> Cost: $1709.25 | Cycle Time: 372.4s | Wait Time: 529.4s
+Epoch [235/2500] | Train Loss: 0.1011 | Test Loss: 0.0218
+   ↳ MedAE -> Cost: $1026.70 (±3.1%) | Cycle Time: 135.0s (±0.8%) | Wait Time: 234.1s (±0.7%)
+   ↳ MAE   -> Cost: $1499.15 | Cycle Time: 367.4s | Wait Time: 512.2s
+Epoch [240/2500] | Train Loss: 0.0946 | Test Loss: 0.0297
+   ↳ MedAE -> Cost: $1294.64 (±3.9%) | Cycle Time: 137.7s (±0.8%) | Wait Time: 235.2s (±0.7%)
+   ↳ MAE   -> Cost: $1790.96 | Cycle Time: 428.6s | Wait Time: 584.2s
+Epoch [245/2500] | Train Loss: 0.1002 | Test Loss: 0.0196
+   ↳ MedAE -> Cost: $1385.82 (±4.2%) | Cycle Time: 129.1s (±0.7%) | Wait Time: 222.6s (±0.6%)
+   ↳ MAE   -> Cost: $1780.74 | Cycle Time: 340.2s | Wait Time: 481.7s
+Epoch [250/2500] | Train Loss: 0.0976 | Test Loss: 0.0370
+   ↳ MedAE -> Cost: $1500.67 (±4.5%) | Cycle Time: 137.8s (±0.8%) | Wait Time: 238.6s (±0.7%)
+   ↳ MAE   -> Cost: $2024.71 | Cycle Time: 467.4s | Wait Time: 643.2s
+Epoch [255/2500] | Train Loss: 0.1001 | Test Loss: 0.0249
+   ↳ MedAE -> Cost: $1092.52 (±3.3%) | Cycle Time: 130.6s (±0.7%) | Wait Time: 228.7s (±0.7%)
+   ↳ MAE   -> Cost: $1524.82 | Cycle Time: 378.1s | Wait Time: 513.7s
+Epoch [260/2500] | Train Loss: 0.0981 | Test Loss: 0.0458
+   ↳ MedAE -> Cost: $2421.34 (±7.3%) | Cycle Time: 181.1s (±1.0%) | Wait Time: 281.8s (±0.8%)
+   ↳ MAE   -> Cost: $2792.69 | Cycle Time: 552.4s | Wait Time: 739.7s
+Epoch [265/2500] | Train Loss: 0.0975 | Test Loss: 0.0243
+   ↳ MedAE -> Cost: $1751.16 (±5.3%) | Cycle Time: 135.0s (±0.8%) | Wait Time: 228.9s (±0.7%)
+   ↳ MAE   -> Cost: $2238.65 | Cycle Time: 380.0s | Wait Time: 525.8s
+Epoch [270/2500] | Train Loss: 0.0947 | Test Loss: 0.0218
+   ↳ MedAE -> Cost: $1976.43 (±6.0%) | Cycle Time: 154.4s (±0.9%) | Wait Time: 253.0s (±0.7%)
+   ↳ MAE   -> Cost: $2340.37 | Cycle Time: 360.4s | Wait Time: 512.2s
+Epoch [275/2500] | Train Loss: 0.0952 | Test Loss: 0.0273
+   ↳ MedAE -> Cost: $1970.01 (±6.0%) | Cycle Time: 135.0s (±0.8%) | Wait Time: 227.8s (±0.7%)
+   ↳ MAE   -> Cost: $2365.58 | Cycle Time: 393.6s | Wait Time: 531.1s
+Epoch [280/2500] | Train Loss: 0.0964 | Test Loss: 0.0307
+   ↳ MedAE -> Cost: $1811.96 (±5.5%) | Cycle Time: 152.0s (±0.9%) | Wait Time: 262.1s (±0.8%)
+   ↳ MAE   -> Cost: $2174.57 | Cycle Time: 419.9s | Wait Time: 592.3s
+Epoch [285/2500] | Train Loss: 0.0943 | Test Loss: 0.0272
+   ↳ MedAE -> Cost: $1957.62 (±5.9%) | Cycle Time: 129.5s (±0.7%) | Wait Time: 226.4s (±0.7%)
+   ↳ MAE   -> Cost: $2438.84 | Cycle Time: 386.1s | Wait Time: 524.1s
+Epoch [290/2500] | Train Loss: 0.0925 | Test Loss: 0.0600
+   ↳ MedAE -> Cost: $2786.53 (±8.4%) | Cycle Time: 167.1s (±0.9%) | Wait Time: 279.5s (±0.8%)
+   ↳ MAE   -> Cost: $2978.20 | Cycle Time: 593.2s | Wait Time: 801.1s
+Epoch [295/2500] | Train Loss: 0.0933 | Test Loss: 0.0213
+   ↳ MedAE -> Cost: $2777.45 (±8.4%) | Cycle Time: 131.6s (±0.7%) | Wait Time: 226.5s (±0.7%)
+   ↳ MAE   -> Cost: $2945.05 | Cycle Time: 326.8s | Wait Time: 460.0s
+Epoch [300/2500] | Train Loss: 0.0974 | Test Loss: 0.0254
+   ↳ MedAE -> Cost: $3218.23 (±9.7%) | Cycle Time: 134.3s (±0.8%) | Wait Time: 234.3s (±0.7%)
+   ↳ MAE   -> Cost: $3362.18 | Cycle Time: 342.8s | Wait Time: 484.6s
+Epoch [305/2500] | Train Loss: 0.0907 | Test Loss: 0.0263
+   ↳ MedAE -> Cost: $2059.18 (±6.2%) | Cycle Time: 133.8s (±0.7%) | Wait Time: 226.2s (±0.7%)
+   ↳ MAE   -> Cost: $2473.06 | Cycle Time: 375.2s | Wait Time: 503.5s
+Epoch [310/2500] | Train Loss: 0.0942 | Test Loss: 0.0188
+   ↳ MedAE -> Cost: $1330.89 (±4.0%) | Cycle Time: 129.9s (±0.7%) | Wait Time: 224.1s (±0.7%)
+   ↳ MAE   -> Cost: $1723.70 | Cycle Time: 333.0s | Wait Time: 468.0s
+Epoch [315/2500] | Train Loss: 0.0999 | Test Loss: 0.0301
+   ↳ MedAE -> Cost: $2631.66 (±8.0%) | Cycle Time: 134.6s (±0.8%) | Wait Time: 232.3s (±0.7%)
+   ↳ MAE   -> Cost: $2802.89 | Cycle Time: 398.9s | Wait Time: 554.3s
+Epoch [320/2500] | Train Loss: 0.0954 | Test Loss: 0.0361
+   ↳ MedAE -> Cost: $2989.73 (±9.1%) | Cycle Time: 139.6s (±0.8%) | Wait Time: 242.3s (±0.7%)
+   ↳ MAE   -> Cost: $3045.70 | Cycle Time: 444.9s | Wait Time: 609.5s
+Epoch [325/2500] | Train Loss: 0.0940 | Test Loss: 0.0238
+   ↳ MedAE -> Cost: $2787.27 (±8.4%) | Cycle Time: 129.8s (±0.7%) | Wait Time: 222.8s (±0.6%)
+   ↳ MAE   -> Cost: $2960.47 | Cycle Time: 341.3s | Wait Time: 475.8s
+Epoch [330/2500] | Train Loss: 0.0912 | Test Loss: 0.0652
+   ↳ MedAE -> Cost: $2454.28 (±7.4%) | Cycle Time: 155.4s (±0.9%) | Wait Time: 270.4s (±0.8%)
+   ↳ MAE   -> Cost: $2663.94 | Cycle Time: 612.7s | Wait Time: 818.4s
+Epoch [335/2500] | Train Loss: 0.0951 | Test Loss: 0.0297
+   ↳ MedAE -> Cost: $2943.63 (±8.9%) | Cycle Time: 133.8s (±0.7%) | Wait Time: 229.8s (±0.7%)
+   ↳ MAE   -> Cost: $3064.66 | Cycle Time: 394.0s | Wait Time: 538.0s
+Epoch [340/2500] | Train Loss: 0.0937 | Test Loss: 0.0351
+   ↳ MedAE -> Cost: $3164.96 (±9.6%) | Cycle Time: 142.2s (±0.8%) | Wait Time: 243.4s (±0.7%)
+   ↳ MAE   -> Cost: $3115.05 | Cycle Time: 439.0s | Wait Time: 594.9s
+Epoch [345/2500] | Train Loss: 0.0922 | Test Loss: 0.0261
+   ↳ MedAE -> Cost: $3061.42 (±9.3%) | Cycle Time: 133.8s (±0.7%) | Wait Time: 228.3s (±0.7%)
+   ↳ MAE   -> Cost: $3153.49 | Cycle Time: 354.6s | Wait Time: 493.3s
+Epoch [350/2500] | Train Loss: 0.0954 | Test Loss: 0.0384
+   ↳ MedAE -> Cost: $3753.90 (±11.4%) | Cycle Time: 141.2s (±0.8%) | Wait Time: 238.5s (±0.7%)
+   ↳ MAE   -> Cost: $3780.87 | Cycle Time: 429.6s | Wait Time: 578.1s
+Epoch [355/2500] | Train Loss: 0.0941 | Test Loss: 0.0387
+   ↳ MedAE -> Cost: $4081.86 (±12.4%) | Cycle Time: 146.6s (±0.8%) | Wait Time: 246.3s (±0.7%)
+   ↳ MAE   -> Cost: $4312.00 | Cycle Time: 438.4s | Wait Time: 606.3s
+Epoch [360/2500] | Train Loss: 0.0906 | Test Loss: 0.0223
+   ↳ MedAE -> Cost: $2621.53 (±7.9%) | Cycle Time: 128.7s (±0.7%) | Wait Time: 220.4s (±0.6%)
+   ↳ MAE   -> Cost: $2748.72 | Cycle Time: 345.0s | Wait Time: 482.8s
+Epoch [365/2500] | Train Loss: 0.0951 | Test Loss: 0.0323
+   ↳ MedAE -> Cost: $3961.16 (±12.0%) | Cycle Time: 136.4s (±0.8%) | Wait Time: 233.7s (±0.7%)
+   ↳ MAE   -> Cost: $3901.78 | Cycle Time: 388.3s | Wait Time: 537.7s
+Epoch [370/2500] | Train Loss: 0.0959 | Test Loss: 0.0222
+   ↳ MedAE -> Cost: $3509.39 (±10.6%) | Cycle Time: 125.5s (±0.7%) | Wait Time: 223.9s (±0.6%)
+   ↳ MAE   -> Cost: $3470.91 | Cycle Time: 307.8s | Wait Time: 441.6s
+Epoch [375/2500] | Train Loss: 0.0952 | Test Loss: 0.0313
+   ↳ MedAE -> Cost: $3815.62 (±11.6%) | Cycle Time: 149.5s (±0.8%) | Wait Time: 249.7s (±0.7%)
+   ↳ MAE   -> Cost: $3735.03 | Cycle Time: 385.2s | Wait Time: 531.2s
+Epoch [380/2500] | Train Loss: 0.0944 | Test Loss: 0.0229
+   ↳ MedAE -> Cost: $3508.69 (±10.6%) | Cycle Time: 126.9s (±0.7%) | Wait Time: 223.5s (±0.6%)
+   ↳ MAE   -> Cost: $3410.51 | Cycle Time: 317.9s | Wait Time: 444.2s
+Epoch [385/2500] | Train Loss: 0.0980 | Test Loss: 0.0815
+   ↳ MedAE -> Cost: $4128.82 (±12.5%) | Cycle Time: 180.3s (±1.0%) | Wait Time: 288.4s (±0.8%)
+   ↳ MAE   -> Cost: $4025.04 | Cycle Time: 656.0s | Wait Time: 887.5s
+Epoch [390/2500] | Train Loss: 0.0946 | Test Loss: 0.0468
+   ↳ MedAE -> Cost: $3771.95 (±11.4%) | Cycle Time: 139.1s (±0.8%) | Wait Time: 237.0s (±0.7%)
+   ↳ MAE   -> Cost: $3711.82 | Cycle Time: 457.8s | Wait Time: 631.3s
+Epoch [395/2500] | Train Loss: 0.0900 | Test Loss: 0.0302
+   ↳ MedAE -> Cost: $3684.98 (±11.2%) | Cycle Time: 128.7s (±0.7%) | Wait Time: 225.3s (±0.7%)
+   ↳ MAE   -> Cost: $3589.15 | Cycle Time: 375.9s | Wait Time: 526.7s
+Epoch [400/2500] | Train Loss: 0.0996 | Test Loss: 0.0278
+   ↳ MedAE -> Cost: $3924.18 (±11.9%) | Cycle Time: 136.9s (±0.8%) | Wait Time: 234.4s (±0.7%)
+   ↳ MAE   -> Cost: $3800.87 | Cycle Time: 352.9s | Wait Time: 485.8s
+Epoch [405/2500] | Train Loss: 0.0920 | Test Loss: 0.0369
+   ↳ MedAE -> Cost: $5981.43 (±18.1%) | Cycle Time: 130.1s (±0.7%) | Wait Time: 226.2s (±0.7%)
+   ↳ MAE   -> Cost: $5826.66 | Cycle Time: 315.7s | Wait Time: 452.2s
+Epoch [410/2500] | Train Loss: 0.0951 | Test Loss: 0.0271
+   ↳ MedAE -> Cost: $3969.46 (±12.0%) | Cycle Time: 127.7s (±0.7%) | Wait Time: 218.7s (±0.6%)
+   ↳ MAE   -> Cost: $3907.76 | Cycle Time: 331.1s | Wait Time: 465.8s
+Epoch [415/2500] | Train Loss: 0.0979 | Test Loss: 0.0416
+   ↳ MedAE -> Cost: $4753.88 (±14.4%) | Cycle Time: 145.4s (±0.8%) | Wait Time: 241.1s (±0.7%)
+   ↳ MAE   -> Cost: $4459.42 | Cycle Time: 422.4s | Wait Time: 583.4s
+Epoch [420/2500] | Train Loss: 0.0946 | Test Loss: 0.0273
+   ↳ MedAE -> Cost: $3613.19 (±10.9%) | Cycle Time: 127.7s (±0.7%) | Wait Time: 217.8s (±0.6%)
+   ↳ MAE   -> Cost: $3647.66 | Cycle Time: 342.4s | Wait Time: 475.8s
+Epoch [425/2500] | Train Loss: 0.0903 | Test Loss: 0.0259
+   ↳ MedAE -> Cost: $3752.84 (±11.4%) | Cycle Time: 126.0s (±0.7%) | Wait Time: 219.9s (±0.6%)
+   ↳ MAE   -> Cost: $3782.15 | Cycle Time: 319.1s | Wait Time: 454.6s
+Epoch [430/2500] | Train Loss: 0.0996 | Test Loss: 0.0230
+   ↳ MedAE -> Cost: $3435.49 (±10.4%) | Cycle Time: 129.5s (±0.7%) | Wait Time: 224.5s (±0.7%)
+   ↳ MAE   -> Cost: $3414.40 | Cycle Time: 326.0s | Wait Time: 463.0s
+Epoch [435/2500] | Train Loss: 0.0971 | Test Loss: 0.0561
+   ↳ MedAE -> Cost: $4351.76 (±13.2%) | Cycle Time: 160.5s (±0.9%) | Wait Time: 262.1s (±0.8%)
+   ↳ MAE   -> Cost: $4382.23 | Cycle Time: 531.1s | Wait Time: 710.2s
+Epoch [440/2500] | Train Loss: 0.0957 | Test Loss: 0.0289
+   ↳ MedAE -> Cost: $4236.12 (±12.8%) | Cycle Time: 127.5s (±0.7%) | Wait Time: 222.5s (±0.6%)
+   ↳ MAE   -> Cost: $4319.43 | Cycle Time: 330.3s | Wait Time: 464.2s
+Epoch [445/2500] | Train Loss: 0.0930 | Test Loss: 0.0394
+   ↳ MedAE -> Cost: $4768.85 (±14.4%) | Cycle Time: 138.2s (±0.8%) | Wait Time: 235.4s (±0.7%)
+   ↳ MAE   -> Cost: $4560.83 | Cycle Time: 405.3s | Wait Time: 562.1s
+Epoch [450/2500] | Train Loss: 0.0935 | Test Loss: 0.0285
+   ↳ MedAE -> Cost: $3870.10 (±11.7%) | Cycle Time: 128.7s (±0.7%) | Wait Time: 225.9s (±0.7%)
+   ↳ MAE   -> Cost: $3800.06 | Cycle Time: 355.0s | Wait Time: 504.9s
+Epoch [455/2500] | Train Loss: 0.0892 | Test Loss: 0.0255
+   ↳ MedAE -> Cost: $3645.13 (±11.0%) | Cycle Time: 129.2s (±0.7%) | Wait Time: 220.8s (±0.6%)
+   ↳ MAE   -> Cost: $3589.49 | Cycle Time: 333.4s | Wait Time: 463.7s
+Epoch [460/2500] | Train Loss: 0.0938 | Test Loss: 0.0346
+   ↳ MedAE -> Cost: $4895.71 (±14.8%) | Cycle Time: 156.2s (±0.9%) | Wait Time: 248.6s (±0.7%)
+   ↳ MAE   -> Cost: $4593.44 | Cycle Time: 385.1s | Wait Time: 517.4s
+Epoch [465/2500] | Train Loss: 0.0946 | Test Loss: 0.0418
+   ↳ MedAE -> Cost: $5206.59 (±15.8%) | Cycle Time: 153.0s (±0.9%) | Wait Time: 250.5s (±0.7%)
+   ↳ MAE   -> Cost: $5205.41 | Cycle Time: 417.5s | Wait Time: 580.2s
+Epoch [470/2500] | Train Loss: 0.0991 | Test Loss: 0.0280
+   ↳ MedAE -> Cost: $4074.18 (±12.3%) | Cycle Time: 130.1s (±0.7%) | Wait Time: 224.1s (±0.7%)
+   ↳ MAE   -> Cost: $3956.68 | Cycle Time: 356.8s | Wait Time: 497.1s
+Epoch [475/2500] | Train Loss: 0.0941 | Test Loss: 0.0400
+   ↳ MedAE -> Cost: $3637.47 (±11.0%) | Cycle Time: 136.2s (±0.8%) | Wait Time: 233.5s (±0.7%)
+   ↳ MAE   -> Cost: $3685.04 | Cycle Time: 446.4s | Wait Time: 609.4s
+Epoch [480/2500] | Train Loss: 0.0967 | Test Loss: 0.0447
+   ↳ MedAE -> Cost: $4985.85 (±15.1%) | Cycle Time: 136.2s (±0.8%) | Wait Time: 237.3s (±0.7%)
+   ↳ MAE   -> Cost: $4759.74 | Cycle Time: 440.8s | Wait Time: 603.9s
+Epoch [485/2500] | Train Loss: 0.0950 | Test Loss: 0.0376
+   ↳ MedAE -> Cost: $3890.11 (±11.8%) | Cycle Time: 145.6s (±0.8%) | Wait Time: 241.9s (±0.7%)
+   ↳ MAE   -> Cost: $3837.01 | Cycle Time: 430.9s | Wait Time: 588.4s
+Epoch [490/2500] | Train Loss: 0.0967 | Test Loss: 0.0340
+   ↳ MedAE -> Cost: $4571.45 (±13.8%) | Cycle Time: 134.3s (±0.8%) | Wait Time: 226.8s (±0.7%)
+   ↳ MAE   -> Cost: $4457.05 | Cycle Time: 367.3s | Wait Time: 507.4s
+Epoch [495/2500] | Train Loss: 0.0970 | Test Loss: 0.0327
+   ↳ MedAE -> Cost: $4866.44 (±14.7%) | Cycle Time: 134.6s (±0.8%) | Wait Time: 233.2s (±0.7%)
+   ↳ MAE   -> Cost: $4640.72 | Cycle Time: 354.7s | Wait Time: 501.1s
+Epoch [500/2500] | Train Loss: 0.0970 | Test Loss: 0.0305
+   ↳ MedAE -> Cost: $4954.19 (±15.0%) | Cycle Time: 158.6s (±0.9%) | Wait Time: 257.0s (±0.7%)
+   ↳ MAE   -> Cost: $4739.50 | Cycle Time: 348.8s | Wait Time: 483.5s
+
+Early stopping triggered at Epoch 501!
+Best Test Loss achieved: 0.0166
+Training complete in 3119.62 seconds.
+Saved the BEST trained model weights to surrogate_model.pth
+
+Evaluating BEST model for JSON export...
+
+[5/12] Hypertuning Complex Model (synthetic)...
+[I 2026-08-10 15:45:17,521] A new study created in memory with name: no-name-814ab2dc-5e46-4d8a-93b3-312dc472f9f6
+[I 2026-08-10 15:54:28,148] Trial 0 finished with value: 0.03468947200015605 and parameters: {'lr': 0.0001025350969016849, 'weight_decay': 0.006351221010640699, 'dropout_rate': 0.3793972738151323, 'batch_size': 64}. Best is trial 0 with value: 0.03468947200015605.
+[I 2026-08-10 15:59:11,898] Trial 1 finished with value: 0.01062749245524701 and parameters: {'lr': 0.002176624112345368, 'weight_decay': 0.00025378155082656634, 'dropout_rate': 0.3686326600082205, 'batch_size': 128}. Best is trial 1 with value: 0.01062749245524701.
+[I 2026-08-10 16:00:33,325] Trial 2 finished with value: 0.06574824406984807 and parameters: {'lr': 3.095566460242367e-05, 'weight_decay': 5.415244119402541e-06, 'dropout_rate': 0.18690900933179197, 'batch_size': 512}. Best is trial 1 with value: 0.01062749245524701.
+[I 2026-08-10 16:05:16,601] Trial 3 finished with value: 0.06044861484668793 and parameters: {'lr': 2.3795221163877236e-05, 'weight_decay': 1.4742753159914688e-05, 'dropout_rate': 0.21486282948216126, 'batch_size': 128}. Best is trial 1 with value: 0.01062749245524701.
+[I 2026-08-10 16:06:36,373] Trial 4 finished with value: 0.011456504663609006 and parameters: {'lr': 0.00039710847107924746, 'weight_decay': 1.5339162591163623e-06, 'dropout_rate': 0.32339518335564726, 'batch_size': 512}. Best is trial 1 with value: 0.01062749245524701.
+[I 2026-08-10 16:15:48,123] Trial 5 finished with value: 0.009923296596983806 and parameters: {'lr': 0.0015199881220083974, 'weight_decay': 1.6536937182824424e-05, 'dropout_rate': 0.09395245130287275, 'batch_size': 64}. Best is trial 5 with value: 0.009923296596983806.
+[I 2026-08-10 16:17:16,709] Trial 6 pruned. 
+[I 2026-08-10 16:18:44,951] Trial 7 pruned. 
+[I 2026-08-10 16:18:59,128] Trial 8 pruned. 
+[I 2026-08-10 16:19:12,448] Trial 9 pruned. 
+[I 2026-08-10 16:21:42,088] Trial 10 finished with value: 0.008318302717176458 and parameters: {'lr': 0.004123205892066725, 'weight_decay': 0.00017195055939855968, 'dropout_rate': 0.4862916998545396, 'batch_size': 256}. Best is trial 10 with value: 0.008318302717176458.
+[I 2026-08-10 16:24:10,107] Trial 11 finished with value: 0.008342939144371713 and parameters: {'lr': 0.004493237557441468, 'weight_decay': 0.00016000992990038095, 'dropout_rate': 0.4860064702169915, 'batch_size': 256}. Best is trial 10 with value: 0.008318302717176458.
+[I 2026-08-10 16:26:37,992] Trial 12 finished with value: 0.01034005966553038 and parameters: {'lr': 0.00449135250779887, 'weight_decay': 0.0001701962735334531, 'dropout_rate': 0.4980153244584545, 'batch_size': 256}. Best is trial 10 with value: 0.008318302717176458.
+[I 2026-08-10 16:27:01,976] Trial 13 pruned. 
+[I 2026-08-10 16:27:25,937] Trial 14 pruned. 
+[I 2026-08-10 16:27:49,601] Trial 15 pruned. 
+[I 2026-08-10 16:28:13,321] Trial 16 pruned. 
+[I 2026-08-10 16:30:41,073] Trial 17 finished with value: 0.010253730239239221 and parameters: {'lr': 0.0031294740995830863, 'weight_decay': 6.701521675295788e-05, 'dropout_rate': 0.49971309738869824, 'batch_size': 256}. Best is trial 10 with value: 0.008318302717176458.
+[I 2026-08-10 16:31:04,987] Trial 18 pruned. 
+[I 2026-08-10 16:31:28,843] Trial 19 pruned. 
+[I 2026-08-10 16:36:12,519] Trial 20 finished with value: 0.011482162826082361 and parameters: {'lr': 0.0023564357532783065, 'weight_decay': 0.0022584339968514445, 'dropout_rate': 0.2569838718725217, 'batch_size': 128}. Best is trial 10 with value: 0.008318302717176458.
+[I 2026-08-10 16:37:41,342] Trial 21 pruned. 
+[I 2026-08-10 16:41:38,874] Trial 22 pruned. 
+[I 2026-08-10 16:43:07,664] Trial 23 pruned. 
+[I 2026-08-10 16:43:31,468] Trial 24 pruned. 
+[I 2026-08-10 16:43:55,269] Trial 25 pruned. 
+[I 2026-08-10 16:45:24,025] Trial 26 pruned. 
+[I 2026-08-10 16:46:09,430] Trial 27 pruned. 
+[I 2026-08-10 16:46:33,208] Trial 28 pruned. 
+[I 2026-08-10 16:48:01,860] Trial 29 pruned. 
+[I 2026-08-10 16:49:30,909] Trial 30 pruned. 
+[I 2026-08-10 16:49:54,493] Trial 31 pruned. 
+[I 2026-08-10 16:50:18,494] Trial 32 pruned. 
+[I 2026-08-10 16:50:42,120] Trial 33 pruned. 
+[I 2026-08-10 16:51:05,923] Trial 34 pruned. 
+[I 2026-08-10 16:51:51,433] Trial 35 pruned. 
+[I 2026-08-10 16:52:04,626] Trial 36 pruned. 
+[I 2026-08-10 16:54:32,842] Trial 37 finished with value: 0.006173280098427952 and parameters: {'lr': 0.0023651529090173745, 'weight_decay': 3.502312851092156e-06, 'dropout_rate': 0.15841637766604488, 'batch_size': 256}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 16:59:17,054] Trial 38 finished with value: 0.0077828835969088106 and parameters: {'lr': 0.0019420906104781319, 'weight_decay': 1.8746858266738821e-06, 'dropout_rate': 0.13102165903577057, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:04:01,455] Trial 39 finished with value: 0.014933136437560817 and parameters: {'lr': 0.002266268814480284, 'weight_decay': 1.30301337736072e-06, 'dropout_rate': 0.16938428978533493, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:08:47,696] Trial 40 finished with value: 0.011980894798047755 and parameters: {'lr': 0.0049780943113524045, 'weight_decay': 2.4984462717786138e-06, 'dropout_rate': 0.20053838391772355, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:13:32,270] Trial 41 finished with value: 0.008762943085829254 and parameters: {'lr': 0.001106546930130107, 'weight_decay': 2.8083433326867717e-06, 'dropout_rate': 0.10366233928505048, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:18:17,466] Trial 42 finished with value: 0.006173710146983333 and parameters: {'lr': 0.001098748674250335, 'weight_decay': 2.891910716533818e-06, 'dropout_rate': 0.0945757046198995, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:23:01,400] Trial 43 finished with value: 0.008967403219659893 and parameters: {'lr': 0.0019363404685329992, 'weight_decay': 4.549379633110647e-06, 'dropout_rate': 0.05616491093650373, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:27:45,101] Trial 44 finished with value: 0.007194925221588456 and parameters: {'lr': 0.0024626436828201247, 'weight_decay': 1.1346796698729635e-06, 'dropout_rate': 0.14651217520602916, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:28:30,795] Trial 45 pruned. 
+[I 2026-08-10 17:29:16,545] Trial 46 pruned. 
+[I 2026-08-10 17:34:00,826] Trial 47 finished with value: 0.00818516209543586 and parameters: {'lr': 0.0013350812201592451, 'weight_decay': 8.356009351083416e-06, 'dropout_rate': 0.10626733389064227, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:38:44,896] Trial 48 finished with value: 0.006900261305088463 and parameters: {'lr': 0.0006150561832121027, 'weight_decay': 4.420856432505999e-06, 'dropout_rate': 0.1003452782817302, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:39:30,657] Trial 49 pruned. 
+[I 2026-08-10 17:40:18,749] Trial 50 pruned. 
+[I 2026-08-10 17:45:03,289] Trial 51 finished with value: 0.0070552780389589375 and parameters: {'lr': 0.00093698622361483, 'weight_decay': 8.086359153480055e-06, 'dropout_rate': 0.10556547664342886, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:49:47,965] Trial 52 finished with value: 0.007828852182478203 and parameters: {'lr': 0.0009434955906525915, 'weight_decay': 3.950465170176428e-06, 'dropout_rate': 0.14329673415473282, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:50:33,464] Trial 53 pruned. 
+[I 2026-08-10 17:51:30,555] Trial 54 pruned. 
+[I 2026-08-10 17:52:51,050] Trial 55 finished with value: 0.00843826713135598 and parameters: {'lr': 0.0009399523683697697, 'weight_decay': 6.171006655615656e-06, 'dropout_rate': 0.05291548666443413, 'batch_size': 512}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 17:57:35,813] Trial 56 finished with value: 0.011640783351780063 and parameters: {'lr': 0.002558517917195385, 'weight_decay': 1.2100007965922228e-06, 'dropout_rate': 0.1559992673497203, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 18:02:20,350] Trial 57 finished with value: 0.011232064747676572 and parameters: {'lr': 0.0012375185209079946, 'weight_decay': 3.1569357626798927e-06, 'dropout_rate': 0.18978088436569168, 'batch_size': 128}. Best is trial 37 with value: 0.006173280098427952.
+[I 2026-08-10 18:07:04,906] Trial 58 finished with value: 0.006007060868116295 and parameters: {'lr': 0.0017570467864897257, 'weight_decay': 2.13500374412296e-06, 'dropout_rate': 0.11627219509568461, 'batch_size': 128}. Best is trial 58 with value: 0.006007060868116295.
+[I 2026-08-10 18:07:50,522] Trial 59 pruned. 
+[I 2026-08-10 18:09:10,779] Trial 60 finished with value: 0.00916339409701784 and parameters: {'lr': 0.0007700655606729422, 'weight_decay': 4.9802982036686604e-06, 'dropout_rate': 0.0866839428626202, 'batch_size': 512}. Best is trial 58 with value: 0.006007060868116295.
+[I 2026-08-10 18:13:55,423] Trial 61 finished with value: 0.005159541188173082 and parameters: {'lr': 0.0017347799266751714, 'weight_decay': 2.3037114841114634e-06, 'dropout_rate': 0.1277850783021841, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:18:43,726] Trial 62 finished with value: 0.009101307186063324 and parameters: {'lr': 0.001540654474210689, 'weight_decay': 9.247320326453176e-06, 'dropout_rate': 0.11153336485529788, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:23:29,227] Trial 63 finished with value: 0.006137119514846183 and parameters: {'lr': 0.0017009302061824995, 'weight_decay': 2.2144505013245924e-06, 'dropout_rate': 0.14549239331303856, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:28:14,715] Trial 64 finished with value: 0.008994874045792875 and parameters: {'lr': 0.0010055733253790417, 'weight_decay': 1.8359858799768707e-05, 'dropout_rate': 0.07146630102931126, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:33:00,349] Trial 65 finished with value: 0.005387575720027212 and parameters: {'lr': 0.0014389747655576932, 'weight_decay': 2.3755887159083323e-06, 'dropout_rate': 0.21406362442174143, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:37:46,002] Trial 66 finished with value: 0.006160299757823864 and parameters: {'lr': 0.0017615370580815457, 'weight_decay': 2.3155755930092163e-06, 'dropout_rate': 0.22028250556655837, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:42:31,533] Trial 67 finished with value: 0.008918799726135991 and parameters: {'lr': 0.0017667337535059425, 'weight_decay': 2.449439211838552e-06, 'dropout_rate': 0.22784988019808775, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:43:17,157] Trial 68 pruned. 
+[I 2026-08-10 18:48:02,644] Trial 69 finished with value: 0.011780506863735947 and parameters: {'lr': 0.0036583760768584867, 'weight_decay': 1.4589556995720097e-06, 'dropout_rate': 0.20837449791463808, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:48:16,711] Trial 70 pruned. 
+[I 2026-08-10 18:49:05,200] Trial 71 pruned. 
+[I 2026-08-10 18:53:50,166] Trial 72 finished with value: 0.010539259149384557 and parameters: {'lr': 0.0016949491899758058, 'weight_decay': 5.275373342316949e-06, 'dropout_rate': 0.12451659400697185, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 18:54:36,025] Trial 73 pruned. 
+[I 2026-08-10 18:59:21,405] Trial 74 finished with value: 0.006490653112248396 and parameters: {'lr': 0.001985095399877588, 'weight_decay': 1.4551000469097392e-06, 'dropout_rate': 0.2285817320343386, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:04:06,794] Trial 75 finished with value: 0.009555917649025088 and parameters: {'lr': 0.0019458097290745236, 'weight_decay': 1.6433701937950992e-06, 'dropout_rate': 0.23211171298843566, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:04:55,434] Trial 76 pruned. 
+[I 2026-08-10 19:09:41,841] Trial 77 finished with value: 0.011032475496119094 and parameters: {'lr': 0.0014040546627119986, 'weight_decay': 3.2331279141689537e-06, 'dropout_rate': 0.1553324127653862, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:11:16,485] Trial 78 pruned. 
+[I 2026-08-10 19:16:01,744] Trial 79 finished with value: 0.011385647167299784 and parameters: {'lr': 0.0017775534999378189, 'weight_decay': 2.2691651106673083e-06, 'dropout_rate': 0.26347268574411586, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:18:30,548] Trial 80 finished with value: 0.0076833251676532936 and parameters: {'lr': 0.0022417526593720167, 'weight_decay': 1.3766008054529142e-06, 'dropout_rate': 0.2401095000073862, 'batch_size': 256}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:19:16,450] Trial 81 pruned. 
+[I 2026-08-10 19:24:02,152] Trial 82 finished with value: 0.006557769666823268 and parameters: {'lr': 0.0015422841286519909, 'weight_decay': 3.336541274776953e-06, 'dropout_rate': 0.06271148178310051, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:24:47,785] Trial 83 pruned. 
+[I 2026-08-10 19:29:33,558] Trial 84 finished with value: 0.006815216947451259 and parameters: {'lr': 0.0015201263856560207, 'weight_decay': 2.027790899435224e-06, 'dropout_rate': 0.06723668351103451, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:34:19,037] Trial 85 finished with value: 0.008932981650840608 and parameters: {'lr': 0.0029025011193425172, 'weight_decay': 3.6272993727138055e-06, 'dropout_rate': 0.1361482660932379, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:39:04,717] Trial 86 finished with value: 0.008591803993655391 and parameters: {'lr': 0.003437282802690953, 'weight_decay': 2.654513788718994e-06, 'dropout_rate': 0.2972532041469542, 'batch_size': 128}. Best is trial 61 with value: 0.005159541188173082.
+[I 2026-08-10 19:41:33,339] Trial 87 finished with value: 0.004534931331750196 and parameters: {'lr': 0.002124527810073934, 'weight_decay': 1.5671760606050403e-06, 'dropout_rate': 0.11978087067426763, 'batch_size': 256}. Best is trial 87 with value: 0.004534931331750196.
+[I 2026-08-10 19:41:58,855] Trial 88 pruned. 
+[I 2026-08-10 19:42:23,039] Trial 89 pruned. 
+[I 2026-08-10 19:44:51,610] Trial 90 finished with value: 0.004573737758271629 and parameters: {'lr': 0.0026607833116857912, 'weight_decay': 1.0360972005176427e-06, 'dropout_rate': 0.11763752642463418, 'batch_size': 256}. Best is trial 87 with value: 0.004534931331750196.
+[I 2026-08-10 19:47:20,294] Trial 91 finished with value: 0.004867523739074512 and parameters: {'lr': 0.002624522889723089, 'weight_decay': 1.043129959529713e-06, 'dropout_rate': 0.12602485596491397, 'batch_size': 256}. Best is trial 87 with value: 0.004534931331750196.
+[I 2026-08-10 19:49:48,828] Trial 92 finished with value: 0.009610150392969712 and parameters: {'lr': 0.002683649628643694, 'weight_decay': 1.7999926281892099e-06, 'dropout_rate': 0.1134133391370955, 'batch_size': 256}. Best is trial 87 with value: 0.004534931331750196.
+[I 2026-08-10 19:52:17,384] Trial 93 finished with value: 0.007046276015341527 and parameters: {'lr': 0.002321835575214543, 'weight_decay': 0.009358284305436124, 'dropout_rate': 0.12423951146437882, 'batch_size': 256}. Best is trial 87 with value: 0.004534931331750196.
+[I 2026-08-10 19:54:46,050] Trial 94 finished with value: 0.004478879215401372 and parameters: {'lr': 0.0017729766735176443, 'weight_decay': 2.102101500970643e-06, 'dropout_rate': 0.09305765707294075, 'batch_size': 256}. Best is trial 94 with value: 0.004478879215401372.
+[I 2026-08-10 19:57:16,479] Trial 95 finished with value: 0.006067143890491182 and parameters: {'lr': 0.003100717773129175, 'weight_decay': 1.277352727985182e-06, 'dropout_rate': 0.1357539627363734, 'batch_size': 256}. Best is trial 94 with value: 0.004478879215401372.
+[I 2026-08-10 19:59:45,427] Trial 96 finished with value: 0.005076549049693926 and parameters: {'lr': 0.0031170899045256297, 'weight_decay': 1.0557790981937136e-06, 'dropout_rate': 0.08363516717883686, 'batch_size': 256}. Best is trial 94 with value: 0.004478879215401372.
+[I 2026-08-10 20:02:14,282] Trial 97 finished with value: 0.004865926579162601 and parameters: {'lr': 0.004105904559330941, 'weight_decay': 1.0468475811228013e-06, 'dropout_rate': 0.12969263626664987, 'batch_size': 256}. Best is trial 94 with value: 0.004478879215401372.
+[I 2026-08-10 20:04:43,055] Trial 98 finished with value: 0.005163095677440259 and parameters: {'lr': 0.003955291924901774, 'weight_decay': 1.0077093292762864e-06, 'dropout_rate': 0.08189135179603253, 'batch_size': 256}. Best is trial 94 with value: 0.004478879215401372.
+[I 2026-08-10 20:07:11,708] Trial 99 finished with value: 0.00456147575352028 and parameters: {'lr': 0.004235197598300626, 'weight_decay': 1.0040914168266246e-06, 'dropout_rate': 0.08011761520413163, 'batch_size': 256}. Best is trial 94 with value: 0.004478879215401372.
+
+Best Trial Validation MSE: 0.00448
+BATCH_SIZE = 256
+LEARNING_RATE = 0.0017729766735176443
+WEIGHT_DECAY = 2.102101500970643e-06
+DROPOUT_RATE = 0.09305765707294075
+--------------------------------------------------
+Saved config automatically to:
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/complex_model/output/synthetic/best_params.json
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/complex_model/best_params.json
+
+Or run with environment variables:
+export BATCH_SIZE=256 LEARNING_RATE=0.0017729766735176443 WEIGHT_DECAY=2.102101500970643e-06 DROPOUT_RATE=0.09305765707294075
+==================================================
+
+
+[6/12] Training Hypertuned Complex Model (synthetic)...
+Hyperparameters loaded for source 'synthetic': BATCH_SIZE=256, LEARNING_RATE=0.0017729766735176443, WEIGHT_DECAY=2.102101500970643e-06, DROPOUT_RATE=0.09305765707294075
+Loading dataset from source: synthetic
+Dropped 1440 unconverged rows (48558 remain).
+Features: 20 | Targets: 3
+--> Training on 38846 samples.
+--> Testing on 9712 consistent samples.
+Epoch [1/10000] | Train Loss: 0.2169 | Test Loss: 0.0928
+   ↳ MedAE -> Cost: $2325.04 | Cycle Time: 647.4s | Wait Time: 569.4s
+Epoch [5/10000] | Train Loss: 0.0698 | Test Loss: 0.0287
+   ↳ MedAE -> Cost: $2197.69 | Cycle Time: 422.3s | Wait Time: 289.0s
+Epoch [10/10000] | Train Loss: 0.0500 | Test Loss: 0.0201
+   ↳ MedAE -> Cost: $2097.12 | Cycle Time: 524.1s | Wait Time: 407.8s
+Epoch [15/10000] | Train Loss: 0.0341 | Test Loss: 0.0185
+   ↳ MedAE -> Cost: $1977.40 | Cycle Time: 302.4s | Wait Time: 259.0s
+Epoch [20/10000] | Train Loss: 0.0323 | Test Loss: 0.0126
+   ↳ MedAE -> Cost: $1888.60 | Cycle Time: 341.3s | Wait Time: 258.9s
+Epoch [25/10000] | Train Loss: 0.0289 | Test Loss: 0.0080
+   ↳ MedAE -> Cost: $1876.91 | Cycle Time: 252.6s | Wait Time: 221.1s
+Epoch [30/10000] | Train Loss: 0.0244 | Test Loss: 0.0098
+   ↳ MedAE -> Cost: $1848.85 | Cycle Time: 246.2s | Wait Time: 210.9s
+Epoch [35/10000] | Train Loss: 0.0237 | Test Loss: 0.0086
+   ↳ MedAE -> Cost: $1779.45 | Cycle Time: 309.6s | Wait Time: 235.7s
+Epoch [40/10000] | Train Loss: 0.0184 | Test Loss: 0.0067
+   ↳ MedAE -> Cost: $1680.52 | Cycle Time: 220.3s | Wait Time: 197.0s
+Epoch [45/10000] | Train Loss: 0.0182 | Test Loss: 0.0089
+   ↳ MedAE -> Cost: $1723.81 | Cycle Time: 252.4s | Wait Time: 215.5s
+Epoch [50/10000] | Train Loss: 0.0211 | Test Loss: 0.0074
+   ↳ MedAE -> Cost: $1803.94 | Cycle Time: 263.3s | Wait Time: 228.0s
+Epoch [55/10000] | Train Loss: 0.0189 | Test Loss: 0.0063
+   ↳ MedAE -> Cost: $1785.66 | Cycle Time: 233.6s | Wait Time: 197.0s
+Epoch [60/10000] | Train Loss: 0.0170 | Test Loss: 0.0066
+   ↳ MedAE -> Cost: $1717.27 | Cycle Time: 231.4s | Wait Time: 223.4s
+Epoch [65/10000] | Train Loss: 0.0158 | Test Loss: 0.0074
+   ↳ MedAE -> Cost: $1771.27 | Cycle Time: 196.0s | Wait Time: 193.4s
+Epoch [70/10000] | Train Loss: 0.0164 | Test Loss: 0.0083
+   ↳ MedAE -> Cost: $1858.30 | Cycle Time: 294.9s | Wait Time: 223.2s
+Epoch [75/10000] | Train Loss: 0.0140 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1679.19 | Cycle Time: 201.0s | Wait Time: 178.4s
+Epoch [80/10000] | Train Loss: 0.0160 | Test Loss: 0.0077
+   ↳ MedAE -> Cost: $1759.51 | Cycle Time: 211.0s | Wait Time: 211.2s
+Epoch [85/10000] | Train Loss: 0.0153 | Test Loss: 0.0074
+   ↳ MedAE -> Cost: $1734.12 | Cycle Time: 220.6s | Wait Time: 195.8s
+Epoch [90/10000] | Train Loss: 0.0150 | Test Loss: 0.0064
+   ↳ MedAE -> Cost: $1794.97 | Cycle Time: 278.2s | Wait Time: 266.6s
+Epoch [95/10000] | Train Loss: 0.0146 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1818.90 | Cycle Time: 201.9s | Wait Time: 188.3s
+Epoch [100/10000] | Train Loss: 0.0163 | Test Loss: 0.0067
+   ↳ MedAE -> Cost: $1769.25 | Cycle Time: 232.2s | Wait Time: 178.6s
+Epoch [105/10000] | Train Loss: 0.0112 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $1747.49 | Cycle Time: 235.4s | Wait Time: 215.0s
+Epoch [110/10000] | Train Loss: 0.0143 | Test Loss: 0.0056
+   ↳ MedAE -> Cost: $1750.23 | Cycle Time: 213.0s | Wait Time: 198.1s
+Epoch [115/10000] | Train Loss: 0.0125 | Test Loss: 0.0093
+   ↳ MedAE -> Cost: $1812.61 | Cycle Time: 237.7s | Wait Time: 183.9s
+Epoch [120/10000] | Train Loss: 0.0144 | Test Loss: 0.0089
+   ↳ MedAE -> Cost: $1664.07 | Cycle Time: 255.6s | Wait Time: 251.7s
+Epoch [125/10000] | Train Loss: 0.0164 | Test Loss: 0.0070
+   ↳ MedAE -> Cost: $1722.09 | Cycle Time: 289.1s | Wait Time: 234.1s
+Epoch [130/10000] | Train Loss: 0.0125 | Test Loss: 0.0051
+   ↳ MedAE -> Cost: $1678.72 | Cycle Time: 199.5s | Wait Time: 178.1s
+Epoch [135/10000] | Train Loss: 0.0118 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1759.56 | Cycle Time: 183.0s | Wait Time: 182.4s
+Epoch [140/10000] | Train Loss: 0.0122 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1735.73 | Cycle Time: 228.8s | Wait Time: 187.2s
+Epoch [145/10000] | Train Loss: 0.0190 | Test Loss: 0.0067
+   ↳ MedAE -> Cost: $1724.93 | Cycle Time: 255.0s | Wait Time: 193.7s
+Epoch [150/10000] | Train Loss: 0.0105 | Test Loss: 0.0043
+   ↳ MedAE -> Cost: $1651.45 | Cycle Time: 177.9s | Wait Time: 172.9s
+Epoch [155/10000] | Train Loss: 0.0115 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1677.83 | Cycle Time: 195.8s | Wait Time: 184.1s
+Epoch [160/10000] | Train Loss: 0.0147 | Test Loss: 0.0091
+   ↳ MedAE -> Cost: $1696.70 | Cycle Time: 214.3s | Wait Time: 196.6s
+Epoch [165/10000] | Train Loss: 0.0157 | Test Loss: 0.0092
+   ↳ MedAE -> Cost: $1788.53 | Cycle Time: 244.5s | Wait Time: 212.2s
+Epoch [170/10000] | Train Loss: 0.0151 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1733.85 | Cycle Time: 205.7s | Wait Time: 184.6s
+Epoch [175/10000] | Train Loss: 0.0121 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1710.22 | Cycle Time: 183.8s | Wait Time: 177.4s
+Epoch [180/10000] | Train Loss: 0.0112 | Test Loss: 0.0045
+   ↳ MedAE -> Cost: $1723.34 | Cycle Time: 184.0s | Wait Time: 165.8s
+Epoch [185/10000] | Train Loss: 0.0115 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1750.56 | Cycle Time: 189.3s | Wait Time: 178.3s
+Epoch [190/10000] | Train Loss: 0.0117 | Test Loss: 0.0063
+   ↳ MedAE -> Cost: $1848.09 | Cycle Time: 204.3s | Wait Time: 174.6s
+Epoch [195/10000] | Train Loss: 0.0109 | Test Loss: 0.0083
+   ↳ MedAE -> Cost: $1776.63 | Cycle Time: 195.9s | Wait Time: 183.1s
+Epoch [200/10000] | Train Loss: 0.0100 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1710.83 | Cycle Time: 183.9s | Wait Time: 182.3s
+Epoch [205/10000] | Train Loss: 0.0099 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1723.45 | Cycle Time: 178.6s | Wait Time: 173.5s
+Epoch [210/10000] | Train Loss: 0.0108 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1696.05 | Cycle Time: 180.3s | Wait Time: 179.0s
+Epoch [215/10000] | Train Loss: 0.0159 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1691.69 | Cycle Time: 188.6s | Wait Time: 181.1s
+Epoch [220/10000] | Train Loss: 0.0104 | Test Loss: 0.0065
+   ↳ MedAE -> Cost: $1666.46 | Cycle Time: 173.9s | Wait Time: 171.8s
+Epoch [225/10000] | Train Loss: 0.0117 | Test Loss: 0.0059
+   ↳ MedAE -> Cost: $1701.56 | Cycle Time: 225.9s | Wait Time: 209.2s
+Epoch [230/10000] | Train Loss: 0.0092 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1672.93 | Cycle Time: 171.9s | Wait Time: 169.8s
+Epoch [235/10000] | Train Loss: 0.0104 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1743.49 | Cycle Time: 184.7s | Wait Time: 180.1s
+Epoch [240/10000] | Train Loss: 0.0100 | Test Loss: 0.0064
+   ↳ MedAE -> Cost: $1687.06 | Cycle Time: 201.5s | Wait Time: 182.4s
+Epoch [245/10000] | Train Loss: 0.0146 | Test Loss: 0.0092
+   ↳ MedAE -> Cost: $1819.99 | Cycle Time: 205.1s | Wait Time: 191.2s
+Epoch [250/10000] | Train Loss: 0.0096 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1733.27 | Cycle Time: 185.2s | Wait Time: 178.2s
+Epoch [255/10000] | Train Loss: 0.0095 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1690.11 | Cycle Time: 205.0s | Wait Time: 189.9s
+Epoch [260/10000] | Train Loss: 0.0112 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1711.07 | Cycle Time: 204.2s | Wait Time: 175.2s
+Epoch [265/10000] | Train Loss: 0.0104 | Test Loss: 0.0051
+   ↳ MedAE -> Cost: $1694.53 | Cycle Time: 187.4s | Wait Time: 173.8s
+Epoch [270/10000] | Train Loss: 0.0090 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1679.40 | Cycle Time: 165.9s | Wait Time: 159.9s
+Epoch [275/10000] | Train Loss: 0.0102 | Test Loss: 0.0058
+   ↳ MedAE -> Cost: $1749.08 | Cycle Time: 198.4s | Wait Time: 179.6s
+Epoch [280/10000] | Train Loss: 0.0090 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1641.63 | Cycle Time: 182.3s | Wait Time: 167.8s
+Epoch [285/10000] | Train Loss: 0.0108 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1687.79 | Cycle Time: 204.3s | Wait Time: 173.8s
+Epoch [290/10000] | Train Loss: 0.0093 | Test Loss: 0.0057
+   ↳ MedAE -> Cost: $1677.57 | Cycle Time: 246.7s | Wait Time: 207.0s
+Epoch [295/10000] | Train Loss: 0.0097 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1693.10 | Cycle Time: 196.5s | Wait Time: 186.5s
+Epoch [300/10000] | Train Loss: 0.0112 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1683.97 | Cycle Time: 187.0s | Wait Time: 191.2s
+Epoch [305/10000] | Train Loss: 0.0106 | Test Loss: 0.0059
+   ↳ MedAE -> Cost: $1668.06 | Cycle Time: 195.9s | Wait Time: 174.7s
+Epoch [310/10000] | Train Loss: 0.0089 | Test Loss: 0.0047
+   ↳ MedAE -> Cost: $1691.72 | Cycle Time: 174.8s | Wait Time: 170.0s
+Epoch [315/10000] | Train Loss: 0.0104 | Test Loss: 0.0082
+   ↳ MedAE -> Cost: $1731.61 | Cycle Time: 186.3s | Wait Time: 182.7s
+Epoch [320/10000] | Train Loss: 0.0105 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1699.67 | Cycle Time: 177.0s | Wait Time: 171.7s
+Epoch [325/10000] | Train Loss: 0.0102 | Test Loss: 0.0057
+   ↳ MedAE -> Cost: $1713.39 | Cycle Time: 182.6s | Wait Time: 168.9s
+Epoch [330/10000] | Train Loss: 0.0103 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1763.24 | Cycle Time: 182.8s | Wait Time: 182.6s
+Epoch [335/10000] | Train Loss: 0.0094 | Test Loss: 0.0085
+   ↳ MedAE -> Cost: $1658.26 | Cycle Time: 181.5s | Wait Time: 181.1s
+Epoch [340/10000] | Train Loss: 0.0085 | Test Loss: 0.0043
+   ↳ MedAE -> Cost: $1668.48 | Cycle Time: 180.8s | Wait Time: 162.6s
+Epoch [345/10000] | Train Loss: 0.0091 | Test Loss: 0.0057
+   ↳ MedAE -> Cost: $1653.38 | Cycle Time: 192.9s | Wait Time: 178.2s
+Epoch [350/10000] | Train Loss: 0.0091 | Test Loss: 0.0050
+   ↳ MedAE -> Cost: $1716.57 | Cycle Time: 185.5s | Wait Time: 179.1s
+Epoch [355/10000] | Train Loss: 0.0091 | Test Loss: 0.0059
+   ↳ MedAE -> Cost: $1670.36 | Cycle Time: 231.9s | Wait Time: 219.1s
+Epoch [360/10000] | Train Loss: 0.0085 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1708.09 | Cycle Time: 180.0s | Wait Time: 181.5s
+Epoch [365/10000] | Train Loss: 0.0094 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1695.98 | Cycle Time: 180.9s | Wait Time: 165.9s
+Epoch [370/10000] | Train Loss: 0.0091 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1643.77 | Cycle Time: 191.2s | Wait Time: 194.5s
+Epoch [375/10000] | Train Loss: 0.0098 | Test Loss: 0.0066
+   ↳ MedAE -> Cost: $1732.89 | Cycle Time: 220.7s | Wait Time: 218.3s
+Epoch [380/10000] | Train Loss: 0.0086 | Test Loss: 0.0070
+   ↳ MedAE -> Cost: $1660.32 | Cycle Time: 216.8s | Wait Time: 184.1s
+Epoch [385/10000] | Train Loss: 0.0080 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1644.70 | Cycle Time: 176.2s | Wait Time: 156.9s
+Epoch [390/10000] | Train Loss: 0.0082 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1658.75 | Cycle Time: 179.7s | Wait Time: 169.0s
+Epoch [395/10000] | Train Loss: 0.0083 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1734.35 | Cycle Time: 164.2s | Wait Time: 164.2s
+Epoch [400/10000] | Train Loss: 0.0081 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1700.07 | Cycle Time: 162.1s | Wait Time: 154.5s
+Epoch [405/10000] | Train Loss: 0.0075 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1654.78 | Cycle Time: 166.0s | Wait Time: 165.2s
+Epoch [410/10000] | Train Loss: 0.0084 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1756.12 | Cycle Time: 180.4s | Wait Time: 171.6s
+Epoch [415/10000] | Train Loss: 0.0085 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1720.76 | Cycle Time: 171.7s | Wait Time: 174.7s
+Epoch [420/10000] | Train Loss: 0.0079 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1679.61 | Cycle Time: 173.5s | Wait Time: 161.2s
+Epoch [425/10000] | Train Loss: 0.0094 | Test Loss: 0.0048
+   ↳ MedAE -> Cost: $1701.99 | Cycle Time: 174.7s | Wait Time: 159.0s
+Epoch [430/10000] | Train Loss: 0.0090 | Test Loss: 0.0051
+   ↳ MedAE -> Cost: $1671.75 | Cycle Time: 189.1s | Wait Time: 184.5s
+Epoch [435/10000] | Train Loss: 0.0082 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1658.07 | Cycle Time: 201.9s | Wait Time: 179.5s
+Epoch [440/10000] | Train Loss: 0.0079 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1667.87 | Cycle Time: 163.7s | Wait Time: 164.1s
+Epoch [445/10000] | Train Loss: 0.0086 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1665.41 | Cycle Time: 171.3s | Wait Time: 157.9s
+Epoch [450/10000] | Train Loss: 0.0079 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1692.12 | Cycle Time: 192.3s | Wait Time: 158.8s
+Epoch [455/10000] | Train Loss: 0.0084 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1757.09 | Cycle Time: 179.4s | Wait Time: 197.9s
+Epoch [460/10000] | Train Loss: 0.0081 | Test Loss: 0.0043
+   ↳ MedAE -> Cost: $1663.49 | Cycle Time: 166.9s | Wait Time: 153.9s
+Epoch [465/10000] | Train Loss: 0.0075 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1667.13 | Cycle Time: 184.1s | Wait Time: 165.7s
+Epoch [470/10000] | Train Loss: 0.0076 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1691.50 | Cycle Time: 169.2s | Wait Time: 165.7s
+Epoch [475/10000] | Train Loss: 0.0071 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1689.84 | Cycle Time: 169.6s | Wait Time: 162.3s
+Epoch [480/10000] | Train Loss: 0.0083 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1655.42 | Cycle Time: 191.9s | Wait Time: 174.4s
+Epoch [485/10000] | Train Loss: 0.0076 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1643.16 | Cycle Time: 199.1s | Wait Time: 174.3s
+Epoch [490/10000] | Train Loss: 0.0076 | Test Loss: 0.0048
+   ↳ MedAE -> Cost: $1673.41 | Cycle Time: 250.6s | Wait Time: 229.5s
+Epoch [495/10000] | Train Loss: 0.0075 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1780.39 | Cycle Time: 191.2s | Wait Time: 156.6s
+Epoch [500/10000] | Train Loss: 0.0077 | Test Loss: 0.0050
+   ↳ MedAE -> Cost: $1700.80 | Cycle Time: 175.2s | Wait Time: 166.1s
+Epoch [505/10000] | Train Loss: 0.0076 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1665.61 | Cycle Time: 158.2s | Wait Time: 155.3s
+Epoch [510/10000] | Train Loss: 0.0083 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1725.73 | Cycle Time: 175.3s | Wait Time: 172.3s
+Epoch [515/10000] | Train Loss: 0.0101 | Test Loss: 0.0114
+   ↳ MedAE -> Cost: $1735.02 | Cycle Time: 188.7s | Wait Time: 175.3s
+Epoch [520/10000] | Train Loss: 0.0075 | Test Loss: 0.0045
+   ↳ MedAE -> Cost: $1721.80 | Cycle Time: 168.7s | Wait Time: 168.6s
+Epoch [525/10000] | Train Loss: 0.0077 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1719.81 | Cycle Time: 185.1s | Wait Time: 176.5s
+Epoch [530/10000] | Train Loss: 0.0075 | Test Loss: 0.0048
+   ↳ MedAE -> Cost: $1688.56 | Cycle Time: 172.9s | Wait Time: 166.4s
+Epoch [535/10000] | Train Loss: 0.0080 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1655.83 | Cycle Time: 181.8s | Wait Time: 156.4s
+Epoch [540/10000] | Train Loss: 0.0070 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1644.97 | Cycle Time: 169.9s | Wait Time: 156.7s
+Epoch [545/10000] | Train Loss: 0.0075 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1677.70 | Cycle Time: 171.6s | Wait Time: 154.2s
+Epoch [550/10000] | Train Loss: 0.0075 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1651.49 | Cycle Time: 206.1s | Wait Time: 200.2s
+Epoch [555/10000] | Train Loss: 0.0075 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1646.73 | Cycle Time: 180.6s | Wait Time: 166.3s
+Epoch [560/10000] | Train Loss: 0.0074 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1717.31 | Cycle Time: 177.2s | Wait Time: 173.3s
+Epoch [565/10000] | Train Loss: 0.0074 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1669.92 | Cycle Time: 169.4s | Wait Time: 166.3s
+Epoch [570/10000] | Train Loss: 0.0081 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1690.16 | Cycle Time: 188.8s | Wait Time: 169.8s
+Epoch [575/10000] | Train Loss: 0.0074 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1648.53 | Cycle Time: 169.8s | Wait Time: 154.3s
+Epoch [580/10000] | Train Loss: 0.0073 | Test Loss: 0.0043
+   ↳ MedAE -> Cost: $1692.23 | Cycle Time: 162.3s | Wait Time: 155.3s
+Epoch [585/10000] | Train Loss: 0.0077 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1738.65 | Cycle Time: 169.9s | Wait Time: 155.3s
+Epoch [590/10000] | Train Loss: 0.0111 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1714.62 | Cycle Time: 177.1s | Wait Time: 155.8s
+Epoch [595/10000] | Train Loss: 0.0077 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1661.13 | Cycle Time: 165.3s | Wait Time: 157.5s
+Epoch [600/10000] | Train Loss: 0.0072 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1710.46 | Cycle Time: 167.1s | Wait Time: 153.8s
+Epoch [605/10000] | Train Loss: 0.0077 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1690.66 | Cycle Time: 188.6s | Wait Time: 172.5s
+Epoch [610/10000] | Train Loss: 0.0085 | Test Loss: 0.0072
+   ↳ MedAE -> Cost: $1678.83 | Cycle Time: 190.7s | Wait Time: 172.7s
+Epoch [615/10000] | Train Loss: 0.0090 | Test Loss: 0.0075
+   ↳ MedAE -> Cost: $1694.69 | Cycle Time: 185.4s | Wait Time: 163.2s
+Epoch [620/10000] | Train Loss: 0.0073 | Test Loss: 0.0048
+   ↳ MedAE -> Cost: $1651.68 | Cycle Time: 189.7s | Wait Time: 174.9s
+Epoch [625/10000] | Train Loss: 0.0105 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1652.48 | Cycle Time: 167.5s | Wait Time: 163.7s
+Epoch [630/10000] | Train Loss: 0.0084 | Test Loss: 0.0065
+   ↳ MedAE -> Cost: $1652.95 | Cycle Time: 169.3s | Wait Time: 159.7s
+Epoch [635/10000] | Train Loss: 0.0074 | Test Loss: 0.0076
+   ↳ MedAE -> Cost: $1733.02 | Cycle Time: 198.6s | Wait Time: 170.6s
+Epoch [640/10000] | Train Loss: 0.0082 | Test Loss: 0.0078
+   ↳ MedAE -> Cost: $1705.22 | Cycle Time: 168.2s | Wait Time: 159.7s
+Epoch [645/10000] | Train Loss: 0.0075 | Test Loss: 0.0051
+   ↳ MedAE -> Cost: $1666.22 | Cycle Time: 174.5s | Wait Time: 162.7s
+Epoch [650/10000] | Train Loss: 0.0071 | Test Loss: 0.0062
+   ↳ MedAE -> Cost: $1650.30 | Cycle Time: 176.6s | Wait Time: 170.8s
+Epoch [655/10000] | Train Loss: 0.0105 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1727.88 | Cycle Time: 184.5s | Wait Time: 165.2s
+Epoch [660/10000] | Train Loss: 0.0094 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $1705.03 | Cycle Time: 169.3s | Wait Time: 162.1s
+Epoch [665/10000] | Train Loss: 0.0072 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1719.80 | Cycle Time: 260.8s | Wait Time: 231.0s
+Epoch [670/10000] | Train Loss: 0.0071 | Test Loss: 0.0063
+   ↳ MedAE -> Cost: $1774.42 | Cycle Time: 172.5s | Wait Time: 156.4s
+Epoch [675/10000] | Train Loss: 0.0072 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1911.01 | Cycle Time: 206.2s | Wait Time: 210.9s
+Epoch [680/10000] | Train Loss: 0.0087 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1677.23 | Cycle Time: 182.9s | Wait Time: 162.6s
+Epoch [685/10000] | Train Loss: 0.0080 | Test Loss: 0.0045
+   ↳ MedAE -> Cost: $1730.76 | Cycle Time: 171.0s | Wait Time: 158.8s
+Epoch [690/10000] | Train Loss: 0.0075 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1654.33 | Cycle Time: 180.5s | Wait Time: 169.9s
+Epoch [695/10000] | Train Loss: 0.0072 | Test Loss: 0.0106
+   ↳ MedAE -> Cost: $1788.78 | Cycle Time: 198.6s | Wait Time: 176.5s
+Epoch [700/10000] | Train Loss: 0.0073 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1699.16 | Cycle Time: 204.7s | Wait Time: 192.4s
+Epoch [705/10000] | Train Loss: 0.0067 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1672.91 | Cycle Time: 164.7s | Wait Time: 154.5s
+Epoch [710/10000] | Train Loss: 0.0074 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1642.40 | Cycle Time: 178.3s | Wait Time: 155.5s
+Epoch [715/10000] | Train Loss: 0.0070 | Test Loss: 0.0057
+   ↳ MedAE -> Cost: $1761.07 | Cycle Time: 167.4s | Wait Time: 158.3s
+Epoch [720/10000] | Train Loss: 0.0069 | Test Loss: 0.0057
+   ↳ MedAE -> Cost: $1709.63 | Cycle Time: 165.9s | Wait Time: 158.1s
+Epoch [725/10000] | Train Loss: 0.0067 | Test Loss: 0.0053
+   ↳ MedAE -> Cost: $1646.96 | Cycle Time: 162.2s | Wait Time: 155.0s
+Epoch [730/10000] | Train Loss: 0.0073 | Test Loss: 0.0084
+   ↳ MedAE -> Cost: $1782.87 | Cycle Time: 208.2s | Wait Time: 167.7s
+Epoch [735/10000] | Train Loss: 0.0071 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1660.09 | Cycle Time: 181.7s | Wait Time: 151.9s
+Epoch [740/10000] | Train Loss: 0.0078 | Test Loss: 0.0070
+   ↳ MedAE -> Cost: $1671.32 | Cycle Time: 175.0s | Wait Time: 164.5s
+Epoch [745/10000] | Train Loss: 0.0067 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $1686.54 | Cycle Time: 165.0s | Wait Time: 151.4s
+Epoch [750/10000] | Train Loss: 0.0066 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $1823.99 | Cycle Time: 182.9s | Wait Time: 163.9s
+Epoch [755/10000] | Train Loss: 0.0064 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1686.13 | Cycle Time: 175.1s | Wait Time: 150.3s
+Epoch [760/10000] | Train Loss: 0.0065 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1667.74 | Cycle Time: 163.8s | Wait Time: 157.5s
+Epoch [765/10000] | Train Loss: 0.0071 | Test Loss: 0.0047
+   ↳ MedAE -> Cost: $1666.82 | Cycle Time: 161.0s | Wait Time: 154.0s
+Epoch [770/10000] | Train Loss: 0.0069 | Test Loss: 0.0048
+   ↳ MedAE -> Cost: $1709.58 | Cycle Time: 184.4s | Wait Time: 187.3s
+Epoch [775/10000] | Train Loss: 0.0063 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1713.89 | Cycle Time: 159.5s | Wait Time: 157.9s
+Epoch [780/10000] | Train Loss: 0.0066 | Test Loss: 0.0071
+   ↳ MedAE -> Cost: $1690.98 | Cycle Time: 178.0s | Wait Time: 164.6s
+Epoch [785/10000] | Train Loss: 0.0067 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1735.72 | Cycle Time: 197.9s | Wait Time: 158.7s
+Epoch [790/10000] | Train Loss: 0.0071 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1651.58 | Cycle Time: 165.2s | Wait Time: 165.3s
+Epoch [795/10000] | Train Loss: 0.0068 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1697.79 | Cycle Time: 160.1s | Wait Time: 159.2s
+Epoch [800/10000] | Train Loss: 0.0071 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1712.26 | Cycle Time: 163.0s | Wait Time: 161.0s
+Epoch [805/10000] | Train Loss: 0.0067 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1661.32 | Cycle Time: 174.8s | Wait Time: 162.8s
+Epoch [810/10000] | Train Loss: 0.0066 | Test Loss: 0.0045
+   ↳ MedAE -> Cost: $1703.72 | Cycle Time: 159.1s | Wait Time: 153.6s
+Epoch [815/10000] | Train Loss: 0.0115 | Test Loss: 0.0102
+   ↳ MedAE -> Cost: $1756.23 | Cycle Time: 191.6s | Wait Time: 188.9s
+Epoch [820/10000] | Train Loss: 0.0078 | Test Loss: 0.0045
+   ↳ MedAE -> Cost: $1699.77 | Cycle Time: 180.2s | Wait Time: 159.0s
+Epoch [825/10000] | Train Loss: 0.0071 | Test Loss: 0.0047
+   ↳ MedAE -> Cost: $1684.58 | Cycle Time: 159.2s | Wait Time: 149.4s
+Epoch [830/10000] | Train Loss: 0.0068 | Test Loss: 0.0048
+   ↳ MedAE -> Cost: $1674.88 | Cycle Time: 160.5s | Wait Time: 151.8s
+Epoch [835/10000] | Train Loss: 0.0063 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1720.71 | Cycle Time: 156.9s | Wait Time: 147.4s
+Epoch [840/10000] | Train Loss: 0.0068 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1669.63 | Cycle Time: 166.4s | Wait Time: 157.1s
+Epoch [845/10000] | Train Loss: 0.0065 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $1722.15 | Cycle Time: 171.4s | Wait Time: 164.2s
+Epoch [850/10000] | Train Loss: 0.0063 | Test Loss: 0.0047
+   ↳ MedAE -> Cost: $1682.81 | Cycle Time: 178.5s | Wait Time: 161.5s
+Epoch [855/10000] | Train Loss: 0.0125 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1722.84 | Cycle Time: 183.9s | Wait Time: 168.4s
+Epoch [860/10000] | Train Loss: 0.0065 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1683.18 | Cycle Time: 154.6s | Wait Time: 148.6s
+Epoch [865/10000] | Train Loss: 0.0066 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $1691.91 | Cycle Time: 184.0s | Wait Time: 164.1s
+Epoch [870/10000] | Train Loss: 0.0063 | Test Loss: 0.0067
+   ↳ MedAE -> Cost: $1695.85 | Cycle Time: 166.6s | Wait Time: 155.8s
+Epoch [875/10000] | Train Loss: 0.0064 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1655.22 | Cycle Time: 164.6s | Wait Time: 171.2s
+Epoch [880/10000] | Train Loss: 0.0063 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1812.55 | Cycle Time: 156.2s | Wait Time: 161.7s
+Epoch [885/10000] | Train Loss: 0.0064 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1715.18 | Cycle Time: 166.3s | Wait Time: 153.4s
+Epoch [890/10000] | Train Loss: 0.0071 | Test Loss: 0.0061
+   ↳ MedAE -> Cost: $1678.37 | Cycle Time: 157.9s | Wait Time: 157.3s
+Epoch [895/10000] | Train Loss: 0.0068 | Test Loss: 0.0057
+   ↳ MedAE -> Cost: $1746.11 | Cycle Time: 181.3s | Wait Time: 164.0s
+Epoch [900/10000] | Train Loss: 0.0071 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1710.77 | Cycle Time: 170.9s | Wait Time: 155.6s
+Epoch [905/10000] | Train Loss: 0.0065 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1638.75 | Cycle Time: 170.2s | Wait Time: 165.6s
+Epoch [910/10000] | Train Loss: 0.0067 | Test Loss: 0.0063
+   ↳ MedAE -> Cost: $1706.88 | Cycle Time: 175.8s | Wait Time: 158.5s
+Epoch [915/10000] | Train Loss: 0.0064 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1673.43 | Cycle Time: 166.7s | Wait Time: 165.1s
+Epoch [920/10000] | Train Loss: 0.0065 | Test Loss: 0.0062
+   ↳ MedAE -> Cost: $1740.42 | Cycle Time: 187.5s | Wait Time: 187.8s
+Epoch [925/10000] | Train Loss: 0.0076 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1673.73 | Cycle Time: 187.8s | Wait Time: 176.0s
+Epoch [930/10000] | Train Loss: 0.0088 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1686.46 | Cycle Time: 177.4s | Wait Time: 153.8s
+Epoch [935/10000] | Train Loss: 0.0066 | Test Loss: 0.0062
+   ↳ MedAE -> Cost: $1775.46 | Cycle Time: 206.2s | Wait Time: 205.0s
+Epoch [940/10000] | Train Loss: 0.0086 | Test Loss: 0.0059
+   ↳ MedAE -> Cost: $1740.40 | Cycle Time: 186.7s | Wait Time: 154.7s
+Epoch [945/10000] | Train Loss: 0.0064 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1724.55 | Cycle Time: 191.1s | Wait Time: 172.4s
+Epoch [950/10000] | Train Loss: 0.0063 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1657.56 | Cycle Time: 162.4s | Wait Time: 150.7s
+Epoch [955/10000] | Train Loss: 0.0067 | Test Loss: 0.0053
+   ↳ MedAE -> Cost: $1776.66 | Cycle Time: 169.0s | Wait Time: 155.8s
+Epoch [960/10000] | Train Loss: 0.0064 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1758.00 | Cycle Time: 172.4s | Wait Time: 172.2s
+Epoch [965/10000] | Train Loss: 0.0064 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $1788.77 | Cycle Time: 182.2s | Wait Time: 159.0s
+Epoch [970/10000] | Train Loss: 0.0064 | Test Loss: 0.0045
+   ↳ MedAE -> Cost: $1663.35 | Cycle Time: 169.9s | Wait Time: 160.9s
+Epoch [975/10000] | Train Loss: 0.0064 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1684.57 | Cycle Time: 172.7s | Wait Time: 150.4s
+Epoch [980/10000] | Train Loss: 0.0062 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1674.17 | Cycle Time: 197.1s | Wait Time: 191.6s
+Epoch [985/10000] | Train Loss: 0.0067 | Test Loss: 0.0050
+   ↳ MedAE -> Cost: $1765.65 | Cycle Time: 190.0s | Wait Time: 158.6s
+Epoch [990/10000] | Train Loss: 0.0067 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1683.75 | Cycle Time: 199.8s | Wait Time: 198.6s
+Epoch [995/10000] | Train Loss: 0.0068 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1682.26 | Cycle Time: 216.7s | Wait Time: 190.7s
+Epoch [1000/10000] | Train Loss: 0.0063 | Test Loss: 0.0051
+   ↳ MedAE -> Cost: $1660.25 | Cycle Time: 163.9s | Wait Time: 158.2s
+Epoch [1005/10000] | Train Loss: 0.0078 | Test Loss: 0.0064
+   ↳ MedAE -> Cost: $1733.56 | Cycle Time: 235.5s | Wait Time: 189.7s
+Epoch [1010/10000] | Train Loss: 0.0072 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1668.41 | Cycle Time: 186.4s | Wait Time: 158.9s
+Epoch [1015/10000] | Train Loss: 0.0063 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1749.40 | Cycle Time: 162.4s | Wait Time: 154.9s
+Epoch [1020/10000] | Train Loss: 0.0063 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1757.34 | Cycle Time: 168.7s | Wait Time: 159.5s
+Epoch [1025/10000] | Train Loss: 0.0060 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $1685.62 | Cycle Time: 170.2s | Wait Time: 154.1s
+Epoch [1030/10000] | Train Loss: 0.0066 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1698.80 | Cycle Time: 190.7s | Wait Time: 154.2s
+Epoch [1035/10000] | Train Loss: 0.0068 | Test Loss: 0.0047
+   ↳ MedAE -> Cost: $1705.85 | Cycle Time: 190.8s | Wait Time: 196.9s
+Epoch [1040/10000] | Train Loss: 0.0063 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1847.73 | Cycle Time: 189.7s | Wait Time: 161.2s
+Epoch [1045/10000] | Train Loss: 0.0060 | Test Loss: 0.0048
+   ↳ MedAE -> Cost: $1850.92 | Cycle Time: 173.0s | Wait Time: 156.5s
+Epoch [1050/10000] | Train Loss: 0.0061 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1713.65 | Cycle Time: 163.2s | Wait Time: 155.6s
+Epoch [1055/10000] | Train Loss: 0.0059 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1685.28 | Cycle Time: 157.4s | Wait Time: 150.8s
+Epoch [1060/10000] | Train Loss: 0.0074 | Test Loss: 0.0050
+   ↳ MedAE -> Cost: $1720.36 | Cycle Time: 177.5s | Wait Time: 163.6s
+Epoch [1065/10000] | Train Loss: 0.0060 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $1660.37 | Cycle Time: 163.5s | Wait Time: 154.6s
+Epoch [1070/10000] | Train Loss: 0.0070 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1658.92 | Cycle Time: 226.2s | Wait Time: 188.9s
+Epoch [1075/10000] | Train Loss: 0.0060 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1683.44 | Cycle Time: 161.9s | Wait Time: 149.6s
+Epoch [1080/10000] | Train Loss: 0.0064 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1718.03 | Cycle Time: 178.0s | Wait Time: 163.7s
+Epoch [1085/10000] | Train Loss: 0.0061 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $1865.25 | Cycle Time: 175.7s | Wait Time: 159.3s
+Epoch [1090/10000] | Train Loss: 0.0061 | Test Loss: 0.0043
+   ↳ MedAE -> Cost: $1667.81 | Cycle Time: 171.7s | Wait Time: 159.8s
+Epoch [1095/10000] | Train Loss: 0.0067 | Test Loss: 0.0056
+   ↳ MedAE -> Cost: $1737.69 | Cycle Time: 188.0s | Wait Time: 170.9s
+Epoch [1100/10000] | Train Loss: 0.0060 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1766.35 | Cycle Time: 166.2s | Wait Time: 149.4s
+Epoch [1105/10000] | Train Loss: 0.0059 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1709.41 | Cycle Time: 163.9s | Wait Time: 151.5s
+Epoch [1110/10000] | Train Loss: 0.0059 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1707.18 | Cycle Time: 161.2s | Wait Time: 152.9s
+Epoch [1115/10000] | Train Loss: 0.0062 | Test Loss: 0.0059
+   ↳ MedAE -> Cost: $1698.13 | Cycle Time: 162.8s | Wait Time: 151.1s
+Epoch [1120/10000] | Train Loss: 0.0072 | Test Loss: 0.0062
+   ↳ MedAE -> Cost: $1809.68 | Cycle Time: 195.0s | Wait Time: 171.0s
+
+Early stopping triggered at Epoch 1123!
+Training finished in 1694.48s.
+
+Evaluating BEST model for JSON export...
+Exported metrics to models/output/metrics_complex_nn.json
+
+[7/12] Hypertuning Complex Model (BIMP)...
+[I 2026-08-10 20:35:31,676] A new study created in memory with name: no-name-f72bd6e6-e27c-4f4c-ac06-9daa1ac44b64
+[I 2026-08-10 20:50:45,227] Trial 0 finished with value: 0.015608597135905906 and parameters: {'lr': 0.0001025350969016849, 'weight_decay': 0.006351221010640699, 'dropout_rate': 0.3793972738151323, 'batch_size': 64}. Best is trial 0 with value: 0.015608597135905906.
+[I 2026-08-10 20:58:36,459] Trial 1 finished with value: 0.008891927574602604 and parameters: {'lr': 0.002176624112345368, 'weight_decay': 0.00025378155082656634, 'dropout_rate': 0.3686326600082205, 'batch_size': 128}. Best is trial 1 with value: 0.008891927574602604.
+[I 2026-08-10 21:00:49,897] Trial 2 finished with value: 0.08471989384157173 and parameters: {'lr': 3.095566460242367e-05, 'weight_decay': 5.415244119402541e-06, 'dropout_rate': 0.18690900933179197, 'batch_size': 512}. Best is trial 1 with value: 0.008891927574602604.
+[I 2026-08-10 21:08:38,458] Trial 3 finished with value: 0.08766968746757667 and parameters: {'lr': 2.3795221163877236e-05, 'weight_decay': 1.4742753159914688e-05, 'dropout_rate': 0.21486282948216126, 'batch_size': 128}. Best is trial 1 with value: 0.008891927574602604.
+[I 2026-08-10 21:10:50,696] Trial 4 finished with value: 0.014071609744404757 and parameters: {'lr': 0.00039710847107924746, 'weight_decay': 1.5339162591163623e-06, 'dropout_rate': 0.32339518335564726, 'batch_size': 512}. Best is trial 1 with value: 0.008891927574602604.
+[I 2026-08-10 21:26:05,314] Trial 5 finished with value: 0.01617218177831159 and parameters: {'lr': 0.0015199881220083974, 'weight_decay': 1.6536937182824424e-05, 'dropout_rate': 0.09395245130287275, 'batch_size': 64}. Best is trial 1 with value: 0.008891927574602604.
+[I 2026-08-10 21:28:31,847] Trial 6 pruned. 
+[I 2026-08-10 21:30:58,055] Trial 7 pruned. 
+[I 2026-08-10 21:31:19,181] Trial 8 pruned. 
+[I 2026-08-10 21:31:40,615] Trial 9 pruned. 
+[I 2026-08-10 21:39:29,475] Trial 10 finished with value: 0.010409626733368772 and parameters: {'lr': 0.004140875942657801, 'weight_decay': 0.0003594644649447466, 'dropout_rate': 0.4862916998545396, 'batch_size': 128}. Best is trial 1 with value: 0.008891927574602604.
+[I 2026-08-10 21:47:18,673] Trial 11 finished with value: 0.008416853496546682 and parameters: {'lr': 0.004596484853975605, 'weight_decay': 0.00029686068058218374, 'dropout_rate': 0.4939567430895256, 'batch_size': 128}. Best is trial 11 with value: 0.008416853496546682.
+[I 2026-08-10 21:55:09,560] Trial 12 finished with value: 0.01954406477105115 and parameters: {'lr': 0.004286367597455442, 'weight_decay': 0.00018678344058775705, 'dropout_rate': 0.49792370549591447, 'batch_size': 128}. Best is trial 11 with value: 0.008416853496546682.
+[I 2026-08-10 21:55:53,964] Trial 13 pruned. 
+[I 2026-08-10 22:03:43,024] Trial 14 finished with value: 0.0068834415465667 and parameters: {'lr': 0.0017234271442560182, 'weight_decay': 0.0010207433587096813, 'dropout_rate': 0.3125267308705596, 'batch_size': 128}. Best is trial 14 with value: 0.0068834415465667.
+[I 2026-08-10 22:05:07,561] Trial 15 pruned. 
+[I 2026-08-10 22:05:46,869] Trial 16 pruned. 
+[I 2026-08-10 22:13:36,335] Trial 17 finished with value: 0.010833858679028044 and parameters: {'lr': 0.002385959175569181, 'weight_decay': 6.701521675295788e-05, 'dropout_rate': 0.24655730513392335, 'batch_size': 128}. Best is trial 14 with value: 0.0068834415465667.
+[I 2026-08-10 22:15:00,848] Trial 18 pruned. 
+[I 2026-08-10 22:16:16,157] Trial 19 pruned. 
+[I 2026-08-10 22:20:21,346] Trial 20 finished with value: 0.008795710688841744 and parameters: {'lr': 0.0049694847310060705, 'weight_decay': 6.729931404776501e-05, 'dropout_rate': 0.4551477203239141, 'batch_size': 256}. Best is trial 14 with value: 0.0068834415465667.
+[I 2026-08-10 22:24:26,658] Trial 21 finished with value: 0.008629935677242925 and parameters: {'lr': 0.002865448529559627, 'weight_decay': 9.755773457017867e-05, 'dropout_rate': 0.45073371722279143, 'batch_size': 256}. Best is trial 14 with value: 0.0068834415465667.
+[I 2026-08-10 22:25:10,825] Trial 22 pruned. 
+[I 2026-08-10 22:29:16,192] Trial 23 finished with value: 0.006388601040923814 and parameters: {'lr': 0.002577098453834228, 'weight_decay': 0.002944411251939321, 'dropout_rate': 0.43609048273199674, 'batch_size': 256}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 22:29:55,370] Trial 24 pruned. 
+[I 2026-08-10 22:37:46,011] Trial 25 finished with value: 0.00854250558096132 and parameters: {'lr': 0.0015825296363922653, 'weight_decay': 0.0032081200092859974, 'dropout_rate': 0.40088152764475266, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 22:39:01,148] Trial 26 pruned. 
+[I 2026-08-10 22:39:40,501] Trial 27 pruned. 
+[I 2026-08-10 22:47:30,834] Trial 28 finished with value: 0.011891230601366388 and parameters: {'lr': 0.0031515662259647362, 'weight_decay': 0.002864772798342851, 'dropout_rate': 0.2977562506101438, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 22:49:57,741] Trial 29 pruned. 
+[I 2026-08-10 22:54:02,897] Trial 30 finished with value: 0.012414502351972327 and parameters: {'lr': 0.0018308772431131358, 'weight_decay': 0.00040653677421171306, 'dropout_rate': 0.45423422006851266, 'batch_size': 256}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:01:55,696] Trial 31 finished with value: 0.0073608486112981975 and parameters: {'lr': 0.0013643326293687366, 'weight_decay': 0.0037497462643856848, 'dropout_rate': 0.39785552434842264, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:09:46,285] Trial 32 finished with value: 0.012677034283064846 and parameters: {'lr': 0.0031520186982388213, 'weight_decay': 0.004643747146808056, 'dropout_rate': 0.39713289223134224, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:17:37,108] Trial 33 finished with value: 0.009507454428058584 and parameters: {'lr': 0.001129212838796639, 'weight_decay': 0.0014980033173426584, 'dropout_rate': 0.3543780151986954, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:19:01,957] Trial 34 pruned. 
+[I 2026-08-10 23:26:52,460] Trial 35 finished with value: 0.01131416620471351 and parameters: {'lr': 0.003668504411025853, 'weight_decay': 0.001831669610013792, 'dropout_rate': 0.44276672777822257, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:27:13,822] Trial 36 pruned. 
+[I 2026-08-10 23:35:05,081] Trial 37 finished with value: 0.010608421313907455 and parameters: {'lr': 0.0011217784263527983, 'weight_decay': 0.0009422000880678175, 'dropout_rate': 0.2563574420084484, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:37:32,674] Trial 38 pruned. 
+[I 2026-08-10 23:45:25,459] Trial 39 finished with value: 0.00861335292517947 and parameters: {'lr': 0.0025479094532975923, 'weight_decay': 0.0004197354446994398, 'dropout_rate': 0.4032148639528959, 'batch_size': 128}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:47:38,642] Trial 40 finished with value: 0.007458365627310914 and parameters: {'lr': 0.0049780943113524045, 'weight_decay': 0.002926433756160546, 'dropout_rate': 0.20360847108852925, 'batch_size': 512}. Best is trial 23 with value: 0.006388601040923814.
+[I 2026-08-10 23:49:52,418] Trial 41 finished with value: 0.00477527029280921 and parameters: {'lr': 0.004783396261822634, 'weight_decay': 0.002960724081283009, 'dropout_rate': 0.221899825305792, 'batch_size': 512}. Best is trial 41 with value: 0.00477527029280921.
+[I 2026-08-10 23:52:05,975] Trial 42 finished with value: 0.005326401029931704 and parameters: {'lr': 0.0032918680922158564, 'weight_decay': 0.002724855345341199, 'dropout_rate': 0.21434891738399714, 'batch_size': 512}. Best is trial 41 with value: 0.00477527029280921.
+[I 2026-08-10 23:54:19,530] Trial 43 finished with value: 0.004444027008241047 and parameters: {'lr': 0.0014011648920110359, 'weight_decay': 0.005994012042360005, 'dropout_rate': 0.16855459166942055, 'batch_size': 512}. Best is trial 43 with value: 0.004444027008241047.
+[I 2026-08-10 23:56:34,924] Trial 44 finished with value: 0.004930979466772928 and parameters: {'lr': 0.003428967630525272, 'weight_decay': 0.006257153759270132, 'dropout_rate': 0.16390690045166267, 'batch_size': 512}. Best is trial 43 with value: 0.004444027008241047.
+[I 2026-08-10 23:58:48,795] Trial 45 finished with value: 0.004382955590286751 and parameters: {'lr': 0.0030761309213494345, 'weight_decay': 0.0056421507436272495, 'dropout_rate': 0.14967794040937588, 'batch_size': 512}. Best is trial 45 with value: 0.004382955590286751.
+[I 2026-08-11 00:01:03,822] Trial 46 finished with value: 0.00486684610425795 and parameters: {'lr': 0.0034566503065058623, 'weight_decay': 0.0059175940990253495, 'dropout_rate': 0.15310857276695752, 'batch_size': 512}. Best is trial 45 with value: 0.004382955590286751.
+[I 2026-08-11 00:03:17,760] Trial 47 finished with value: 0.0062109958904231965 and parameters: {'lr': 0.003822583559884729, 'weight_decay': 0.005935004885952141, 'dropout_rate': 0.15804909576649517, 'batch_size': 512}. Best is trial 45 with value: 0.004382955590286751.
+[I 2026-08-11 00:03:39,133] Trial 48 pruned. 
+[I 2026-08-11 00:04:00,562] Trial 49 pruned. 
+[I 2026-08-11 00:06:13,864] Trial 50 finished with value: 0.0028187067889814768 and parameters: {'lr': 0.003680610668451913, 'weight_decay': 0.006725614160229408, 'dropout_rate': 0.06303901132025293, 'batch_size': 512}. Best is trial 50 with value: 0.0028187067889814768.
+[I 2026-08-11 00:08:27,745] Trial 51 finished with value: 0.0026884178309202512 and parameters: {'lr': 0.004087619969278517, 'weight_decay': 0.005154571056256761, 'dropout_rate': 0.054864862094957396, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:10:41,389] Trial 52 finished with value: 0.0034138813025725696 and parameters: {'lr': 0.0041161405043192234, 'weight_decay': 0.00490605287579492, 'dropout_rate': 0.07123456932883591, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:12:54,751] Trial 53 finished with value: 0.004261927477287412 and parameters: {'lr': 0.004256213358503067, 'weight_decay': 1.627971322865163e-06, 'dropout_rate': 0.06091923481253636, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:15:08,389] Trial 54 finished with value: 0.0029476685897104186 and parameters: {'lr': 0.001970211861217133, 'weight_decay': 1.2770814288673283e-06, 'dropout_rate': 0.0546567975360934, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:17:22,024] Trial 55 finished with value: 0.004337494422241013 and parameters: {'lr': 0.00210257647929061, 'weight_decay': 1.348074873581979e-06, 'dropout_rate': 0.05148182468942394, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:19:35,586] Trial 56 finished with value: 0.004747188864545661 and parameters: {'lr': 0.0020149437081697914, 'weight_decay': 1.0676986316032318e-06, 'dropout_rate': 0.05045582646269405, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:21:49,012] Trial 57 finished with value: 0.003951812745672735 and parameters: {'lr': 0.002341142496316302, 'weight_decay': 2.876720631338852e-06, 'dropout_rate': 0.08415074950742087, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:24:02,500] Trial 58 finished with value: 0.003597363398362838 and parameters: {'lr': 0.0038900205893834645, 'weight_decay': 2.6568113927055737e-06, 'dropout_rate': 0.08951705013330873, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:26:16,184] Trial 59 finished with value: 0.004492617824489461 and parameters: {'lr': 0.0025403556362666494, 'weight_decay': 3.282017906863957e-06, 'dropout_rate': 0.08447537779990187, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:28:29,880] Trial 60 finished with value: 0.003775968814541683 and parameters: {'lr': 0.0038713718113972955, 'weight_decay': 9.007456853728305e-06, 'dropout_rate': 0.10341198495928167, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:30:43,438] Trial 61 finished with value: 0.0037697549255261724 and parameters: {'lr': 0.00403120312637587, 'weight_decay': 2.744341694216245e-06, 'dropout_rate': 0.10316657062585402, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:32:57,083] Trial 62 finished with value: 0.0034867859585097764 and parameters: {'lr': 0.0038596563565093506, 'weight_decay': 1.0614635110320877e-05, 'dropout_rate': 0.11051186313959771, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:35:10,645] Trial 63 finished with value: 0.002962770860323473 and parameters: {'lr': 0.0028856039393027654, 'weight_decay': 3.331415183652038e-05, 'dropout_rate': 0.12394337114786436, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:37:23,786] Trial 64 finished with value: 0.003504758110262492 and parameters: {'lr': 0.0028402116795433817, 'weight_decay': 2.259119704719789e-05, 'dropout_rate': 0.1263066512246259, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:39:37,171] Trial 65 finished with value: 0.004455272003735898 and parameters: {'lr': 0.002850654383100934, 'weight_decay': 3.0382376142305462e-05, 'dropout_rate': 0.11819540669074927, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:41:50,662] Trial 66 finished with value: 0.003320610856758153 and parameters: {'lr': 0.0015731809602782766, 'weight_decay': 2.298891193284688e-05, 'dropout_rate': 0.07140830952425092, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:46:54,963] Trial 67 pruned. 
+[I 2026-08-11 00:47:19,207] Trial 68 pruned. 
+[I 2026-08-11 00:49:32,535] Trial 69 finished with value: 0.003130888828955281 and parameters: {'lr': 0.0016025961129123875, 'weight_decay': 8.493637417060523e-06, 'dropout_rate': 0.1377079045734823, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:49:53,793] Trial 70 pruned. 
+[I 2026-08-11 00:50:15,319] Trial 71 pruned. 
+[I 2026-08-11 00:52:28,494] Trial 72 finished with value: 0.0036976327371184155 and parameters: {'lr': 0.0017290347546508582, 'weight_decay': 1.6954879670430937e-05, 'dropout_rate': 0.10167373885500733, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:54:42,109] Trial 73 finished with value: 0.0050724267145766 and parameters: {'lr': 0.0022735081202247234, 'weight_decay': 4.04318531659194e-05, 'dropout_rate': 0.1375601116941449, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:56:55,679] Trial 74 finished with value: 0.0033814069662654964 and parameters: {'lr': 0.0012609781739668189, 'weight_decay': 1.0425090540891312e-05, 'dropout_rate': 0.06170440287799445, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 00:59:10,977] Trial 75 finished with value: 0.0031951785911084694 and parameters: {'lr': 0.0012797000610175926, 'weight_decay': 4.008202364059529e-06, 'dropout_rate': 0.060961254688946316, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:00:01,637] Trial 76 pruned. 
+[I 2026-08-11 01:02:38,390] Trial 77 pruned. 
+[I 2026-08-11 01:04:51,752] Trial 78 finished with value: 0.00313683926535634 and parameters: {'lr': 0.001307344219181942, 'weight_decay': 6.258149283903252e-06, 'dropout_rate': 0.06276701735795492, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:05:13,258] Trial 79 pruned. 
+[I 2026-08-11 01:07:26,555] Trial 80 finished with value: 0.0036989021013985788 and parameters: {'lr': 0.0014345049906343396, 'weight_decay': 2.0858992497925167e-05, 'dropout_rate': 0.0801985215366694, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:07:55,943] Trial 81 pruned. 
+[I 2026-08-11 01:10:09,389] Trial 82 finished with value: 0.003354530208240026 and parameters: {'lr': 0.0016473831819705342, 'weight_decay': 6.175473774524241e-06, 'dropout_rate': 0.06347329355204279, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:12:22,862] Trial 83 finished with value: 0.002860728835299989 and parameters: {'lr': 0.0015875790369781018, 'weight_decay': 5.380566126207668e-06, 'dropout_rate': 0.09356475174321496, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:14:36,234] Trial 84 finished with value: 0.0029904653540677104 and parameters: {'lr': 0.0019205930187086106, 'weight_decay': 2.1110149571158548e-06, 'dropout_rate': 0.12145202743827638, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:15:08,306] Trial 85 pruned. 
+[I 2026-08-11 01:17:21,749] Trial 86 finished with value: 0.0037879827839856816 and parameters: {'lr': 0.001943901277715361, 'weight_decay': 1.2508192637970869e-06, 'dropout_rate': 0.18350524892708567, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:19:35,016] Trial 87 finished with value: 0.006969382724772368 and parameters: {'lr': 0.0012473620538527748, 'weight_decay': 3.556043427957045e-06, 'dropout_rate': 0.14614721949563492, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:21:48,424] Trial 88 finished with value: 0.004210344293145337 and parameters: {'lr': 0.002691936349774545, 'weight_decay': 2.0089356492184413e-06, 'dropout_rate': 0.11935324157512525, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:24:16,387] Trial 89 pruned. 
+[I 2026-08-11 01:28:22,543] Trial 90 finished with value: 0.005398882917985357 and parameters: {'lr': 0.002183929001106008, 'weight_decay': 4.9221170540899745e-06, 'dropout_rate': 0.10785109650357914, 'batch_size': 256}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:30:36,503] Trial 91 finished with value: 0.0029885561169052 and parameters: {'lr': 0.001453367062096512, 'weight_decay': 5.13229597163151e-05, 'dropout_rate': 0.08185005876278384, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:30:58,033] Trial 92 pruned. 
+[I 2026-08-11 01:33:11,480] Trial 93 finished with value: 0.0029653004400423074 and parameters: {'lr': 0.0013812110569052219, 'weight_decay': 1.5561441053448161e-06, 'dropout_rate': 0.05153283883804674, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:35:24,829] Trial 94 finished with value: 0.0027990461585792846 and parameters: {'lr': 0.0014975694317329305, 'weight_decay': 8.803293628427013e-05, 'dropout_rate': 0.0941443142786527, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:37:38,286] Trial 95 finished with value: 0.0028322013428422337 and parameters: {'lr': 0.0018033383807745617, 'weight_decay': 9.150707849259304e-05, 'dropout_rate': 0.1269986344944476, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:39:51,505] Trial 96 finished with value: 0.004913572476395501 and parameters: {'lr': 0.001970339346092976, 'weight_decay': 0.00011286830194125782, 'dropout_rate': 0.09213920580156824, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:42:04,888] Trial 97 finished with value: 0.004381270595932005 and parameters: {'lr': 0.003165064237631388, 'weight_decay': 0.00021545206477354415, 'dropout_rate': 0.12379103381270752, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:44:18,582] Trial 98 finished with value: 0.0029568958393936403 and parameters: {'lr': 0.002409169359351871, 'weight_decay': 5.842948969471233e-05, 'dropout_rate': 0.051137250357528655, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+[I 2026-08-11 01:46:31,677] Trial 99 finished with value: 0.0033728440888711295 and parameters: {'lr': 0.00249960352161222, 'weight_decay': 8.174308168689682e-05, 'dropout_rate': 0.05160272234546499, 'batch_size': 512}. Best is trial 51 with value: 0.0026884178309202512.
+
+Best Trial Validation MSE: 0.00269
+BATCH_SIZE = 512
+LEARNING_RATE = 0.004087619969278517
+WEIGHT_DECAY = 0.005154571056256761
+DROPOUT_RATE = 0.054864862094957396
+--------------------------------------------------
+Saved config automatically to:
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/complex_model/output/BIMP/best_params.json
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/complex_model/best_params.json
+
+Or run with environment variables:
+export BATCH_SIZE=512 LEARNING_RATE=0.004087619969278517 WEIGHT_DECAY=0.005154571056256761 DROPOUT_RATE=0.054864862094957396
+==================================================
+
+
+[8/12] Training Hypertuned Complex Model (BIMP)...
+Hyperparameters loaded for source 'BIMP': BATCH_SIZE=512, LEARNING_RATE=0.004087619969278517, WEIGHT_DECAY=0.005154571056256761, DROPOUT_RATE=0.054864862094957396
+Loading dataset from source: BIMP
+Dropped 30 unconverged rows (80411 remain).
+Features: 13 | Targets: 3
+--> Training on 64328 samples.
+--> Testing on 16083 consistent samples.
+Epoch [1/10000] | Train Loss: 0.1427 | Test Loss: 0.0552
+   ↳ MedAE -> Cost: $1324.96 | Cycle Time: 204.8s | Wait Time: 306.0s
+Epoch [5/10000] | Train Loss: 0.0481 | Test Loss: 0.0181
+   ↳ MedAE -> Cost: $899.26 | Cycle Time: 164.4s | Wait Time: 256.2s
+Epoch [10/10000] | Train Loss: 0.0343 | Test Loss: 0.0389
+   ↳ MedAE -> Cost: $764.50 | Cycle Time: 138.3s | Wait Time: 240.5s
+Epoch [15/10000] | Train Loss: 0.0239 | Test Loss: 0.0054
+   ↳ MedAE -> Cost: $599.29 | Cycle Time: 107.8s | Wait Time: 191.8s
+Epoch [20/10000] | Train Loss: 0.0187 | Test Loss: 0.0055
+   ↳ MedAE -> Cost: $640.64 | Cycle Time: 122.0s | Wait Time: 207.9s
+Epoch [25/10000] | Train Loss: 0.0182 | Test Loss: 0.0075
+   ↳ MedAE -> Cost: $628.07 | Cycle Time: 108.4s | Wait Time: 198.0s
+Epoch [30/10000] | Train Loss: 0.0207 | Test Loss: 0.0088
+   ↳ MedAE -> Cost: $657.12 | Cycle Time: 141.8s | Wait Time: 228.1s
+Epoch [35/10000] | Train Loss: 0.0154 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $486.64 | Cycle Time: 109.9s | Wait Time: 192.7s
+Epoch [40/10000] | Train Loss: 0.0123 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $537.88 | Cycle Time: 109.6s | Wait Time: 191.0s
+Epoch [45/10000] | Train Loss: 0.0117 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $548.54 | Cycle Time: 111.2s | Wait Time: 193.2s
+Epoch [50/10000] | Train Loss: 0.0112 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $565.96 | Cycle Time: 100.7s | Wait Time: 184.3s
+Epoch [55/10000] | Train Loss: 0.0139 | Test Loss: 0.0085
+   ↳ MedAE -> Cost: $779.72 | Cycle Time: 110.0s | Wait Time: 194.4s
+Epoch [60/10000] | Train Loss: 0.0112 | Test Loss: 0.0050
+   ↳ MedAE -> Cost: $711.12 | Cycle Time: 112.7s | Wait Time: 187.6s
+Epoch [65/10000] | Train Loss: 0.0115 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $541.10 | Cycle Time: 104.7s | Wait Time: 192.1s
+Epoch [70/10000] | Train Loss: 0.0139 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $423.67 | Cycle Time: 111.5s | Wait Time: 186.5s
+Epoch [75/10000] | Train Loss: 0.0114 | Test Loss: 0.0053
+   ↳ MedAE -> Cost: $576.52 | Cycle Time: 134.4s | Wait Time: 220.3s
+Epoch [80/10000] | Train Loss: 0.0116 | Test Loss: 0.0046
+   ↳ MedAE -> Cost: $495.95 | Cycle Time: 102.4s | Wait Time: 185.5s
+Epoch [85/10000] | Train Loss: 0.0116 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1101.25 | Cycle Time: 110.1s | Wait Time: 191.4s
+Epoch [90/10000] | Train Loss: 0.0106 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $733.40 | Cycle Time: 105.8s | Wait Time: 187.7s
+Epoch [95/10000] | Train Loss: 0.0098 | Test Loss: 0.0057
+   ↳ MedAE -> Cost: $547.72 | Cycle Time: 104.7s | Wait Time: 190.7s
+Epoch [100/10000] | Train Loss: 0.0105 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $436.55 | Cycle Time: 109.3s | Wait Time: 189.6s
+Epoch [105/10000] | Train Loss: 0.0099 | Test Loss: 0.0030
+   ↳ MedAE -> Cost: $412.82 | Cycle Time: 104.0s | Wait Time: 185.4s
+Epoch [110/10000] | Train Loss: 0.0094 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $386.09 | Cycle Time: 107.1s | Wait Time: 187.1s
+Epoch [115/10000] | Train Loss: 0.0097 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $482.99 | Cycle Time: 101.9s | Wait Time: 181.3s
+Epoch [120/10000] | Train Loss: 0.0094 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $336.24 | Cycle Time: 98.8s | Wait Time: 179.4s
+Epoch [125/10000] | Train Loss: 0.0087 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $486.99 | Cycle Time: 108.6s | Wait Time: 194.2s
+Epoch [130/10000] | Train Loss: 0.0107 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $506.61 | Cycle Time: 117.3s | Wait Time: 189.3s
+Epoch [135/10000] | Train Loss: 0.0087 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $451.92 | Cycle Time: 101.0s | Wait Time: 187.4s
+Epoch [140/10000] | Train Loss: 0.0090 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $914.51 | Cycle Time: 109.7s | Wait Time: 189.6s
+Epoch [145/10000] | Train Loss: 0.0104 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $436.66 | Cycle Time: 113.7s | Wait Time: 199.0s
+Epoch [150/10000] | Train Loss: 0.0080 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $932.42 | Cycle Time: 108.7s | Wait Time: 182.9s
+Epoch [155/10000] | Train Loss: 0.0084 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $495.68 | Cycle Time: 98.2s | Wait Time: 180.0s
+Epoch [160/10000] | Train Loss: 0.0076 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1071.29 | Cycle Time: 97.6s | Wait Time: 180.1s
+Epoch [165/10000] | Train Loss: 0.0076 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $501.66 | Cycle Time: 98.0s | Wait Time: 180.8s
+Epoch [170/10000] | Train Loss: 0.0084 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $606.42 | Cycle Time: 109.3s | Wait Time: 185.4s
+Epoch [175/10000] | Train Loss: 0.0078 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $296.24 | Cycle Time: 98.7s | Wait Time: 176.5s
+Epoch [180/10000] | Train Loss: 0.0082 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $646.46 | Cycle Time: 105.3s | Wait Time: 188.0s
+Epoch [185/10000] | Train Loss: 0.0076 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $600.32 | Cycle Time: 116.9s | Wait Time: 200.6s
+Epoch [190/10000] | Train Loss: 0.0074 | Test Loss: 0.0026
+   ↳ MedAE -> Cost: $325.10 | Cycle Time: 98.5s | Wait Time: 177.9s
+Epoch [195/10000] | Train Loss: 0.0074 | Test Loss: 0.0031
+   ↳ MedAE -> Cost: $522.86 | Cycle Time: 97.4s | Wait Time: 178.1s
+Epoch [200/10000] | Train Loss: 0.0075 | Test Loss: 0.0030
+   ↳ MedAE -> Cost: $358.14 | Cycle Time: 98.4s | Wait Time: 178.8s
+Epoch [205/10000] | Train Loss: 0.0074 | Test Loss: 0.0030
+   ↳ MedAE -> Cost: $375.35 | Cycle Time: 101.8s | Wait Time: 185.8s
+Epoch [210/10000] | Train Loss: 0.0076 | Test Loss: 0.0028
+   ↳ MedAE -> Cost: $400.76 | Cycle Time: 99.6s | Wait Time: 188.7s
+Epoch [215/10000] | Train Loss: 0.0077 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $315.11 | Cycle Time: 99.5s | Wait Time: 183.1s
+Epoch [220/10000] | Train Loss: 0.0078 | Test Loss: 0.0026
+   ↳ MedAE -> Cost: $576.60 | Cycle Time: 94.6s | Wait Time: 176.0s
+Epoch [225/10000] | Train Loss: 0.0082 | Test Loss: 0.0031
+   ↳ MedAE -> Cost: $310.97 | Cycle Time: 99.8s | Wait Time: 181.5s
+Epoch [230/10000] | Train Loss: 0.0073 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $303.19 | Cycle Time: 96.0s | Wait Time: 178.9s
+Epoch [235/10000] | Train Loss: 0.0074 | Test Loss: 0.0080
+   ↳ MedAE -> Cost: $690.85 | Cycle Time: 119.1s | Wait Time: 211.5s
+Epoch [240/10000] | Train Loss: 0.0072 | Test Loss: 0.0027
+   ↳ MedAE -> Cost: $304.00 | Cycle Time: 97.1s | Wait Time: 178.3s
+Epoch [245/10000] | Train Loss: 0.0083 | Test Loss: 0.0028
+   ↳ MedAE -> Cost: $506.72 | Cycle Time: 99.7s | Wait Time: 180.4s
+Epoch [250/10000] | Train Loss: 0.0078 | Test Loss: 0.0030
+   ↳ MedAE -> Cost: $588.64 | Cycle Time: 102.8s | Wait Time: 186.7s
+Epoch [255/10000] | Train Loss: 0.0070 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $421.40 | Cycle Time: 100.9s | Wait Time: 178.5s
+Epoch [260/10000] | Train Loss: 0.0081 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $343.94 | Cycle Time: 96.0s | Wait Time: 178.9s
+Epoch [265/10000] | Train Loss: 0.0078 | Test Loss: 0.0024
+   ↳ MedAE -> Cost: $352.04 | Cycle Time: 98.0s | Wait Time: 176.5s
+Epoch [270/10000] | Train Loss: 0.0083 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $418.69 | Cycle Time: 100.0s | Wait Time: 183.0s
+Epoch [275/10000] | Train Loss: 0.0064 | Test Loss: 0.0031
+   ↳ MedAE -> Cost: $373.01 | Cycle Time: 94.9s | Wait Time: 178.0s
+Epoch [280/10000] | Train Loss: 0.0098 | Test Loss: 0.0033
+   ↳ MedAE -> Cost: $471.13 | Cycle Time: 106.6s | Wait Time: 185.9s
+Epoch [285/10000] | Train Loss: 0.0078 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $530.54 | Cycle Time: 98.7s | Wait Time: 182.2s
+Epoch [290/10000] | Train Loss: 0.0078 | Test Loss: 0.0033
+   ↳ MedAE -> Cost: $699.19 | Cycle Time: 100.9s | Wait Time: 184.1s
+Epoch [295/10000] | Train Loss: 0.0065 | Test Loss: 0.0052
+   ↳ MedAE -> Cost: $458.16 | Cycle Time: 115.0s | Wait Time: 200.2s
+Epoch [300/10000] | Train Loss: 0.0087 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $619.01 | Cycle Time: 98.9s | Wait Time: 181.7s
+Epoch [305/10000] | Train Loss: 0.0070 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $349.46 | Cycle Time: 94.6s | Wait Time: 175.3s
+Epoch [310/10000] | Train Loss: 0.0075 | Test Loss: 0.0026
+   ↳ MedAE -> Cost: $309.80 | Cycle Time: 105.6s | Wait Time: 190.9s
+Epoch [315/10000] | Train Loss: 0.0083 | Test Loss: 0.0027
+   ↳ MedAE -> Cost: $498.77 | Cycle Time: 95.7s | Wait Time: 178.5s
+Epoch [320/10000] | Train Loss: 0.0073 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $291.54 | Cycle Time: 109.6s | Wait Time: 188.4s
+Epoch [325/10000] | Train Loss: 0.0084 | Test Loss: 0.0043
+   ↳ MedAE -> Cost: $416.50 | Cycle Time: 104.2s | Wait Time: 191.9s
+Epoch [330/10000] | Train Loss: 0.0075 | Test Loss: 0.0030
+   ↳ MedAE -> Cost: $287.10 | Cycle Time: 100.4s | Wait Time: 186.8s
+Epoch [335/10000] | Train Loss: 0.0067 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $361.24 | Cycle Time: 97.8s | Wait Time: 183.7s
+Epoch [340/10000] | Train Loss: 0.0069 | Test Loss: 0.0026
+   ↳ MedAE -> Cost: $443.61 | Cycle Time: 93.3s | Wait Time: 173.9s
+Epoch [345/10000] | Train Loss: 0.0076 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $335.52 | Cycle Time: 108.6s | Wait Time: 192.7s
+Epoch [350/10000] | Train Loss: 0.0079 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $410.91 | Cycle Time: 102.2s | Wait Time: 186.8s
+Epoch [355/10000] | Train Loss: 0.0073 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $488.44 | Cycle Time: 95.7s | Wait Time: 177.2s
+Epoch [360/10000] | Train Loss: 0.0067 | Test Loss: 0.0029
+   ↳ MedAE -> Cost: $658.39 | Cycle Time: 96.8s | Wait Time: 177.4s
+Epoch [365/10000] | Train Loss: 0.0080 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $443.05 | Cycle Time: 103.9s | Wait Time: 191.0s
+Epoch [370/10000] | Train Loss: 0.0077 | Test Loss: 0.0028
+   ↳ MedAE -> Cost: $450.05 | Cycle Time: 97.6s | Wait Time: 178.6s
+Epoch [375/10000] | Train Loss: 0.0068 | Test Loss: 0.0024
+   ↳ MedAE -> Cost: $348.08 | Cycle Time: 94.5s | Wait Time: 176.2s
+Epoch [380/10000] | Train Loss: 0.0070 | Test Loss: 0.0031
+   ↳ MedAE -> Cost: $542.64 | Cycle Time: 97.1s | Wait Time: 179.6s
+Epoch [385/10000] | Train Loss: 0.0072 | Test Loss: 0.0028
+   ↳ MedAE -> Cost: $598.50 | Cycle Time: 99.2s | Wait Time: 181.9s
+Epoch [390/10000] | Train Loss: 0.0067 | Test Loss: 0.0026
+   ↳ MedAE -> Cost: $326.83 | Cycle Time: 100.8s | Wait Time: 183.8s
+Epoch [395/10000] | Train Loss: 0.0068 | Test Loss: 0.0030
+   ↳ MedAE -> Cost: $591.55 | Cycle Time: 95.7s | Wait Time: 177.7s
+Epoch [400/10000] | Train Loss: 0.0078 | Test Loss: 0.0029
+   ↳ MedAE -> Cost: $501.22 | Cycle Time: 96.0s | Wait Time: 177.5s
+Epoch [405/10000] | Train Loss: 0.0074 | Test Loss: 0.0033
+   ↳ MedAE -> Cost: $357.07 | Cycle Time: 100.0s | Wait Time: 187.3s
+Epoch [410/10000] | Train Loss: 0.0073 | Test Loss: 0.0029
+   ↳ MedAE -> Cost: $530.02 | Cycle Time: 97.1s | Wait Time: 178.6s
+Epoch [415/10000] | Train Loss: 0.0060 | Test Loss: 0.0028
+   ↳ MedAE -> Cost: $568.87 | Cycle Time: 96.5s | Wait Time: 177.1s
+Epoch [420/10000] | Train Loss: 0.0068 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $387.72 | Cycle Time: 96.0s | Wait Time: 181.7s
+Epoch [425/10000] | Train Loss: 0.0067 | Test Loss: 0.0029
+   ↳ MedAE -> Cost: $420.47 | Cycle Time: 97.9s | Wait Time: 179.1s
+
+Early stopping triggered at Epoch 426!
+Training finished in 581.74s.
+
+Evaluating BEST model for JSON export...
+Exported metrics to models/output/metrics_complex_nn.json
+
+[9/12] Hypertuning Deep Network (synthetic)...
+[I 2026-08-11 01:56:18,882] A new study created in memory with name: no-name-3306f102-2211-4b68-a5ea-1ec5c92a34bc
+[I 2026-08-11 02:35:51,561] Trial 0 finished with value: 0.004204292604438899 and parameters: {'lr': 0.00011844319751820405, 'weight_decay': 0.007969454818643935, 'dropout_rate': 0.3829984854528513, 'batch_size': 128, 'hidden_dim': 256, 'num_blocks': 7}. Best is trial 0 with value: 0.004204292604438899.
+[I 2026-08-11 02:40:40,263] Trial 1 finished with value: 0.021576985861044347 and parameters: {'lr': 5.242693862597316e-05, 'weight_decay': 0.008706020878304856, 'dropout_rate': 0.40811066020010545, 'batch_size': 1024, 'hidden_dim': 256, 'num_blocks': 5}. Best is trial 0 with value: 0.004204292604438899.
+[I 2026-08-11 02:49:04,208] Trial 2 finished with value: 0.004881643908807188 and parameters: {'lr': 0.00020456102872218944, 'weight_decay': 0.00019010245319870352, 'dropout_rate': 0.27303616213380455, 'batch_size': 512, 'hidden_dim': 512, 'num_blocks': 4}. Best is trial 0 with value: 0.004204292604438899.
+[I 2026-08-11 03:08:38,319] Trial 3 finished with value: 0.00356702446397486 and parameters: {'lr': 0.0002025418890664836, 'weight_decay': 0.00021930485556643703, 'dropout_rate': 0.2162628982463199, 'batch_size': 256, 'hidden_dim': 512, 'num_blocks': 6}. Best is trial 3 with value: 0.00356702446397486.
+[I 2026-08-11 03:39:33,762] Trial 4 finished with value: 0.004107851677772142 and parameters: {'lr': 6.622290670049676e-05, 'weight_decay': 0.0009780337016659412, 'dropout_rate': 0.2085971302788046, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 4}. Best is trial 3 with value: 0.00356702446397486.
+[I 2026-08-11 03:40:06,133] Trial 5 pruned. 
+[I 2026-08-11 03:40:42,576] Trial 6 pruned. 
+[I 2026-08-11 04:11:41,112] Trial 7 finished with value: 0.0034434633211369273 and parameters: {'lr': 0.00029594756677318233, 'weight_decay': 0.00024970737145052745, 'dropout_rate': 0.2013805292809006, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 4}. Best is trial 7 with value: 0.0034434633211369273.
+[I 2026-08-11 04:12:02,474] Trial 8 pruned. 
+[I 2026-08-11 04:12:50,237] Trial 9 pruned. 
+[I 2026-08-11 04:59:47,839] Trial 10 finished with value: 0.0031787495806205658 and parameters: {'lr': 0.00026069474240583197, 'weight_decay': 0.00010280029617905622, 'dropout_rate': 0.32950929112362876, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 8}. Best is trial 10 with value: 0.0031787495806205658.
+[I 2026-08-11 05:02:27,606] Trial 11 pruned. 
+[I 2026-08-11 05:05:02,844] Trial 12 pruned. 
+[I 2026-08-11 05:07:46,541] Trial 13 pruned. 
+[I 2026-08-11 05:10:06,983] Trial 14 pruned. 
+[I 2026-08-11 05:49:13,362] Trial 15 finished with value: 0.00317967876322457 and parameters: {'lr': 0.0004992665188813598, 'weight_decay': 0.00020818984688409883, 'dropout_rate': 0.2504873774302143, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 6}. Best is trial 10 with value: 0.0031787495806205658.
+[I 2026-08-11 06:28:17,002] Trial 16 finished with value: 0.003137797748599404 and parameters: {'lr': 0.00048377944093147025, 'weight_decay': 0.00015116459039077416, 'dropout_rate': 0.24631493484602113, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 6}. Best is trial 16 with value: 0.003137797748599404.
+[I 2026-08-11 06:31:38,547] Trial 17 pruned. 
+[I 2026-08-11 06:32:00,761] Trial 18 pruned. 
+[I 2026-08-11 06:34:36,843] Trial 19 pruned. 
+[I 2026-08-11 07:21:28,323] Trial 20 finished with value: 0.0031414245342746795 and parameters: {'lr': 0.00039343798915216584, 'weight_decay': 0.00035822844241745184, 'dropout_rate': 0.3623944769345241, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 8}. Best is trial 16 with value: 0.003137797748599404.
+[I 2026-08-11 08:08:19,955] Trial 21 finished with value: 0.0030572985082594722 and parameters: {'lr': 0.0004081700050591622, 'weight_decay': 0.0003322200733750523, 'dropout_rate': 0.3627522081472127, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 8}. Best is trial 21 with value: 0.0030572985082594722.
+[I 2026-08-11 08:55:09,684] Trial 22 finished with value: 0.003180645444220211 and parameters: {'lr': 0.000404281323743043, 'weight_decay': 0.0003373966241651292, 'dropout_rate': 0.3593543045989167, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 8}. Best is trial 21 with value: 0.0030572985082594722.
+[I 2026-08-11 09:38:10,502] Trial 23 finished with value: 0.003183495523362026 and parameters: {'lr': 0.0004285162168144756, 'weight_decay': 0.0007176524586659393, 'dropout_rate': 0.36711092708262005, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 7}. Best is trial 21 with value: 0.0030572985082594722.
+[I 2026-08-11 09:41:08,874] Trial 24 pruned. 
+[I 2026-08-11 10:24:10,757] Trial 25 finished with value: 0.0031037738660267588 and parameters: {'lr': 0.00032892889761204397, 'weight_decay': 0.0010855123662302567, 'dropout_rate': 0.3057548126970177, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 7}. Best is trial 21 with value: 0.0030572985082594722.
+[I 2026-08-11 10:25:16,570] Trial 26 pruned. 
+[I 2026-08-11 10:26:28,037] Trial 27 pruned. 
+[I 2026-08-11 10:27:05,517] Trial 28 pruned. 
+[I 2026-08-11 10:29:22,677] Trial 29 pruned. 
+[I 2026-08-11 10:31:40,109] Trial 30 pruned. 
+[I 2026-08-11 10:41:13,327] Trial 31 pruned. 
+[I 2026-08-11 10:53:35,099] Trial 32 pruned. 
+[I 2026-08-11 11:12:37,496] Trial 33 pruned. 
+[I 2026-08-11 11:15:21,078] Trial 34 pruned. 
+[I 2026-08-11 11:15:45,313] Trial 35 pruned. 
+[I 2026-08-11 11:16:18,970] Trial 36 pruned. 
+[I 2026-08-11 11:18:58,681] Trial 37 pruned. 
+[I 2026-08-11 11:22:33,826] Trial 38 pruned. 
+[I 2026-08-11 11:23:01,080] Trial 39 pruned. 
+[I 2026-08-11 11:25:18,286] Trial 40 pruned. 
+[I 2026-08-11 11:27:57,759] Trial 41 pruned. 
+[I 2026-08-11 11:30:55,911] Trial 42 pruned. 
+[I 2026-08-11 11:37:40,211] Trial 43 pruned. 
+[I 2026-08-11 11:50:39,283] Trial 44 pruned. 
+[I 2026-08-11 11:53:47,145] Trial 45 pruned. 
+[I 2026-08-11 12:02:40,813] Trial 46 pruned. 
+
+Best Trial Validation MSE: 0.00306
+
+==================================================
+🚀 HYPERPARAMETERS TUNED & AUTOMATICALLY LINKED!
+==================================================
+BATCH_SIZE = 128
+LEARNING_RATE = 0.0004081700050591622
+WEIGHT_DECAY = 0.0003322200733750523
+HIDDEN_DIM = 512
+NUM_BLOCKS = 8
+DROPOUT_RATE = 0.3627522081472127
+--------------------------------------------------
+Saved config automatically to:
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/deep_network/output/synthetic/best_params.json
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/deep_network/best_params.json
+
+Or run with environment variables:
+export BATCH_SIZE=128 LEARNING_RATE=0.0004081700050591622 WEIGHT_DECAY=0.0003322200733750523 HIDDEN_DIM=512 NUM_BLOCKS=8 DROPOUT_RATE=0.3627522081472127
+==================================================
+
+
+[10/12] Training Hypertuned Deep Network (synthetic)...
+Hyperparameters loaded for source 'synthetic': BATCH_SIZE=128, LEARNING_RATE=0.0004081700050591622, WEIGHT_DECAY=0.0003322200733750523, HIDDEN_DIM=512, NUM_BLOCKS=8, DROPOUT_RATE=0.3627522081472127
+Loading dataset from source: synthetic
+Dropped 1440 unconverged rows (48558 remain).
+Features: 20 | Targets: 3
+--> Training on 38846 samples.
+--> Testing on 9712 consistent samples.
+Epoch [1/10000] | Train Loss: 0.2888 | Test Loss: 0.1302
+   ↳ MedAE -> Cost: $6264.53 | Cycle Time: 1170.4s | Wait Time: 593.5s
+Epoch [5/10000] | Train Loss: 0.0744 | Test Loss: 0.0524
+   ↳ MedAE -> Cost: $2703.23 | Cycle Time: 629.6s | Wait Time: 591.2s
+Epoch [10/10000] | Train Loss: 0.0528 | Test Loss: 0.0262
+   ↳ MedAE -> Cost: $2271.85 | Cycle Time: 511.9s | Wait Time: 322.7s
+Epoch [15/10000] | Train Loss: 0.0386 | Test Loss: 0.0242
+   ↳ MedAE -> Cost: $2227.39 | Cycle Time: 431.0s | Wait Time: 337.1s
+Epoch [20/10000] | Train Loss: 0.0165 | Test Loss: 0.0159
+   ↳ MedAE -> Cost: $2020.30 | Cycle Time: 343.4s | Wait Time: 255.5s
+Epoch [25/10000] | Train Loss: 0.0186 | Test Loss: 0.0116
+   ↳ MedAE -> Cost: $2179.50 | Cycle Time: 258.0s | Wait Time: 215.7s
+Epoch [30/10000] | Train Loss: 0.0414 | Test Loss: 0.0283
+   ↳ MedAE -> Cost: $1969.56 | Cycle Time: 473.9s | Wait Time: 500.9s
+Epoch [35/10000] | Train Loss: 0.0321 | Test Loss: 0.0196
+   ↳ MedAE -> Cost: $1937.50 | Cycle Time: 411.5s | Wait Time: 329.2s
+Epoch [40/10000] | Train Loss: 0.0126 | Test Loss: 0.0090
+   ↳ MedAE -> Cost: $1791.86 | Cycle Time: 242.3s | Wait Time: 209.2s
+Epoch [45/10000] | Train Loss: 0.0213 | Test Loss: 0.0152
+   ↳ MedAE -> Cost: $2017.82 | Cycle Time: 387.0s | Wait Time: 271.2s
+Epoch [50/10000] | Train Loss: 0.0076 | Test Loss: 0.0056
+   ↳ MedAE -> Cost: $1702.25 | Cycle Time: 271.0s | Wait Time: 203.1s
+Epoch [55/10000] | Train Loss: 0.0065 | Test Loss: 0.0056
+   ↳ MedAE -> Cost: $1685.77 | Cycle Time: 202.2s | Wait Time: 181.0s
+Epoch [60/10000] | Train Loss: 0.0119 | Test Loss: 0.0064
+   ↳ MedAE -> Cost: $1710.78 | Cycle Time: 223.4s | Wait Time: 199.4s
+Epoch [65/10000] | Train Loss: 0.0058 | Test Loss: 0.0053
+   ↳ MedAE -> Cost: $1750.46 | Cycle Time: 198.3s | Wait Time: 181.2s
+Epoch [70/10000] | Train Loss: 0.0171 | Test Loss: 0.0268
+   ↳ MedAE -> Cost: $2305.91 | Cycle Time: 376.1s | Wait Time: 271.8s
+Epoch [75/10000] | Train Loss: 0.0056 | Test Loss: 0.0044
+   ↳ MedAE -> Cost: $1686.12 | Cycle Time: 184.5s | Wait Time: 183.5s
+Epoch [80/10000] | Train Loss: 0.0052 | Test Loss: 0.0050
+   ↳ MedAE -> Cost: $1918.22 | Cycle Time: 205.6s | Wait Time: 179.4s
+Epoch [85/10000] | Train Loss: 0.0045 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1641.18 | Cycle Time: 181.1s | Wait Time: 160.4s
+Epoch [90/10000] | Train Loss: 0.0045 | Test Loss: 0.0043
+   ↳ MedAE -> Cost: $1668.79 | Cycle Time: 194.2s | Wait Time: 180.3s
+Epoch [95/10000] | Train Loss: 0.0061 | Test Loss: 0.0045
+   ↳ MedAE -> Cost: $1644.28 | Cycle Time: 174.3s | Wait Time: 167.7s
+Epoch [100/10000] | Train Loss: 0.0041 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1646.86 | Cycle Time: 168.2s | Wait Time: 157.2s
+Epoch [105/10000] | Train Loss: 0.0038 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1670.12 | Cycle Time: 168.3s | Wait Time: 159.3s
+Epoch [110/10000] | Train Loss: 0.0038 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1669.69 | Cycle Time: 183.5s | Wait Time: 164.5s
+Epoch [115/10000] | Train Loss: 0.0035 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1660.61 | Cycle Time: 164.7s | Wait Time: 161.6s
+Epoch [120/10000] | Train Loss: 0.0035 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1638.17 | Cycle Time: 168.8s | Wait Time: 151.5s
+Epoch [125/10000] | Train Loss: 0.0033 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1633.88 | Cycle Time: 156.7s | Wait Time: 155.5s
+Epoch [130/10000] | Train Loss: 0.0033 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1640.73 | Cycle Time: 160.3s | Wait Time: 147.1s
+Epoch [135/10000] | Train Loss: 0.0072 | Test Loss: 0.0121
+   ↳ MedAE -> Cost: $1749.99 | Cycle Time: 258.4s | Wait Time: 200.9s
+Epoch [140/10000] | Train Loss: 0.0031 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1632.24 | Cycle Time: 156.8s | Wait Time: 148.6s
+Epoch [145/10000] | Train Loss: 0.0030 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1716.48 | Cycle Time: 159.2s | Wait Time: 154.4s
+Epoch [150/10000] | Train Loss: 0.0029 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1664.87 | Cycle Time: 161.6s | Wait Time: 152.6s
+Epoch [155/10000] | Train Loss: 0.0029 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1654.30 | Cycle Time: 167.8s | Wait Time: 149.2s
+Epoch [160/10000] | Train Loss: 0.0029 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1665.09 | Cycle Time: 152.5s | Wait Time: 149.3s
+Epoch [165/10000] | Train Loss: 0.0029 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1656.90 | Cycle Time: 162.3s | Wait Time: 153.7s
+Epoch [170/10000] | Train Loss: 0.0029 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1650.57 | Cycle Time: 152.1s | Wait Time: 144.0s
+Epoch [175/10000] | Train Loss: 0.0154 | Test Loss: 0.0115
+   ↳ MedAE -> Cost: $1720.27 | Cycle Time: 215.2s | Wait Time: 288.4s
+Epoch [180/10000] | Train Loss: 0.0028 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $1631.83 | Cycle Time: 152.4s | Wait Time: 144.6s
+Epoch [185/10000] | Train Loss: 0.0026 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $1628.75 | Cycle Time: 153.8s | Wait Time: 149.4s
+Epoch [190/10000] | Train Loss: 0.0026 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1740.45 | Cycle Time: 182.1s | Wait Time: 149.3s
+Epoch [195/10000] | Train Loss: 0.0027 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1666.93 | Cycle Time: 150.3s | Wait Time: 143.7s
+Epoch [200/10000] | Train Loss: 0.0027 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1661.30 | Cycle Time: 160.5s | Wait Time: 160.5s
+Epoch [205/10000] | Train Loss: 0.0026 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1644.86 | Cycle Time: 157.6s | Wait Time: 162.4s
+Epoch [210/10000] | Train Loss: 0.0026 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $1657.62 | Cycle Time: 146.7s | Wait Time: 140.5s
+Epoch [215/10000] | Train Loss: 0.0026 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1649.18 | Cycle Time: 166.5s | Wait Time: 145.0s
+Epoch [220/10000] | Train Loss: 0.0025 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1648.32 | Cycle Time: 151.5s | Wait Time: 144.5s
+Epoch [225/10000] | Train Loss: 0.0035 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1662.45 | Cycle Time: 164.9s | Wait Time: 156.0s
+Epoch [230/10000] | Train Loss: 0.0024 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1697.15 | Cycle Time: 149.7s | Wait Time: 145.5s
+Epoch [235/10000] | Train Loss: 0.0024 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1770.12 | Cycle Time: 150.2s | Wait Time: 147.2s
+Epoch [240/10000] | Train Loss: 0.0024 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1638.94 | Cycle Time: 153.4s | Wait Time: 143.8s
+Epoch [245/10000] | Train Loss: 0.0024 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1757.40 | Cycle Time: 156.0s | Wait Time: 152.4s
+Epoch [250/10000] | Train Loss: 0.0043 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1649.78 | Cycle Time: 156.2s | Wait Time: 150.9s
+Epoch [255/10000] | Train Loss: 0.0022 | Test Loss: 0.0033
+   ↳ MedAE -> Cost: $1652.94 | Cycle Time: 148.2s | Wait Time: 141.3s
+Epoch [260/10000] | Train Loss: 0.0022 | Test Loss: 0.0034
+   ↳ MedAE -> Cost: $1648.01 | Cycle Time: 148.1s | Wait Time: 142.0s
+Epoch [265/10000] | Train Loss: 0.0022 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1653.30 | Cycle Time: 148.2s | Wait Time: 142.7s
+Epoch [270/10000] | Train Loss: 0.0022 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1691.06 | Cycle Time: 149.0s | Wait Time: 141.8s
+Epoch [275/10000] | Train Loss: 0.0022 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1666.16 | Cycle Time: 151.9s | Wait Time: 145.3s
+Epoch [280/10000] | Train Loss: 0.0022 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $1693.09 | Cycle Time: 150.3s | Wait Time: 142.0s
+Epoch [285/10000] | Train Loss: 0.0021 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1666.90 | Cycle Time: 152.9s | Wait Time: 142.3s
+Epoch [290/10000] | Train Loss: 0.0021 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1678.71 | Cycle Time: 150.7s | Wait Time: 145.4s
+Epoch [295/10000] | Train Loss: 0.0021 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1648.01 | Cycle Time: 153.9s | Wait Time: 144.8s
+Epoch [300/10000] | Train Loss: 0.0020 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $1683.64 | Cycle Time: 151.5s | Wait Time: 146.4s
+Epoch [305/10000] | Train Loss: 0.0019 | Test Loss: 0.0037
+   ↳ MedAE -> Cost: $1659.18 | Cycle Time: 153.9s | Wait Time: 146.4s
+Epoch [310/10000] | Train Loss: 0.0019 | Test Loss: 0.0038
+   ↳ MedAE -> Cost: $1700.33 | Cycle Time: 153.5s | Wait Time: 146.9s
+Epoch [315/10000] | Train Loss: 0.0019 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1686.34 | Cycle Time: 150.0s | Wait Time: 146.1s
+Epoch [320/10000] | Train Loss: 0.0019 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1689.07 | Cycle Time: 160.9s | Wait Time: 147.1s
+Epoch [325/10000] | Train Loss: 0.0018 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1687.98 | Cycle Time: 150.6s | Wait Time: 141.8s
+Epoch [330/10000] | Train Loss: 0.0018 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1671.69 | Cycle Time: 153.0s | Wait Time: 143.8s
+Epoch [335/10000] | Train Loss: 0.0018 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1682.88 | Cycle Time: 152.6s | Wait Time: 145.8s
+Epoch [340/10000] | Train Loss: 0.0017 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1688.12 | Cycle Time: 151.0s | Wait Time: 143.0s
+Epoch [345/10000] | Train Loss: 0.0017 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1693.70 | Cycle Time: 155.4s | Wait Time: 144.4s
+Epoch [350/10000] | Train Loss: 0.0018 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1678.05 | Cycle Time: 149.8s | Wait Time: 144.0s
+Epoch [355/10000] | Train Loss: 0.0016 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $1685.80 | Cycle Time: 147.4s | Wait Time: 141.8s
+Epoch [360/10000] | Train Loss: 0.0016 | Test Loss: 0.0040
+   ↳ MedAE -> Cost: $1684.67 | Cycle Time: 148.9s | Wait Time: 144.0s
+Epoch [365/10000] | Train Loss: 0.0016 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1694.02 | Cycle Time: 148.1s | Wait Time: 142.6s
+Epoch [370/10000] | Train Loss: 0.0016 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1690.41 | Cycle Time: 149.3s | Wait Time: 145.7s
+Epoch [375/10000] | Train Loss: 0.0015 | Test Loss: 0.0041
+   ↳ MedAE -> Cost: $1698.13 | Cycle Time: 149.7s | Wait Time: 142.3s
+Epoch [380/10000] | Train Loss: 0.0015 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1724.91 | Cycle Time: 148.9s | Wait Time: 143.5s
+Epoch [385/10000] | Train Loss: 0.0022 | Test Loss: 0.0042
+   ↳ MedAE -> Cost: $1680.62 | Cycle Time: 154.5s | Wait Time: 147.5s
+
+Early stopping triggered at Epoch 385!
+Training finished in 3658.51s.
+
+Evaluating BEST model for JSON export...
+Exported metrics to models/output/metrics_deep_nn.json
+
+[11/12] Hypertuning Deep Network (BIMP)...
+[I 2026-08-11 13:03:44,948] A new study created in memory with name: no-name-c6e49c62-fac1-4ce4-8887-947703bf1643
+[I 2026-08-11 14:09:33,840] Trial 0 finished with value: 0.0019083598720770637 and parameters: {'lr': 0.00011844319751820405, 'weight_decay': 0.007969454818643935, 'dropout_rate': 0.3829984854528513, 'batch_size': 128, 'hidden_dim': 256, 'num_blocks': 7}. Best is trial 0 with value: 0.0019083598720770637.
+[I 2026-08-11 14:17:33,579] Trial 1 finished with value: 0.008211630059582547 and parameters: {'lr': 5.242693862597316e-05, 'weight_decay': 0.008706020878304856, 'dropout_rate': 0.40811066020010545, 'batch_size': 1024, 'hidden_dim': 256, 'num_blocks': 5}. Best is trial 0 with value: 0.0019083598720770637.
+[I 2026-08-11 14:31:34,640] Trial 2 finished with value: 0.0019456496300186905 and parameters: {'lr': 0.00020456102872218944, 'weight_decay': 0.00019010245319870352, 'dropout_rate': 0.27303616213380455, 'batch_size': 512, 'hidden_dim': 512, 'num_blocks': 4}. Best is trial 0 with value: 0.0019083598720770637.
+[I 2026-08-11 15:04:08,926] Trial 3 finished with value: 0.0018078246652573993 and parameters: {'lr': 0.0002025418890664836, 'weight_decay': 0.00021930485556643703, 'dropout_rate': 0.2162628982463199, 'batch_size': 256, 'hidden_dim': 512, 'num_blocks': 6}. Best is trial 3 with value: 0.0018078246652573993.
+[I 2026-08-11 15:55:31,072] Trial 4 finished with value: 0.0019130860017844784 and parameters: {'lr': 6.622290670049676e-05, 'weight_decay': 0.0009780337016659412, 'dropout_rate': 0.2085971302788046, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 4}. Best is trial 3 with value: 0.0018078246652573993.
+[I 2026-08-11 15:56:25,192] Trial 5 pruned. 
+[I 2026-08-11 15:57:26,197] Trial 6 pruned. 
+[I 2026-08-11 16:48:59,957] Trial 7 finished with value: 0.0017355067309173166 and parameters: {'lr': 0.00029594756677318233, 'weight_decay': 0.00024970737145052745, 'dropout_rate': 0.2013805292809006, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 4}. Best is trial 7 with value: 0.0017355067309173166.
+[I 2026-08-11 16:49:40,080] Trial 8 pruned. 
+[I 2026-08-11 16:50:59,413] Trial 9 pruned. 
+[I 2026-08-11 18:12:14,722] Trial 10 finished with value: 0.0017512725283948436 and parameters: {'lr': 0.00026069474240583197, 'weight_decay': 0.00010280029617905622, 'dropout_rate': 0.32950929112362876, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 8}. Best is trial 7 with value: 0.0017355067309173166.
+[I 2026-08-11 19:34:18,015] Trial 11 finished with value: 0.0017381991995653729 and parameters: {'lr': 0.00027367581329264593, 'weight_decay': 0.00010572021839517531, 'dropout_rate': 0.3236610753555136, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 8}. Best is trial 7 with value: 0.0017355067309173166.
+[I 2026-08-11 20:50:34,363] Trial 12 finished with value: 0.0017139676003923904 and parameters: {'lr': 0.00030222134737918247, 'weight_decay': 0.0004902006834080998, 'dropout_rate': 0.3204740824158324, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 7}. Best is trial 12 with value: 0.0017139676003923904.
+[I 2026-08-11 22:05:33,255] Trial 13 finished with value: 0.0017038723992851244 and parameters: {'lr': 0.0003809647910029814, 'weight_decay': 0.0005959206131645767, 'dropout_rate': 0.2533566051998971, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 7}. Best is trial 13 with value: 0.0017038723992851244.
+[I 2026-08-11 23:20:27,878] Trial 14 finished with value: 0.0016794506381630923 and parameters: {'lr': 0.00048579900273822434, 'weight_decay': 0.0006694653933471387, 'dropout_rate': 0.25754766509043503, 'batch_size': 128, 'hidden_dim': 512, 'num_blocks': 7}. Best is trial 14 with value: 0.0016794506381630923.
+
+Best Trial Validation MSE: 0.00168
+
+==================================================
+🚀 HYPERPARAMETERS TUNED & AUTOMATICALLY LINKED!
+==================================================
+BATCH_SIZE = 128
+LEARNING_RATE = 0.00048579900273822434
+WEIGHT_DECAY = 0.0006694653933471387
+HIDDEN_DIM = 512
+NUM_BLOCKS = 7
+DROPOUT_RATE = 0.25754766509043503
+--------------------------------------------------
+Saved config automatically to:
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/deep_network/output/BIMP/best_params.json
+  - /Users/luca/Shared/Universita/Tesi/Code/NN-KPI-Predictor/models/deep_network/best_params.json
+
+Or run with environment variables:
+export BATCH_SIZE=128 LEARNING_RATE=0.00048579900273822434 WEIGHT_DECAY=0.0006694653933471387 HIDDEN_DIM=512 NUM_BLOCKS=7 DROPOUT_RATE=0.25754766509043503
+==================================================
+
+
+[12/12] Training Hypertuned Deep Network (BIMP)...
+Hyperparameters loaded for source 'BIMP': BATCH_SIZE=128, LEARNING_RATE=0.00048579900273822434, WEIGHT_DECAY=0.0006694653933471387, HIDDEN_DIM=512, NUM_BLOCKS=7, DROPOUT_RATE=0.25754766509043503
+Loading dataset from source: BIMP
+Dropped 30 unconverged rows (80411 remain).
+Features: 13 | Targets: 3
+--> Training on 64328 samples.
+--> Testing on 16083 consistent samples.
+Epoch [1/10000] | Train Loss: 0.1751 | Test Loss: 0.0564
+   ↳ MedAE -> Cost: $1465.14 | Cycle Time: 194.4s | Wait Time: 327.7s
+Epoch [5/10000] | Train Loss: 0.0288 | Test Loss: 0.0213
+   ↳ MedAE -> Cost: $813.54 | Cycle Time: 153.8s | Wait Time: 260.5s
+Epoch [10/10000] | Train Loss: 0.0185 | Test Loss: 0.0170
+   ↳ MedAE -> Cost: $1743.91 | Cycle Time: 142.1s | Wait Time: 233.0s
+Epoch [15/10000] | Train Loss: 0.0146 | Test Loss: 0.0097
+   ↳ MedAE -> Cost: $694.45 | Cycle Time: 161.6s | Wait Time: 220.8s
+Epoch [20/10000] | Train Loss: 0.0122 | Test Loss: 0.0114
+   ↳ MedAE -> Cost: $472.51 | Cycle Time: 139.9s | Wait Time: 247.2s
+Epoch [25/10000] | Train Loss: 0.0094 | Test Loss: 0.0068
+   ↳ MedAE -> Cost: $486.43 | Cycle Time: 113.1s | Wait Time: 200.0s
+Epoch [30/10000] | Train Loss: 0.0075 | Test Loss: 0.0062
+   ↳ MedAE -> Cost: $839.58 | Cycle Time: 126.1s | Wait Time: 214.7s
+Epoch [35/10000] | Train Loss: 0.0069 | Test Loss: 0.0051
+   ↳ MedAE -> Cost: $500.06 | Cycle Time: 102.9s | Wait Time: 193.0s
+Epoch [40/10000] | Train Loss: 0.0062 | Test Loss: 0.0055
+   ↳ MedAE -> Cost: $421.84 | Cycle Time: 109.4s | Wait Time: 205.4s
+Epoch [45/10000] | Train Loss: 0.0056 | Test Loss: 0.0049
+   ↳ MedAE -> Cost: $480.37 | Cycle Time: 114.4s | Wait Time: 192.3s
+Epoch [50/10000] | Train Loss: 0.0055 | Test Loss: 0.0031
+   ↳ MedAE -> Cost: $354.74 | Cycle Time: 102.1s | Wait Time: 180.9s
+Epoch [55/10000] | Train Loss: 0.0043 | Test Loss: 0.0039
+   ↳ MedAE -> Cost: $549.08 | Cycle Time: 101.4s | Wait Time: 184.3s
+Epoch [60/10000] | Train Loss: 0.0038 | Test Loss: 0.0035
+   ↳ MedAE -> Cost: $531.82 | Cycle Time: 99.6s | Wait Time: 184.9s
+Epoch [65/10000] | Train Loss: 0.0037 | Test Loss: 0.0030
+   ↳ MedAE -> Cost: $294.77 | Cycle Time: 98.2s | Wait Time: 181.8s
+Epoch [70/10000] | Train Loss: 0.0036 | Test Loss: 0.0036
+   ↳ MedAE -> Cost: $299.23 | Cycle Time: 94.1s | Wait Time: 179.5s
+Epoch [75/10000] | Train Loss: 0.0035 | Test Loss: 0.0033
+   ↳ MedAE -> Cost: $691.38 | Cycle Time: 97.3s | Wait Time: 181.1s
+Epoch [80/10000] | Train Loss: 0.0032 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $400.29 | Cycle Time: 94.1s | Wait Time: 177.5s
+Epoch [85/10000] | Train Loss: 0.0029 | Test Loss: 0.0028
+   ↳ MedAE -> Cost: $463.33 | Cycle Time: 97.1s | Wait Time: 189.0s
+Epoch [90/10000] | Train Loss: 0.0030 | Test Loss: 0.0026
+   ↳ MedAE -> Cost: $399.36 | Cycle Time: 96.2s | Wait Time: 184.6s
+Epoch [95/10000] | Train Loss: 0.0029 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $253.69 | Cycle Time: 93.0s | Wait Time: 174.0s
+Epoch [100/10000] | Train Loss: 0.0027 | Test Loss: 0.0029
+   ↳ MedAE -> Cost: $403.63 | Cycle Time: 95.2s | Wait Time: 179.0s
+Epoch [105/10000] | Train Loss: 0.0026 | Test Loss: 0.0024
+   ↳ MedAE -> Cost: $274.76 | Cycle Time: 92.5s | Wait Time: 175.7s
+Epoch [110/10000] | Train Loss: 0.0027 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $366.37 | Cycle Time: 100.2s | Wait Time: 180.0s
+Epoch [115/10000] | Train Loss: 0.0027 | Test Loss: 0.0032
+   ↳ MedAE -> Cost: $254.65 | Cycle Time: 95.7s | Wait Time: 178.8s
+Epoch [120/10000] | Train Loss: 0.0024 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $280.55 | Cycle Time: 92.0s | Wait Time: 175.4s
+Epoch [125/10000] | Train Loss: 0.0026 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $265.68 | Cycle Time: 91.2s | Wait Time: 172.8s
+Epoch [130/10000] | Train Loss: 0.0023 | Test Loss: 0.0023
+   ↳ MedAE -> Cost: $227.37 | Cycle Time: 93.2s | Wait Time: 174.4s
+Epoch [135/10000] | Train Loss: 0.0024 | Test Loss: 0.0023
+   ↳ MedAE -> Cost: $287.25 | Cycle Time: 93.3s | Wait Time: 176.3s
+Epoch [140/10000] | Train Loss: 0.0022 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $223.84 | Cycle Time: 91.4s | Wait Time: 172.3s
+Epoch [145/10000] | Train Loss: 0.0023 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $239.15 | Cycle Time: 93.0s | Wait Time: 175.7s
+Epoch [150/10000] | Train Loss: 0.0022 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $244.11 | Cycle Time: 91.2s | Wait Time: 170.5s
+Epoch [155/10000] | Train Loss: 0.0034 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $250.22 | Cycle Time: 94.4s | Wait Time: 175.5s
+Epoch [160/10000] | Train Loss: 0.0021 | Test Loss: 0.0026
+   ↳ MedAE -> Cost: $254.43 | Cycle Time: 91.5s | Wait Time: 172.3s
+Epoch [165/10000] | Train Loss: 0.0021 | Test Loss: 0.0027
+   ↳ MedAE -> Cost: $349.73 | Cycle Time: 92.6s | Wait Time: 178.9s
+Epoch [170/10000] | Train Loss: 0.0021 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $323.28 | Cycle Time: 89.9s | Wait Time: 170.6s
+Epoch [175/10000] | Train Loss: 0.0021 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $257.67 | Cycle Time: 89.6s | Wait Time: 170.8s
+Epoch [180/10000] | Train Loss: 0.0019 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $317.52 | Cycle Time: 91.5s | Wait Time: 171.0s
+Epoch [185/10000] | Train Loss: 0.0021 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $256.41 | Cycle Time: 90.7s | Wait Time: 172.3s
+Epoch [190/10000] | Train Loss: 0.0019 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $271.51 | Cycle Time: 91.9s | Wait Time: 174.2s
+Epoch [195/10000] | Train Loss: 0.0021 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $203.55 | Cycle Time: 90.7s | Wait Time: 170.9s
+Epoch [200/10000] | Train Loss: 0.0019 | Test Loss: 0.0027
+   ↳ MedAE -> Cost: $229.27 | Cycle Time: 92.6s | Wait Time: 175.7s
+Epoch [205/10000] | Train Loss: 0.0018 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $207.80 | Cycle Time: 91.0s | Wait Time: 170.1s
+Epoch [210/10000] | Train Loss: 0.0020 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $281.58 | Cycle Time: 91.0s | Wait Time: 171.7s
+Epoch [215/10000] | Train Loss: 0.0020 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $218.02 | Cycle Time: 93.0s | Wait Time: 175.1s
+Epoch [220/10000] | Train Loss: 0.0019 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $206.92 | Cycle Time: 94.8s | Wait Time: 177.0s
+Epoch [225/10000] | Train Loss: 0.0020 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $196.67 | Cycle Time: 90.9s | Wait Time: 170.4s
+Epoch [230/10000] | Train Loss: 0.0020 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $241.54 | Cycle Time: 90.2s | Wait Time: 171.1s
+Epoch [235/10000] | Train Loss: 0.0018 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $212.65 | Cycle Time: 91.8s | Wait Time: 175.2s
+Epoch [240/10000] | Train Loss: 0.0020 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $375.58 | Cycle Time: 91.1s | Wait Time: 171.8s
+Epoch [245/10000] | Train Loss: 0.0019 | Test Loss: 0.0024
+   ↳ MedAE -> Cost: $350.61 | Cycle Time: 93.4s | Wait Time: 174.7s
+Epoch [250/10000] | Train Loss: 0.0018 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $237.34 | Cycle Time: 92.8s | Wait Time: 173.3s
+Epoch [255/10000] | Train Loss: 0.0019 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $204.97 | Cycle Time: 92.5s | Wait Time: 174.1s
+Epoch [260/10000] | Train Loss: 0.0018 | Test Loss: 0.0024
+   ↳ MedAE -> Cost: $319.35 | Cycle Time: 91.3s | Wait Time: 174.7s
+Epoch [265/10000] | Train Loss: 0.0018 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $238.25 | Cycle Time: 91.2s | Wait Time: 170.1s
+Epoch [270/10000] | Train Loss: 0.0019 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $217.81 | Cycle Time: 91.2s | Wait Time: 172.3s
+Epoch [275/10000] | Train Loss: 0.0019 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $278.10 | Cycle Time: 90.9s | Wait Time: 171.4s
+Epoch [280/10000] | Train Loss: 0.0018 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $315.61 | Cycle Time: 92.7s | Wait Time: 172.6s
+Epoch [285/10000] | Train Loss: 0.0019 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $247.98 | Cycle Time: 90.8s | Wait Time: 170.6s
+Epoch [290/10000] | Train Loss: 0.0017 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $231.85 | Cycle Time: 90.4s | Wait Time: 170.7s
+Epoch [295/10000] | Train Loss: 0.0019 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $261.87 | Cycle Time: 91.1s | Wait Time: 172.9s
+Epoch [300/10000] | Train Loss: 0.0018 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $245.20 | Cycle Time: 89.6s | Wait Time: 170.7s
+Epoch [305/10000] | Train Loss: 0.0018 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $204.79 | Cycle Time: 90.4s | Wait Time: 169.4s
+Epoch [310/10000] | Train Loss: 0.0018 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $264.47 | Cycle Time: 95.5s | Wait Time: 174.8s
+Epoch [315/10000] | Train Loss: 0.0017 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $196.40 | Cycle Time: 89.2s | Wait Time: 169.7s
+Epoch [320/10000] | Train Loss: 0.0018 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $244.28 | Cycle Time: 92.9s | Wait Time: 170.5s
+Epoch [325/10000] | Train Loss: 0.0018 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $232.92 | Cycle Time: 92.7s | Wait Time: 174.4s
+Epoch [330/10000] | Train Loss: 0.0017 | Test Loss: 0.0024
+   ↳ MedAE -> Cost: $207.07 | Cycle Time: 91.6s | Wait Time: 174.9s
+Epoch [335/10000] | Train Loss: 0.0018 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $215.00 | Cycle Time: 89.6s | Wait Time: 170.3s
+Epoch [340/10000] | Train Loss: 0.0017 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $205.24 | Cycle Time: 90.9s | Wait Time: 172.0s
+Epoch [345/10000] | Train Loss: 0.0017 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $186.85 | Cycle Time: 90.8s | Wait Time: 170.6s
+Epoch [350/10000] | Train Loss: 0.0017 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $213.21 | Cycle Time: 89.9s | Wait Time: 170.8s
+Epoch [355/10000] | Train Loss: 0.0017 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $198.71 | Cycle Time: 90.5s | Wait Time: 172.0s
+Epoch [360/10000] | Train Loss: 0.0017 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $184.78 | Cycle Time: 89.3s | Wait Time: 170.0s
+Epoch [365/10000] | Train Loss: 0.0016 | Test Loss: 0.0018
+   ↳ MedAE -> Cost: $264.03 | Cycle Time: 90.4s | Wait Time: 172.1s
+Epoch [370/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $203.67 | Cycle Time: 91.1s | Wait Time: 171.7s
+Epoch [375/10000] | Train Loss: 0.0017 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $227.69 | Cycle Time: 91.0s | Wait Time: 170.9s
+Epoch [380/10000] | Train Loss: 0.0016 | Test Loss: 0.0025
+   ↳ MedAE -> Cost: $275.16 | Cycle Time: 93.1s | Wait Time: 175.6s
+Epoch [385/10000] | Train Loss: 0.0017 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $178.66 | Cycle Time: 90.1s | Wait Time: 171.0s
+Epoch [390/10000] | Train Loss: 0.0017 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $238.34 | Cycle Time: 90.8s | Wait Time: 171.9s
+Epoch [395/10000] | Train Loss: 0.0017 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $216.52 | Cycle Time: 90.1s | Wait Time: 170.7s
+Epoch [400/10000] | Train Loss: 0.0017 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $203.43 | Cycle Time: 90.6s | Wait Time: 172.2s
+Epoch [405/10000] | Train Loss: 0.0016 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $194.20 | Cycle Time: 90.1s | Wait Time: 169.8s
+Epoch [410/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $201.61 | Cycle Time: 91.0s | Wait Time: 172.4s
+Epoch [415/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $190.49 | Cycle Time: 91.3s | Wait Time: 171.9s
+Epoch [420/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $220.35 | Cycle Time: 91.4s | Wait Time: 170.9s
+Epoch [425/10000] | Train Loss: 0.0016 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $244.59 | Cycle Time: 89.6s | Wait Time: 170.4s
+Epoch [430/10000] | Train Loss: 0.0016 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $209.79 | Cycle Time: 89.8s | Wait Time: 171.1s
+Epoch [435/10000] | Train Loss: 0.0016 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $191.37 | Cycle Time: 90.5s | Wait Time: 171.6s
+Epoch [440/10000] | Train Loss: 0.0016 | Test Loss: 0.0023
+   ↳ MedAE -> Cost: $221.97 | Cycle Time: 94.3s | Wait Time: 174.8s
+Epoch [445/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $228.02 | Cycle Time: 91.2s | Wait Time: 172.9s
+Epoch [450/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $191.45 | Cycle Time: 91.5s | Wait Time: 170.7s
+Epoch [455/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $231.11 | Cycle Time: 90.1s | Wait Time: 171.5s
+Epoch [460/10000] | Train Loss: 0.0016 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $193.48 | Cycle Time: 91.1s | Wait Time: 171.5s
+Epoch [465/10000] | Train Loss: 0.0015 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $251.96 | Cycle Time: 91.8s | Wait Time: 173.4s
+Epoch [470/10000] | Train Loss: 0.0015 | Test Loss: 0.0018
+   ↳ MedAE -> Cost: $187.87 | Cycle Time: 90.0s | Wait Time: 170.0s
+Epoch [475/10000] | Train Loss: 0.0016 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $205.78 | Cycle Time: 90.6s | Wait Time: 172.3s
+Epoch [480/10000] | Train Loss: 0.0016 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $214.97 | Cycle Time: 93.1s | Wait Time: 175.1s
+Epoch [485/10000] | Train Loss: 0.0015 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $213.61 | Cycle Time: 94.7s | Wait Time: 175.2s
+Epoch [490/10000] | Train Loss: 0.0015 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $223.17 | Cycle Time: 91.9s | Wait Time: 173.1s
+Epoch [495/10000] | Train Loss: 0.0015 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $188.07 | Cycle Time: 90.5s | Wait Time: 170.9s
+Epoch [500/10000] | Train Loss: 0.0015 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $187.02 | Cycle Time: 91.1s | Wait Time: 172.5s
+Epoch [505/10000] | Train Loss: 0.0015 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $209.34 | Cycle Time: 92.8s | Wait Time: 172.1s
+Epoch [510/10000] | Train Loss: 0.0015 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $202.63 | Cycle Time: 91.9s | Wait Time: 172.6s
+Epoch [515/10000] | Train Loss: 0.0015 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $200.81 | Cycle Time: 91.3s | Wait Time: 172.7s
+Epoch [520/10000] | Train Loss: 0.0015 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $195.17 | Cycle Time: 91.9s | Wait Time: 175.0s
+Epoch [525/10000] | Train Loss: 0.0015 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $216.23 | Cycle Time: 93.1s | Wait Time: 174.9s
+Epoch [530/10000] | Train Loss: 0.0015 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $221.65 | Cycle Time: 93.0s | Wait Time: 174.7s
+Epoch [535/10000] | Train Loss: 0.0015 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $258.50 | Cycle Time: 92.0s | Wait Time: 175.1s
+Epoch [540/10000] | Train Loss: 0.0014 | Test Loss: 0.0022
+   ↳ MedAE -> Cost: $247.81 | Cycle Time: 91.8s | Wait Time: 174.6s
+Epoch [545/10000] | Train Loss: 0.0015 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $232.35 | Cycle Time: 92.5s | Wait Time: 172.7s
+Epoch [550/10000] | Train Loss: 0.0015 | Test Loss: 0.0019
+   ↳ MedAE -> Cost: $186.97 | Cycle Time: 90.9s | Wait Time: 172.8s
+Epoch [555/10000] | Train Loss: 0.0014 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $229.74 | Cycle Time: 92.5s | Wait Time: 173.2s
+Epoch [560/10000] | Train Loss: 0.0014 | Test Loss: 0.0020
+   ↳ MedAE -> Cost: $268.07 | Cycle Time: 93.4s | Wait Time: 175.6s
+Epoch [565/10000] | Train Loss: 0.0015 | Test Loss: 0.0021
+   ↳ MedAE -> Cost: $214.97 | Cycle Time: 92.7s | Wait Time: 174.5s
+
+Early stopping triggered at Epoch 568!
+Training finished in 8188.43s.
+
+Evaluating BEST model for JSON export...
+Exported metrics to models/output/metrics_deep_nn.json
+
+==================================================
+  All 12 Benchmark Runs Completed Successfully!
+==================================================
+BIMP
+Model Name,Best Test Loss,MedAE - Cost,MedAE - Cycle Time,MedAE - Waiting Time,MAE - Cost,MAE - Cycle Time,MAE - Waiting Time,MedAE % - Cost,MedAE % - Cycle Time,MedAE % - Waiting Time
+Linear Regression Baseline,0.4887,5452.82,1130.87,1609.97,6901.45,1923.15,2548.23,16.51,6.33,4.67
+Simple NN,0.0166,1518.04,128.67,224.09,1876.62,312.71,441.95,4.60,0.72,0.65
+Complex NN - Hypertuned,0.0024,316.14,99.35,179.38,400.15,147.04,243.96,0.96,0.56,0.52
+Deep Network - Hypertuned,0.0018,179.90,89.00,168.73,250.06,127.05,220.40,0.54,0.50,0.49
+
+real
+Model Name,Best Test Loss,MedAE - Cost,MedAE - Cycle Time,MedAE - Waiting Time,MAE - Cost,MAE - Cycle Time,MAE - Waiting Time,MedAE % - Cost,MedAE % - Cycle Time,MedAE % - Waiting Time
+Linear Regression Baseline,0.4419,9196.12,3911.90,4057.93,11185.34,8742.92,9079.69,12.66,13.61,17.19
+Simple NN,0.1215,3117.71,903.74,859.11,4194.52,4910.22,4995.52,4.29,3.15,3.64
+Complex NN - Hypertuned,0.0528,2704.24,725.97,701.13,3533.42,3373.94,3412.42,3.72,2.53,2.97
+Deep Network - Hypertuned,0.0191,607.89,286.39,335.40,858.90,1727.04,1827.09,0.84,1.00,1.42
+
+synthetic
+Model Name,Best Test Loss,MedAE - Cost,MedAE - Cycle Time,MedAE - Waiting Time,MAE - Cost,MAE - Cycle Time,MAE - Waiting Time,MedAE % - Cost,MedAE % - Cycle Time,MedAE % - Waiting Time
+Linear Regression Baseline,0.3917,6572.94,3035.54,2953.85,9124.98,7470.04,7475.98,14.62,13.10,15.55
+Simple NN,0.0192,1905.14,399.74,276.32,2518.64,1582.93,1503.71,4.24,1.72,1.45
+Complex NN - Hypertuned,0.0033,1685.20,158.52,152.47,2076.01,421.44,427.37,3.75,0.68,0.80
+Deep Network - Hypertuned,0.0032,1628.75,153.77,149.43,2044.71,407.91,409.06,3.62,0.66,0.79
+

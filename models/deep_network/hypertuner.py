@@ -1,3 +1,4 @@
+import json
 import argparse
 from pathlib import Path
 import pandas as pd
@@ -162,21 +163,47 @@ def main(SOURCE="real", train_num=40000):
     
     print(f"\nBest Trial Validation MSE: {study.best_trial.value:.5f}")
     best_params = study.best_trial.params
+    hyperparams = {
+        "batch_size": int(best_params["batch_size"]),
+        "learning_rate": float(best_params["lr"]),
+        "weight_decay": float(best_params["weight_decay"]),
+        "hidden_dim": int(best_params["hidden_dim"]),
+        "num_blocks": int(best_params["num_blocks"]),
+        "dropout_rate": float(best_params["dropout_rate"])
+    }
+
+    base_dir = Path(__file__).parent
+    source_out_dir = base_dir / f"output/{SOURCE}"
+    source_out_dir.mkdir(parents=True, exist_ok=True)
     
+    source_json = source_out_dir / "best_params.json"
+    generic_json = base_dir / "best_params.json"
+    
+    with open(source_json, "w") as f:
+        json.dump(hyperparams, f, indent=4)
+    with open(generic_json, "w") as f:
+        json.dump(hyperparams, f, indent=4)
+
     print("\n" + "="*50)
-    print("Copy and paste into deep_model.py")
+    print("🚀 HYPERPARAMETERS TUNED & AUTOMATICALLY LINKED!")
     print("="*50)
-    print(f"BATCH_SIZE = {best_params['batch_size']}")
-    print(f"LEARNING_RATE = {best_params['lr']}")
-    print(f"WEIGHT_DECAY = {best_params['weight_decay']}")
-    print(f"HIDDEN_DIM = {best_params['hidden_dim']}")
-    print(f"NUM_BLOCKS = {best_params['num_blocks']}")
-    print(f"DROPOUT_RATE = {best_params['dropout_rate']}")
+    print(f"BATCH_SIZE = {hyperparams['batch_size']}")
+    print(f"LEARNING_RATE = {hyperparams['learning_rate']}")
+    print(f"WEIGHT_DECAY = {hyperparams['weight_decay']}")
+    print(f"HIDDEN_DIM = {hyperparams['hidden_dim']}")
+    print(f"NUM_BLOCKS = {hyperparams['num_blocks']}")
+    print(f"DROPOUT_RATE = {hyperparams['dropout_rate']}")
+    print("-" * 50)
+    print(f"Saved config automatically to:")
+    print(f"  - {source_json}")
+    print(f"  - {generic_json}")
+    print("\nOr run with environment variables:")
+    print(f"export BATCH_SIZE={hyperparams['batch_size']} LEARNING_RATE={hyperparams['learning_rate']} WEIGHT_DECAY={hyperparams['weight_decay']} HIDDEN_DIM={hyperparams['hidden_dim']} NUM_BLOCKS={hyperparams['num_blocks']} DROPOUT_RATE={hyperparams['dropout_rate']}")
     print("="*50 + "\n")
 
 if __name__ == "__main__": 
     parser = argparse.ArgumentParser()
     parser.add_argument("source", nargs="?", default="synthetic", help="Dataset source")
-    parser.add_argument("--train_num", type=int, default=40000, help="Number of training samples")
+    parser.add_argument("--train_num", type=int, default=100000, help="Number of training samples")
     args = parser.parse_args()
     main(args.source, train_num=args.train_num)

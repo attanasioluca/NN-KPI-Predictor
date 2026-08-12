@@ -325,7 +325,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", default="synthetic", help="Dataset source directory name")
     parser.add_argument("--start_id", type=int, default=0, help="Starting scenario ID")
-    parser.add_argument("--num_scenarios", type=int, default=10000, help="Total number of scenarios to target")
+    parser.add_argument("--num_scenarios", type=int, default=100000, help="Total number of scenarios to target")
     parser.add_argument("--workers", type=int, default=22, help="Number of CPU cores to allocate")
     
     args = parser.parse_args()

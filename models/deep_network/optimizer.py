@@ -17,6 +17,7 @@ from hypertuned_model import (
     DeepPharmacySurrogate,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
+    load_hyperparameters,
     inverse_transform_targets,
     inverse_transform_targets_torch
 )
@@ -82,12 +83,12 @@ def main(SOURCE="synthetic"):
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     
-    # Instantiate the Deep model with optimized hyperparameters
+    params = load_hyperparameters(source=SOURCE)
     model = DeepPharmacySurrogate(
         input_size=x_scaler.n_features_in_, 
-        hidden_dim=512, 
-        num_blocks=6, 
-        dropout_rate=0.3811733811859317
+        hidden_dim=int(params["hidden_dim"]), 
+        num_blocks=int(params["num_blocks"]), 
+        dropout_rate=float(params["dropout_rate"])
     ).to(device)
     
     model.load_state_dict(torch.load(f'models/deep_network/output/{SOURCE}/surrogate_model.pth', map_location=device, weights_only=True))

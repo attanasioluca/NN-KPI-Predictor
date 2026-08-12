@@ -2,21 +2,21 @@
     {
         "Data Source": "BIMP",
         "Model Name": "Deep Network - Hypertuned",
-        "Best Test Loss": 0.006061833822644336,
+        "Best Test Loss": 0.0018013004528268592,
         "MedAE": {
-            "cost": 386.1400229990395,
-            "cycle_time": 93.93832541002485,
-            "waiting_time": 170.20666416509994
+            "cost": 179.90316514341612,
+            "cycle_time": 88.99928059861122,
+            "waiting_time": 168.73014811470784
         },
         "MAE": {
-            "cost": 507.3008458731762,
-            "cycle_time": 195.46939268680387,
-            "waiting_time": 295.35270184611494
+            "cost": 250.06406124407738,
+            "cycle_time": 127.0535466280765,
+            "waiting_time": 220.39896345776208
         },
         "MedAE_Percentage": {
-            "cost": 1.1476457805259914,
-            "cycle_time": 0.5256815213846959,
-            "waiting_time": 0.49442731478311797
+            "cost": 0.5447052527841124,
+            "cycle_time": 0.4981632959458545,
+            "waiting_time": 0.48984949020950963
         }
     },
     {
@@ -42,21 +42,21 @@
     {
         "Data Source": "synthetic",
         "Model Name": "Deep Network - Hypertuned",
-        "Best Test Loss": 0.006589406797519097,
+        "Best Test Loss": 0.0032019761871988385,
         "MedAE": {
-            "cost": 1958.944815864077,
-            "cycle_time": 233.90041981145623,
-            "waiting_time": 202.5826301021516
+            "cost": 1628.7461741405168,
+            "cycle_time": 153.7708808523803,
+            "waiting_time": 149.43476850666048
         },
         "MAE": {
-            "cost": 2638.117464457206,
-            "cycle_time": 2436.4407803923937,
-            "waiting_time": 2459.1628927423158
+            "cost": 2044.705196661684,
+            "cycle_time": 407.9149465406469,
+            "waiting_time": 409.06273330730187
         },
         "MedAE_Percentage": {
-            "cost": 4.383013918915043,
-            "cycle_time": 0.9972473171483303,
-            "waiting_time": 1.0549652742043918
+            "cost": 3.622868420152082,
+            "cycle_time": 0.6635246907770928,
+            "waiting_time": 0.7867923312221479
         }
     }
 ]

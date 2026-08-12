@@ -202,7 +202,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--train_num",
         type=int,
-        default=40000,
+        default=100000,
         help="Number of training samples to use (default: 40000)"
     )
 
