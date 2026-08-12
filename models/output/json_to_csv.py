@@ -12,6 +12,7 @@ files = [
 # Removed "Data Source" from columns since it will be used as a section header
 columns = [
     "Model Name",
+    "Train Samples",
     "Best Test Loss",
     "MedAE - Cost",
     "MedAE - Cycle Time",
@@ -43,6 +44,10 @@ for file_name in files:
         source = str(data.get("Data Source", "Unknown"))
         grouped_data[source].append(data)
 
+# Sort records per data source by Model Name and Train Samples
+for source in grouped_data:
+    grouped_data[source].sort(key=lambda x: (x.get("Model Name", ""), x.get("Train Samples", 0)))
+
 # 2. Print the formatted output
 for source, records in grouped_data.items():
     print(source)
@@ -55,6 +60,7 @@ for source, records in grouped_data.items():
             
         row = [
             str(data.get("Model Name", "Unknown Model")),
+            str(data.get("Train Samples", "N/A")),
             test_loss,
             f"{data['MedAE']['cost']:.2f}",
             f"{data['MedAE']['cycle_time']:.2f}",

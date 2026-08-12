@@ -302,6 +302,7 @@ def main(SOURCE="BIMP", train_num=10000):
     metrics = {
         "Data Source": SOURCE,
         "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": len(X_train),
         "Best Test Loss": float(best_test_loss),
         "MedAE": {
             "cost": float(medae_kpi[0]), 
@@ -324,12 +325,21 @@ def main(SOURCE="BIMP", train_num=10000):
     metrics_file.parent.mkdir(parents=True, exist_ok=True)
     
     if metrics_file.exists():
-        with open(metrics_file, "r") as f: all_metrics = json.load(f)
-    else: all_metrics = []
+        with open(metrics_file, "r") as f:
+            all_metrics = json.load(f)
+    else:
+        all_metrics = []
 
-    all_metrics = [m for m in all_metrics if not (m["Data Source"] == SOURCE and m["Model Name"] == metrics["Model Name"])]
+    all_metrics = [
+        m for m in all_metrics
+        if not (
+            m.get("Data Source") == SOURCE
+            and m.get("Model Name") == metrics["Model Name"]
+            and m.get("Train Samples") == metrics["Train Samples"]
+        )
+    ]
     all_metrics.append(metrics)
-    all_metrics.sort(key=lambda x: x["Data Source"])
+    all_metrics.sort(key=lambda x: (x.get("Data Source", ""), x.get("Model Name", ""), x.get("Train Samples", 0)))
 
     with open(metrics_file, "w") as f:
         json.dump(all_metrics, f, indent=4)

@@ -7,49 +7,57 @@ echo "=================================================="
 echo " Starting Full NN-KPI-Predictor Benchmark Test"
 echo "=================================================="
 
-# 1. LR Model
-echo -e "\n[1/12] Running LR Model (synthetic)..."
-python3 models/LR_model/lr_model.py synthetic
+# Detect Python executable
+if [ -f "./.venv/bin/python" ]; then
+    PYTHON_CMD="./.venv/bin/python"
+elif [ -f "./env/bin/python" ]; then
+    PYTHON_CMD="./env/bin/python"
+else
+    PYTHON_CMD="python3"
+fi
+echo "Using Python executable: $PYTHON_CMD"
 
-echo -e "\n[2/12] Running LR Model (BIMP)..."
-python3 models/LR_model/lr_model.py BIMP
+SOURCES=("synthetic" "BIMP")
+TRAIN_NUMS=(1000 5000 15000)
 
-# 2. Simple Model
-echo -e "\n[3/12] Running Simple Model (synthetic)..."
-python3 models/simple_model/model.py synthetic
-
-echo -e "\n[4/12] Running Simple Model (BIMP)..."
-python3 models/simple_model/model.py BIMP
-
-# 3. Complex Model
-echo -e "\n[5/12] Hypertuning Complex Model (synthetic)..."
-python3 models/complex_model/hypertuner.py synthetic
-
-echo -e "\n[6/12] Training Hypertuned Complex Model (synthetic)..."
-python3 models/complex_model/hypertuned_model.py synthetic
-
-echo -e "\n[7/12] Hypertuning Complex Model (BIMP)..."
-python3 models/complex_model/hypertuner.py BIMP
-
-echo -e "\n[8/12] Training Hypertuned Complex Model (BIMP)..."
-python3 models/complex_model/hypertuned_model.py BIMP
-
-# 4. Deep Network
-echo -e "\n[9/12] Hypertuning Deep Network (synthetic)..."
-python3 models/deep_network/hypertuner.py synthetic
-
-echo -e "\n[10/12] Training Hypertuned Deep Network (synthetic)..."
-python3 models/deep_network/hypertuned_model.py synthetic
-
-echo -e "\n[11/12] Hypertuning Deep Network (BIMP)..."
-python3 models/deep_network/hypertuner.py BIMP
-
-echo -e "\n[12/12] Training Hypertuned Deep Network (BIMP)..."
-python3 models/deep_network/hypertuned_model.py BIMP
-
-echo -e "\n=================================================="
-echo "  All 12 Benchmark Runs Completed Successfully!"
+echo "=================================================="
+echo " 1/2 Hypertuning Complex NN & Deep Network"
 echo "=================================================="
 
-python3 models/output/json_to_csv.py
+#for source in "${SOURCES[@]}"; do
+#    echo -e "\n[Hypertuner] Complex Model ($source)..."
+#    $PYTHON_CMD models/complex_model/hypertuner.py "$source"
+#    
+#    echo -e "\n[Hypertuner] Deep Network ($source)..."
+#done
+
+
+echo -e "\n=================================================="
+echo " 2/2 Running Benchmark Trainings Across Train Sizes"
+echo "=================================================="
+for source in "${SOURCES[@]}"; do
+    for num in "${TRAIN_NUMS[@]}"; do
+        echo -e "\n--------------------------------------------------"
+        echo " Data Source: $source | Train Samples: $num"
+        echo "--------------------------------------------------"
+        
+        echo -e "\n  -> Training LR Model ($source, train_num=$num)..."
+        $PYTHON_CMD models/LR_model/lr_model.py "$source" --train_num "$num"
+        
+        echo -e "\n  -> Training Simple Model ($source, train_num=$num)..."
+        $PYTHON_CMD models/simple_model/model.py "$source" --train_num "$num"
+        
+        echo -e "\n  -> Training Hypertuned Complex Model ($source, train_num=$num)..."
+        $PYTHON_CMD models/complex_model/hypertuned_model.py "$source" --train_num "$num"
+        
+        echo -e "\n  -> Training Hypertuned Deep Network ($source, train_num=$num)..."
+        $PYTHON_CMD models/deep_network/hypertuned_model.py "$source" --train_num "$num"
+    done
+done
+
+echo -e "\n=================================================="
+echo "  All Benchmark Runs Completed Successfully!"
+echo "=================================================="
+
+$PYTHON_CMD models/output/json_to_csv.py
 

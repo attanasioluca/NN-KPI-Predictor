@@ -146,6 +146,7 @@ def main(SOURCE="synthetic", train_num=40000):
     metrics = {
         "Data Source": SOURCE,
         "Model Name": "Linear Regression Baseline",
+        "Train Samples": len(X_train),
         "Best Test Loss": float(test_mse_scaled),
         "MedAE": {
             "cost": float(medae_raw[0]), 
@@ -174,18 +175,19 @@ def main(SOURCE="synthetic", train_num=40000):
     else:
         all_metrics = []
 
-    # Remove any previous entry for this source + model
+    # Remove any previous entry for this source + model + train_samples
     all_metrics = [
         m for m in all_metrics
         if not (
-            m["Data Source"] == SOURCE
-            and m["Model Name"] == metrics["Model Name"]
+            m.get("Data Source") == SOURCE
+            and m.get("Model Name") == metrics["Model Name"]
+            and m.get("Train Samples") == metrics["Train Samples"]
         )
     ]
 
     # Add the updated metrics
     all_metrics.append(metrics)
-    all_metrics.sort(key=lambda x: x["Data Source"])
+    all_metrics.sort(key=lambda x: (x.get("Data Source", ""), x.get("Model Name", ""), x.get("Train Samples", 0)))
 
     with open(metrics_file, "w") as f:
         json.dump(all_metrics, f, indent=4)

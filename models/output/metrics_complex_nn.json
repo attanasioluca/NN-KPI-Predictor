@@ -20,6 +20,69 @@
         }
     },
     {
+        "Data Source": "BIMP",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 1000,
+        "Best Test Loss": 0.07254919672766699,
+        "MedAE": {
+            "cost": 979.7259285641303,
+            "cycle_time": 185.29021845199168,
+            "waiting_time": 292.31842319096177
+        },
+        "MAE": {
+            "cost": 1415.7684008382528,
+            "cycle_time": 708.3803852968215,
+            "waiting_time": 921.0954214832647
+        },
+        "MedAE_Percentage": {
+            "cost": 2.9663839385607615,
+            "cycle_time": 1.0371408095630372,
+            "waiting_time": 0.8486452016956333
+        }
+    },
+    {
+        "Data Source": "BIMP",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 5000,
+        "Best Test Loss": 0.00894113016172758,
+        "MedAE": {
+            "cost": 669.4934634766105,
+            "cycle_time": 116.53531606467004,
+            "waiting_time": 199.38167590837838
+        },
+        "MAE": {
+            "cost": 886.7513839629328,
+            "cycle_time": 257.24136358466933,
+            "waiting_time": 367.5652435347035
+        },
+        "MedAE_Percentage": {
+            "cost": 2.027071652517193,
+            "cycle_time": 0.6522931056790341,
+            "waiting_time": 0.5788355749823667
+        }
+    },
+    {
+        "Data Source": "BIMP",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 15000,
+        "Best Test Loss": 0.0028191907281402448,
+        "MedAE": {
+            "cost": 292.1815204809136,
+            "cycle_time": 101.85383449026267,
+            "waiting_time": 182.69618533314497
+        },
+        "MAE": {
+            "cost": 402.78017264300786,
+            "cycle_time": 162.68491502510335,
+            "waiting_time": 258.6924175676319
+        },
+        "MedAE_Percentage": {
+            "cost": 0.8846581928979854,
+            "cycle_time": 0.5701151914163289,
+            "waiting_time": 0.5303950375710136
+        }
+    },
+    {
         "Data Source": "real",
         "Model Name": "Complex NN - Hypertuned",
         "Best Test Loss": 0.05284970583562289,
@@ -57,6 +120,69 @@
             "cost": 3.748437827192193,
             "cycle_time": 0.6840386230582026,
             "waiting_time": 0.8027723329169514
+        }
+    },
+    {
+        "Data Source": "synthetic",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 1000,
+        "Best Test Loss": 0.1436408715939404,
+        "MedAE": {
+            "cost": 2419.6837436014466,
+            "cycle_time": 479.5038564743154,
+            "waiting_time": 394.4253618288021
+        },
+        "MAE": {
+            "cost": 3447.504009274526,
+            "cycle_time": 5002.335094430526,
+            "waiting_time": 4968.781790663863
+        },
+        "MedAE_Percentage": {
+            "cost": 5.382174313364043,
+            "cycle_time": 2.069069555496525,
+            "waiting_time": 2.076697766039572
+        }
+    },
+    {
+        "Data Source": "synthetic",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 5000,
+        "Best Test Loss": 0.03343079509474398,
+        "MedAE": {
+            "cost": 1900.5433820937305,
+            "cycle_time": 249.56438655085913,
+            "waiting_time": 233.35907215235784
+        },
+        "MAE": {
+            "cost": 2463.851010461763,
+            "cycle_time": 1905.3779005239103,
+            "waiting_time": 2077.651893178506
+        },
+        "MedAE_Percentage": {
+            "cost": 4.22743501070682,
+            "cycle_time": 1.0768757484981941,
+            "waiting_time": 1.2286640533886701
+        }
+    },
+    {
+        "Data Source": "synthetic",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 15000,
+        "Best Test Loss": 0.006514712066513899,
+        "MedAE": {
+            "cost": 1676.6640366720167,
+            "cycle_time": 194.2132816713147,
+            "waiting_time": 177.45996355644456
+        },
+        "MAE": {
+            "cost": 2124.034872168558,
+            "cycle_time": 803.8313270945264,
+            "waiting_time": 772.7729198828206
+        },
+        "MedAE_Percentage": {
+            "cost": 3.7294535429187823,
+            "cycle_time": 0.8380345287185673,
+            "waiting_time": 0.9343484104835296
         }
     }
 ]
