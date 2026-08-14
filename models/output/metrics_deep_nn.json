@@ -103,6 +103,111 @@
         }
     },
     {
+        "Data Source": "real",
+        "Model Name": "Deep Network - Hypertuned",
+        "Train Samples": 1000,
+        "Best Test Loss": 0.26523410691322563,
+        "MedAE": {
+            "cost": 3215.0205601060734,
+            "cycle_time": 1187.225246397571,
+            "waiting_time": 1353.5560398909802
+        },
+        "MAE": {
+            "cost": 5087.653908029817,
+            "cycle_time": 4838.953035824297,
+            "waiting_time": 5167.07284222549
+        },
+        "MedAE_Percentage": {
+            "cost": 4.425160422282733,
+            "cycle_time": 4.126033095102823,
+            "waiting_time": 5.755288871520027
+        }
+    },
+    {
+        "Data Source": "real",
+        "Model Name": "Deep Network - Hypertuned",
+        "Train Samples": 5000,
+        "Best Test Loss": 0.08673647401245399,
+        "MedAE": {
+            "cost": 939.8101207580185,
+            "cycle_time": 390.30980892315347,
+            "waiting_time": 476.41059847254655
+        },
+        "MAE": {
+            "cost": 1472.6895976763537,
+            "cycle_time": 2619.976090118285,
+            "waiting_time": 2750.154524399702
+        },
+        "MedAE_Percentage": {
+            "cost": 1.2935564401808763,
+            "cycle_time": 1.3564664277876202,
+            "waiting_time": 2.025686809305718
+        }
+    },
+    {
+        "Data Source": "real",
+        "Model Name": "Deep Network - Hypertuned",
+        "Train Samples": 15000,
+        "Best Test Loss": 0.022009442741309823,
+        "MedAE": {
+            "cost": 701.2360043094741,
+            "cycle_time": 276.2048154966833,
+            "waiting_time": 342.4663275374987
+        },
+        "MAE": {
+            "cost": 961.7414284268169,
+            "cycle_time": 1275.4381662223714,
+            "waiting_time": 1370.0057314946691
+        },
+        "MedAE_Percentage": {
+            "cost": 0.9651825719110141,
+            "cycle_time": 0.9599106936313008,
+            "waiting_time": 1.4561588775486896
+        }
+    },
+    {
+        "Data Source": "real",
+        "Model Name": "Deep Network - Hypertuned",
+        "Train Samples": 25000,
+        "Best Test Loss": 0.01097091368923305,
+        "MedAE": {
+            "cost": 458.77172964726924,
+            "cycle_time": 213.77655788886477,
+            "waiting_time": 272.45939664720936
+        },
+        "MAE": {
+            "cost": 622.9582688725293,
+            "cycle_time": 876.3502694608957,
+            "waiting_time": 969.3017688794193
+        },
+        "MedAE_Percentage": {
+            "cost": 0.6314542824666445,
+            "cycle_time": 0.7429501313950706,
+            "waiting_time": 1.1584910319568618
+        }
+    },
+    {
+        "Data Source": "real",
+        "Model Name": "Deep Network - Hypertuned",
+        "Train Samples": 39283,
+        "Best Test Loss": 0.003430338096336932,
+        "MedAE": {
+            "cost": 481.42922538443236,
+            "cycle_time": 206.81469582157297,
+            "waiting_time": 260.5450747474606
+        },
+        "MAE": {
+            "cost": 637.1121640260037,
+            "cycle_time": 621.1540979322851,
+            "waiting_time": 684.9473043291817
+        },
+        "MedAE_Percentage": {
+            "cost": 0.6626401027529153,
+            "cycle_time": 0.7187551663870845,
+            "waiting_time": 1.1078316117182625
+        }
+    },
+    {
         "Data Source": "synthetic",
         "Model Name": "Deep Network - Hypertuned",
         "Best Test Loss": 0.0032019761871988385,
