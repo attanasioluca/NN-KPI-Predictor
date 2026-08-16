@@ -28,9 +28,9 @@ class SimulationDataset(Dataset):
 # ==========================================
 # 2. NEURAL NETWORK ARCHITECTURE
 # ==========================================
-class PharmacySurrogate(nn.Module):
+class SurrogateModel(nn.Module):
     def __init__(self, input_size):
-        super(PharmacySurrogate, self).__init__()
+        super(SurrogateModel, self).__init__()
         
         self.shared_entry = nn.Sequential(
             nn.Linear(input_size, 64),
@@ -92,7 +92,8 @@ def main(SOURCE="synthetic", train_num=40000):
     BATCH_SIZE = 64
     EPOCHS = 2500
     LEARNING_RATE = 0.5e-3
-    
+
+    # Pick the best compute device available
     if torch.backends.mps.is_available():
         device = torch.device("mps")
     elif torch.cuda.is_available(): 
@@ -104,33 +105,27 @@ def main(SOURCE="synthetic", train_num=40000):
     print("Loading dataset from source:", SOURCE)
     df = pd.read_csv(DATA_FILE) 
 
-    # 1b. Drop simulation runs that didn't converge -- their KPI estimates
-    # aren't reliable ground truth, so they shouldn't be training targets.
+    # Drop simulation runs that didn't converge.
     n_before = len(df)
     df = df[df[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
     print(f"Dropped {n_before - len(df)} unconverged rows ({len(df)} remain).")
 
+    # Create feature and target arrays
     X_df = df.drop(columns=NON_FEATURE_COLS)
     y_df = df[TARGET_COLS]
-
     input_size = X_df.shape[1]
     output_size = y_df.shape[1]
     print(f"Features: {input_size} | Targets: {output_size}")
 
-    # 1c. Log1p the heavy-tailed KPIs so extreme (but real) outlier scenarios
-    # don't dominate the MSE loss once everything is standardized.
+    # Log1p the heavy-tailed KPIs 
     y_raw = y_df.values.astype(np.float64)
     y_log = y_raw.copy()
     y_log[:, LOG_COL_IDX] = np.log1p(y_log[:, LOG_COL_IDX])
 
-    # 2. Split the FULL dataset once to create a universal, locked test set.
-    # Split X, the log-transformed y (used for training), and the raw y
-    # (used later to report real-world-unit metrics) together so indices
-    # stay aligned.
+    # Split the full dataset once to create a universal, locked test set.
     X_train_full, X_test, y_train_full, y_test, _, y_test_raw = train_test_split(
         X_df.values, y_log, y_raw, test_size=0.2, random_state=42
     )
-
     TRAIN_SAMPLES = train_num 
     
     # 4. Slice the training arrays down to the desired size
@@ -144,7 +139,7 @@ def main(SOURCE="synthetic", train_num=40000):
     x_scaler = StandardScaler()
     y_scaler = StandardScaler()
     
-    # 5. Fit scalers ONLY on the active training subset
+    # 5. Fit scalers for the relevant sets
     X_train_scaled = x_scaler.fit_transform(X_train)
     X_test_scaled = x_scaler.transform(X_test)
     
@@ -164,7 +159,7 @@ def main(SOURCE="synthetic", train_num=40000):
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
     # --- C. Model Initialization ---
-    model = PharmacySurrogate(input_size).to(device)
+    model = SurrogateModel(input_size).to(device)
     criterion = nn.MSELoss() 
     optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=1e-3)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=EPOCHS, eta_min=1e-5)
@@ -201,7 +196,7 @@ def main(SOURCE="synthetic", train_num=40000):
         model.eval()
         test_loss = 0.0
         test_preds_scaled = []
-        
+         
         with torch.no_grad():
             for batch_X, batch_y in test_loader:
                 batch_X, batch_y = batch_X.to(device), batch_y.to(device)
@@ -237,7 +232,7 @@ def main(SOURCE="synthetic", train_num=40000):
                   f"Wait Time: {medae_raw[2]:.1f}s (±{medae_pct[2]:.1f}%)")
             print(f"   ↳ MAE   -> Cost: ${mae_raw[0]:.2f} | Cycle Time: {mae_raw[1]:.1f}s | Wait Time: {mae_raw[2]:.1f}s")
 
-        # --- EARLY STOPPING LOGIC ---
+        # --- Early stopping logic ---
         if test_loss < best_test_loss:
             best_test_loss = test_loss
             patience_counter = 0
@@ -253,7 +248,7 @@ def main(SOURCE="synthetic", train_num=40000):
 
     total_time = time.time() - start_time
     print(f"Training complete in {total_time:.2f} seconds.")
-    print("Saved the BEST trained model weights to surrogate_model.pth")
+    print("Saved the best trained model weights to surrogate_model.pth")
 
     # ==========================================
     # FINAL EVALUATION & JSON EXPORT
@@ -348,7 +343,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--train_num",
         type=int,
-        default=100000,
+        default=40000,
         help="Number of training samples to use (default: 40000)"
     )
 

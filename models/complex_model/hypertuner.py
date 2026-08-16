@@ -34,9 +34,9 @@ class SimulationDataset(Dataset):
     def __len__(self): return len(self.X)
     def __getitem__(self, idx): return self.X[idx], self.y[idx]
 
-class PharmacySurrogate(nn.Module):
+class SurrogateModel(nn.Module):
     def __init__(self, input_size, dropout_rate=0.1):
-        super(PharmacySurrogate, self).__init__()
+        super(SurrogateModel, self).__init__()
         self.shared_entry = nn.Sequential(nn.Linear(input_size, 256), nn.BatchNorm1d(256), nn.Mish(), nn.Dropout(dropout_rate))
         self.shared_h1 = nn.Linear(256, 128)
         self.bn1 = nn.BatchNorm1d(128)
@@ -100,7 +100,7 @@ def main(SOURCE="BIMP", train_num=40000):
         train_loader = DataLoader(SimulationDataset(X_train_scaled, y_train_scaled), batch_size=batch_size, shuffle=True)
         test_loader = DataLoader(SimulationDataset(X_test_scaled, y_test_scaled), batch_size=batch_size, shuffle=False)
 
-        model = PharmacySurrogate(input_size, dropout_rate=dropout_rate).to(device)
+        model = SurrogateModel(input_size, dropout_rate=dropout_rate).to(device)
         optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
         criterion = nn.MSELoss() 
         

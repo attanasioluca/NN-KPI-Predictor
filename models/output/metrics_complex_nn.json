@@ -83,6 +83,48 @@
         }
     },
     {
+        "Data Source": "BIMP",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 25000,
+        "Best Test Loss": 0.002577394277745905,
+        "MedAE": {
+            "cost": 297.78015763614894,
+            "cycle_time": 97.2922656761184,
+            "waiting_time": 180.34059304422408
+        },
+        "MAE": {
+            "cost": 412.6756012650024,
+            "cycle_time": 154.98693729550263,
+            "waiting_time": 251.33944372356297
+        },
+        "MedAE_Percentage": {
+            "cost": 0.9016095737392168,
+            "cycle_time": 0.5445823316015791,
+            "waiting_time": 0.5235563919895203
+        }
+    },
+    {
+        "Data Source": "BIMP",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 40000,
+        "Best Test Loss": 0.0022186569901208033,
+        "MedAE": {
+            "cost": 282.46229615951233,
+            "cycle_time": 95.77895196797544,
+            "waiting_time": 178.41314028915804
+        },
+        "MAE": {
+            "cost": 391.8816737097242,
+            "cycle_time": 141.07527493784454,
+            "waiting_time": 236.0983655399033
+        },
+        "MedAE_Percentage": {
+            "cost": 0.8552306253694544,
+            "cycle_time": 0.5361117311700031,
+            "waiting_time": 0.5179607011184962
+        }
+    },
+    {
         "Data Source": "real",
         "Model Name": "Complex NN - Hypertuned",
         "Best Test Loss": 0.05284970583562289,
@@ -288,6 +330,48 @@
             "cost": 3.7294535429187823,
             "cycle_time": 0.8380345287185673,
             "waiting_time": 0.9343484104835296
+        }
+    },
+    {
+        "Data Source": "synthetic",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 25000,
+        "Best Test Loss": 0.0036007229214199683,
+        "MedAE": {
+            "cost": 1669.1378924465753,
+            "cycle_time": 167.08622296742942,
+            "waiting_time": 163.03013901662416
+        },
+        "MAE": {
+            "cost": 2069.641636495879,
+            "cycle_time": 502.60519155673177,
+            "waiting_time": 509.3140504368446
+        },
+        "MedAE_Percentage": {
+            "cost": 3.712712917109331,
+            "cycle_time": 0.7209806812123742,
+            "waiting_time": 0.8583736195947156
+        }
+    },
+    {
+        "Data Source": "synthetic",
+        "Model Name": "Complex NN - Hypertuned",
+        "Train Samples": 38846,
+        "Best Test Loss": 0.003239188082838397,
+        "MedAE": {
+            "cost": 1650.271479452631,
+            "cycle_time": 162.4219656304067,
+            "waiting_time": 149.46614551232778
+        },
+        "MAE": {
+            "cost": 2037.0087899017963,
+            "cycle_time": 428.47491881252984,
+            "waiting_time": 423.5280448972592
+        },
+        "MedAE_Percentage": {
+            "cost": 3.670747795150793,
+            "cycle_time": 0.7008543094955872,
+            "waiting_time": 0.7869575349942182
         }
     }
 ]

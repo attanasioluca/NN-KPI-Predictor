@@ -119,9 +119,9 @@ class SimulationDataset(Dataset):
 # ==========================================
 # 2. NEURAL NETWORK ARCHITECTURE
 # ==========================================
-class PharmacySurrogate(nn.Module):
+class SurrogateModel(nn.Module):
     def __init__(self, input_size, DROPOUT_RATE):
-        super(PharmacySurrogate, self).__init__()
+        super(SurrogateModel, self).__init__()
         self.shared_entry = nn.Sequential(nn.Linear(input_size, 256), nn.BatchNorm1d(256), nn.Mish(), nn.Dropout(DROPOUT_RATE))
         self.shared_h1 = nn.Linear(256, 128)
         self.bn1 = nn.BatchNorm1d(128)
@@ -213,7 +213,7 @@ def main(SOURCE="BIMP", train_num=10000):
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-    model = PharmacySurrogate(input_size, DROPOUT_RATE=dropout_rate).to(device)
+    model = SurrogateModel(input_size, DROPOUT_RATE=dropout_rate).to(device)
     criterion = nn.MSELoss() 
     optimizer = optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=EPOCHS, eta_min=1e-5)

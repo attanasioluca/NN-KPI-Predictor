@@ -17,7 +17,7 @@ if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 from model import (
-    PharmacySurrogate,
+    SurrogateModel,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
     inverse_transform_targets,
@@ -87,7 +87,7 @@ def main(SOURCE="synthetic"):
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     
-    model = PharmacySurrogate(x_scaler.n_features_in_).to(device)
+    model = SurrogateModel(x_scaler.n_features_in_).to(device)
     model.load_state_dict(torch.load(f"models/simple_model/output/{SOURCE}/surrogate_model.pth", map_location=device, weights_only=True))
     model.eval()
     for param in model.parameters(): param.requires_grad = False

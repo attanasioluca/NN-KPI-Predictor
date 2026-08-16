@@ -135,9 +135,9 @@ class ResBlock(nn.Module):
         )
     def forward(self, x): return x + self.net(x) 
 
-class DeepPharmacySurrogate(nn.Module):
+class DeepSurrogateModel(nn.Module):
     def __init__(self, input_size, hidden_dim=256, num_blocks=4, dropout_rate=0.1):
-        super(DeepPharmacySurrogate, self).__init__()
+        super(DeepSurrogateModel, self).__init__()
         
         self.entry = nn.Sequential(
             nn.Linear(input_size, hidden_dim),
@@ -236,7 +236,7 @@ def main(SOURCE="real", train_num=5000):
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-    model = DeepPharmacySurrogate(input_size, hidden_dim, num_blocks, dropout_rate).to(device)
+    model = DeepSurrogateModel(input_size, hidden_dim, num_blocks, dropout_rate).to(device)
     criterion = nn.MSELoss() 
     optimizer = optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=EPOCHS, eta_min=1e-5)

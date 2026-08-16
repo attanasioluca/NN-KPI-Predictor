@@ -15,7 +15,7 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if parent_dir not in sys.path: sys.path.append(parent_dir)
 
 from hypertuned_model import (
-    PharmacySurrogate,
+    SurrogateModel,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
     DROPOUT_RATE,
@@ -88,7 +88,7 @@ def main(SOURCE="real"):
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
 
     params = load_hyperparameters(source=SOURCE)
-    model = PharmacySurrogate(x_scaler.n_features_in_, DROPOUT_RATE=params["dropout_rate"]).to(device)
+    model = SurrogateModel(x_scaler.n_features_in_, DROPOUT_RATE=params["dropout_rate"]).to(device)
     model.load_state_dict(torch.load(f'models/complex_model/output/{SOURCE}/surrogate_model.pth', map_location=device, weights_only=True))
     model.eval()
     for param in model.parameters(): param.requires_grad = False

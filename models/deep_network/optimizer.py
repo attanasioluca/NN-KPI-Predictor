@@ -14,7 +14,7 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if parent_dir not in sys.path: sys.path.append(parent_dir)
 
 from hypertuned_model import (
-    DeepPharmacySurrogate,
+    DeepSurrogateModel,
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
     load_hyperparameters,
@@ -84,7 +84,7 @@ def main(SOURCE="synthetic"):
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
     
     params = load_hyperparameters(source=SOURCE)
-    model = DeepPharmacySurrogate(
+    model = DeepSurrogateModel(
         input_size=x_scaler.n_features_in_, 
         hidden_dim=int(params["hidden_dim"]), 
         num_blocks=int(params["num_blocks"]), 

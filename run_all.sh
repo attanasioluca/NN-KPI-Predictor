@@ -18,7 +18,7 @@ fi
 echo "Using Python executable: $PYTHON_CMD"
 
 SOURCES=("synthetic" "BIMP")
-TRAIN_NUMS=(1000 5000 15000)
+TRAIN_NUMS=(25000 40000)
 
 echo "=================================================="
 echo " 1/2 Hypertuning Complex NN & Deep Network"
