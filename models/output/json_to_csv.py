@@ -4,6 +4,7 @@ from collections import defaultdict
 
 files = [
     "models/output/metrics_lr_model.json",
+    "models/output/metrics_lgbm_model.json",
     "models/output/metrics_simple_nn.json",
     "models/output/metrics_complex_nn.json",
     "models/output/metrics_deep_nn.json"
