@@ -27,36 +27,34 @@ from helpers.simulator import ScenarioSimulator
 
 def evaluate_scenario(scenario_data, full_model, process_details, num_reps=15):
     simulator = ScenarioSimulator(scenario_data, full_model, process_details, seed=42)
-    result = simulator.run_scenario(replications=num_reps, until = 86400 * 90)
+    result = simulator.run_scenario(replications=num_reps, until=86400 * 90)
     
     return result.get("total_cost", 0.0), result.get("avg_cycle_time", 0.0), result.get("avg_wait_time", 0.0)
 
 # ==========================================
 # MAIN PIPELINE
 # ==========================================
-def main(SOURCE="synthetic"):
-    # --- CONFIGURATION ---
+def main(
+    SOURCE="synthetic",
+    num_reps=50,
+    cost_pct=-10.0,
+    cycle_pct=-10.0,
+    wait_pct=-10.0,
+    max_z_score=3.0,
+    num_starts=500,
+    epochs=10000,
+    lr=0.1
+):
+    MAX_Z_SCORE = max_z_score
+    
     BASE_FILE = f"data/{SOURCE}/model/scenario.json"
     MODEL_FILE = f"data/{SOURCE}/model/model.json"
     DATA_FILE = f"data/{SOURCE}/sim_data_waiting_times.csv" 
     
-    # STEP 0: LOAD FILES & PREP DYNAMIC TARGETS
-    print("[0/4] Loading dataset to determine realistic targets...")
+    # STEP 0: LOAD FILES & INITIALIZE DATASET
+    print("[0/4] Loading scenario files and dataset...")
     df_all = pd.read_csv(DATA_FILE)
-    
-    # Only keep fully-converged rows for both target-setting and bounds
     df = df_all[df_all[CONVERGENCE_FLAGS].all(axis=1)].reset_index(drop=True)
-
-    # Use the 5th percentile (top 5% performance) of the converged dataset
-    # This guarantees the target is physically possible within the bounds.
-    TARGET_COST = df['kpi_total_cost'].quantile(0.05)
-    TARGET_DURATION = df['kpi_cycle_time'].quantile(0.010)
-    TARGET_WAITING_TIME = df['kpi_waiting_time'].quantile(0.10)
-    
-    print(f"--- DYNAMIC TARGETS (5th Percentile) ---")
-    print(f"Goal Cost:         ${TARGET_COST:.2f}")
-    print(f"Goal Duration:     {TARGET_DURATION:.1f} seconds")
-    print(f"Goal Waiting Time: {TARGET_WAITING_TIME:.1f} seconds\n")
 
     with open(BASE_FILE, 'r') as f: base_json = json.load(f)
     with open(MODEL_FILE, 'r') as f: full_model = json.load(f)
@@ -74,14 +72,23 @@ def main(SOURCE="synthetic"):
         if "previous" in node and node["previous"]:
             node["previous"] = [p for p in node["previous"] if p in valid_node_ids]
 
-    # STEP 1: EVALUATE BASELINE SCENARIO
+    # STEP 1: EVALUATE BASELINE SCENARIO & COMPUTE TARGETS
     print("[1/4] Running Ground-Truth SimPy Evaluation on BASELINE...")
     base_true_cost, base_true_cycle_time, base_true_wait_time = evaluate_scenario(
-        baseline_scenario, full_model, process_details
+        baseline_scenario, full_model, process_details, num_reps=num_reps
     )
 
+    TARGET_COST = base_true_cost * (1.0 + cost_pct / 100.0)
+    TARGET_DURATION = base_true_cycle_time * (1.0 + cycle_pct / 100.0)
+    TARGET_WAITING_TIME = base_true_wait_time * (1.0 + wait_pct / 100.0)
+    
+    print(f"\n--- TARGET KPI GOALS (Relative to Baseline) ---")
+    print(f"Baseline Cost:       ${base_true_cost:.2f} -> Target ({'+' if cost_pct >= 0 else ''}{cost_pct:.1f}%): ${TARGET_COST:.2f}")
+    print(f"Baseline Cycle Time: {base_true_cycle_time:.1f}s -> Target ({'+' if cycle_pct >= 0 else ''}{cycle_pct:.1f}%): {TARGET_DURATION:.1f}s")
+    print(f"Baseline Wait Time:  {base_true_wait_time:.1f}s -> Target ({'+' if wait_pct >= 0 else ''}{wait_pct:.1f}%): {TARGET_WAITING_TIME:.1f}s\n")
+
     # STEP 2: NEURAL NETWORK OPTIMIZATION
-    print("\n[2/4] Running Targeted Neural Network Optimizer...")
+    print("[2/4] Running Targeted Neural Network Optimizer...")
     x_scaler = joblib.load(f"models/simple_model/output/{SOURCE}/x_scaler.pkl")
     y_scaler = joblib.load(f"models/simple_model/output/{SOURCE}/y_scaler.pkl")
     
@@ -102,13 +109,9 @@ def main(SOURCE="synthetic"):
     min_scaled_bounds = torch.tensor(x_scaler.transform(raw_min_array), dtype=torch.float32, device=device)
     max_scaled_bounds = torch.tensor(x_scaler.transform(raw_max_array), dtype=torch.float32, device=device)
     
-    # --- MULTI-START INITIALIZATION ---
-    NUM_STARTS = 500
-    
-    # Spawn 499 random starts all over the parameter space
+    NUM_STARTS = num_starts
     rand_starts = min_scaled_bounds + torch.rand((NUM_STARTS - 1, len(X_cols)), device=device) * (max_scaled_bounds - min_scaled_bounds)
     
-    # Add baseline as the 500th start
     base_x_raw = X_df.iloc[0].values.reshape(1, -1)
     base_tensor = torch.tensor(x_scaler.transform(base_x_raw), dtype=torch.float32, device=device)
     
@@ -122,12 +125,12 @@ def main(SOURCE="synthetic"):
     y_mean_tensor = torch.tensor(y_scaler.mean_, dtype=torch.float32, device=device)
     y_scale_tensor = torch.tensor(y_scaler.scale_, dtype=torch.float32, device=device)
 
-    optimizer = optim.Adam([x_optim], lr=0.1)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10000, eta_min=1e-4)
+    optimizer = optim.Adam([x_optim], lr=lr)
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-4)
     best_global_loss = float('inf')
     best_x_optimal = None
 
-    for epoch in range(10000):
+    for epoch in range(epochs):
         optimizer.zero_grad()
         
         predictions = model(x_optim) 
@@ -147,10 +150,11 @@ def main(SOURCE="synthetic"):
         x_raw_differentiable = (x_optim * x_scale_tensor) + x_mean_tensor
         res_amounts = x_raw_differentiable[:, res_amount_indices]
         fractional_penalty = torch.sum(torch.sin(np.pi * res_amounts) ** 2, dim=1)
+        z_score_penalty = torch.sum(torch.relu(torch.abs(x_optim) - MAX_Z_SCORE) ** 2, dim=1)
         
-        integer_weight = max(0.0, (epoch - 5000) / 5000.0) * 1000.0 
+        integer_weight = max(0.0, (epoch - (epochs // 2)) / (epochs // 2)) * 1000.0 
         
-        loss = (10000.0 * kpi_loss) + (integer_weight * fractional_penalty)
+        loss = (10000.0 * kpi_loss) + (integer_weight * fractional_penalty) + (0.5 * z_score_penalty)
         min_loss_in_batch, min_idx = torch.min(loss), torch.argmin(loss)
         if min_loss_in_batch.item() < best_global_loss:
             best_global_loss = min_loss_in_batch.item()
@@ -215,7 +219,7 @@ def main(SOURCE="synthetic"):
     # STEP 4: EVALUATE OPTIMIZED SCENARIO
     print("[4/4] Running Ground-Truth SimPy Evaluation on OPTIMIZED...")
     opt_true_cost, opt_true_duration, opt_true_completed = evaluate_scenario(
-        opt_scenario, full_model, process_details
+        opt_scenario, full_model, process_details, num_reps=num_reps
     )
 
     print("\n=====================================================================")
@@ -229,17 +233,6 @@ def main(SOURCE="synthetic"):
     print(f"OPTIMIZED (True)| ${opt_true_cost:<19.2f} | {opt_true_duration:<19.1f}s | {opt_true_completed:.1f}s")
     print("---------------------------------------------------------------------")
 
-    start_cost_diff = round(base_true_cost, 2) - TARGET_COST
-    start_cycle_diff = base_true_cycle_time - TARGET_DURATION
-    start_wait_diff = base_true_wait_time - TARGET_WAITING_TIME
-    end_cost_diff = round(opt_true_cost, 2) - TARGET_COST
-    end_cycle_diff = opt_true_duration - TARGET_DURATION
-    end_wait_diff = opt_true_completed - TARGET_WAITING_TIME
-
-    print(f"STARTING DELTA      | {('+' if start_cost_diff > 0 else '')}${start_cost_diff:<19.2f} | {('+' if start_cycle_diff > 0 else '')}{start_cycle_diff:.1f}s | {('+' if start_wait_diff > 0 else '')}{start_wait_diff:.1f}s")
-    print("=====================================================================")
-    print(f"FINISHING DELTA      | {('+' if end_cost_diff > 0 else '')}${end_cost_diff:<19.2f} | {('+' if end_cycle_diff > 0 else '')}{end_cycle_diff:.1f}s | {('+' if end_wait_diff > 0 else '')}{end_wait_diff:.1f}s")
-    print("=====================================================================")
     print("\n=====================================================================")
     print("                 RECOMMENDED CONFIGURATION CHANGES")
     print("=====================================================================")
@@ -263,13 +256,26 @@ def main(SOURCE="synthetic"):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "source",
-        nargs="?",
-        default="synthetic",
-        help="Dataset source (default: synthetic)"
-    )
-
+    parser = argparse.ArgumentParser(description="Run Simple Model Inverse Optimizer")
+    parser.add_argument("source", nargs="?", default="synthetic", help="Dataset source (default: synthetic)")
+    parser.add_argument("--num_reps", type=int, default=50, help="SimPy simulation replications (default: 50)")
+    parser.add_argument("--cost_pct", type=float, default=-10.0, help="Target cost %% change relative to baseline (+10 increases, -10 decreases, default: -10.0)")
+    parser.add_argument("--cycle_pct", type=float, default=-10.0, help="Target cycle time %% change relative to baseline (+10 increases, -10 decreases, default: -10.0)")
+    parser.add_argument("--wait_pct", type=float, default=-10.0, help="Target waiting time %% change relative to baseline (+10 increases, -10 decreases, default: -10.0)")
+    parser.add_argument("--max_z_score", type=float, default=3.0, help="Max Z-score bound penalty threshold (default: 3.0)")
+    parser.add_argument("--num_starts", type=int, default=500, help="Multi-start candidate initializations (default: 500)")
+    parser.add_argument("--epochs", type=int, default=10000, help="Max optimization epochs (default: 10000)")
+    parser.add_argument("--lr", type=float, default=0.1, help="Optimizer learning rate (default: 0.1)")
     args = parser.parse_args()
-    main(args.source)
+
+    main(
+        SOURCE=args.source,
+        num_reps=args.num_reps,
+        cost_pct=args.cost_pct,
+        cycle_pct=args.cycle_pct,
+        wait_pct=args.wait_pct,
+        max_z_score=args.max_z_score,
+        num_starts=args.num_starts,
+        epochs=args.epochs,
+        lr=args.lr
+    )

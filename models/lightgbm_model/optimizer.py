@@ -3,25 +3,20 @@ import json
 import copy
 import sys
 import os
-import torch
-import torch.nn as nn
-import torch.optim as optim
 import joblib
 import numpy as np
 import pandas as pd
 from pathlib import Path
+from scipy.optimize import minimize
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-if parent_dir not in sys.path: sys.path.append(parent_dir)
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
 
-from hypertuned_model import (
-    SurrogateModel,
+from models.lightgbm_model.lgbm_model import (
     NON_FEATURE_COLS,
     CONVERGENCE_FLAGS,
-    DROPOUT_RATE,
-    load_hyperparameters,
-    inverse_transform_targets,
-    inverse_transform_targets_torch
+    inverse_transform_targets
 )
 from helpers.simulator import ScenarioSimulator
 
@@ -45,11 +40,10 @@ def main(
     cycle_pct=-10.0,
     wait_pct=-10.0,
     max_z_score=3.0,
-    num_starts=500,
-    epochs=10000,
-    lr=0.1
+    num_starts=5000,
+    maxiter=1000
 ):
-    MAX_Z_SCORE = max_z_score           
+    MAX_Z_SCORE = max_z_score          
     
     BASE_FILE = f"data/{SOURCE}/model/scenario.json"
     MODEL_FILE = f"data/{SOURCE}/model/model.json"
@@ -91,17 +85,11 @@ def main(
     print(f"Baseline Cycle Time: {base_true_duration:.1f}s -> Target ({'+' if cycle_pct >= 0 else ''}{cycle_pct:.1f}%): {TARGET_DURATION:.1f}s")
     print(f"Baseline Wait Time:  {base_true_wait:.1f}s -> Target ({'+' if wait_pct >= 0 else ''}{wait_pct:.1f}%): {TARGET_WAIT_TIME:.1f}s\n")
 
-    # STEP 2: NEURAL NETWORK OPTIMIZATION
-    print("[2/4] Running High-Speed Neural Network Optimizer...")
-    x_scaler = joblib.load(f'models/complex_model/output/{SOURCE}/x_scaler.pkl')
-    y_scaler = joblib.load(f'models/complex_model/output/{SOURCE}/y_scaler.pkl')
-    device = torch.device('cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu')
-
-    params = load_hyperparameters(source=SOURCE)
-    model = SurrogateModel(x_scaler.n_features_in_, DROPOUT_RATE=params["dropout_rate"]).to(device)
-    model.load_state_dict(torch.load(f'models/complex_model/output/{SOURCE}/surrogate_model.pth', map_location=device, weights_only=True))
-    model.eval()
-    for param in model.parameters(): param.requires_grad = False
+    # STEP 2: SURROGATE MODEL OPTIMIZATION
+    print("[2/4] Running LightGBM Surrogate Model Optimizer...")
+    x_scaler = joblib.load(f'models/lightgbm_model/output/{SOURCE}/lgbm_x_scaler.pkl')
+    y_scaler = joblib.load(f'models/lightgbm_model/output/{SOURCE}/lgbm_y_scaler.pkl')
+    model = joblib.load(f'models/lightgbm_model/output/{SOURCE}/lgbm_model.pkl')
 
     X_df = df.drop(columns=NON_FEATURE_COLS)
     X_cols = X_df.columns.tolist()
@@ -109,62 +97,64 @@ def main(
     raw_min_array = X_df.min().values.reshape(1, -1)
     raw_max_array = X_df.max().values.reshape(1, -1)
     
-    min_scaled_bounds = torch.tensor(x_scaler.transform(raw_min_array), dtype=torch.float32, device=device)
-    max_scaled_bounds = torch.tensor(x_scaler.transform(raw_max_array), dtype=torch.float32, device=device)
+    min_scaled_bounds = x_scaler.transform(raw_min_array)[0]
+    max_scaled_bounds = x_scaler.transform(raw_max_array)[0]
     
-    NUM_STARTS = num_starts
-    rand_starts = min_scaled_bounds + torch.rand((NUM_STARTS - 1, len(X_cols)), device=device) * (max_scaled_bounds - min_scaled_bounds)
-    base_tensor = torch.tensor(x_scaler.transform(X_df.iloc[0].values.reshape(1, -1)), dtype=torch.float32, device=device)
-    
-    x_optim = nn.Parameter(torch.cat([rand_starts, base_tensor], dim=0), requires_grad=True)
-
     res_amount_indices = [i for i, col in enumerate(X_cols) if col.startswith("res_") and col.endswith("_amount")]
-    x_mean_tensor = torch.tensor(x_scaler.mean_, dtype=torch.float32, device=device)
-    x_scale_tensor = torch.tensor(x_scaler.scale_, dtype=torch.float32, device=device)
-    y_mean_tensor = torch.tensor(y_scaler.mean_, dtype=torch.float32, device=device)
-    y_scale_tensor = torch.tensor(y_scaler.scale_, dtype=torch.float32, device=device)
 
-    optimizer = optim.Adam([x_optim], lr=lr)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-4)
+    def loss_func(x_scaled):
+        x_scaled_2d = x_scaled.reshape(1, -1)
+        preds_scaled = model.predict(x_scaled_2d)
+        preds_real = inverse_transform_targets(preds_scaled, y_scaler)[0]
+        
+        pred_cost, pred_dur, pred_wait = preds_real[0], preds_real[1], preds_real[2]
+        
+        loss_cost = ((pred_cost - TARGET_COST) / TARGET_COST) ** 2
+        loss_dur  = ((pred_dur - TARGET_DURATION) / TARGET_DURATION) ** 2
+        loss_wait = ((pred_wait - TARGET_WAIT_TIME) / TARGET_WAIT_TIME) ** 2
+        
+        kpi_loss = loss_cost + loss_dur + loss_wait
+        
+        x_raw = x_scaler.inverse_transform(x_scaled_2d)[0]
+        res_amounts = x_raw[res_amount_indices]
+        fractional_penalty = np.sum(np.sin(np.pi * res_amounts) ** 2)
+        
+        z_scores = np.abs(x_scaled)
+        z_score_penalty = np.sum(np.maximum(0.0, z_scores - MAX_Z_SCORE) ** 2)
+        
+        return (10000.0 * kpi_loss) + (1000.0 * fractional_penalty) + (0.5 * z_score_penalty)
+
+    NUM_STARTS = num_starts
+    rand_starts = min_scaled_bounds + np.random.rand(NUM_STARTS - 1, len(X_cols)) * (max_scaled_bounds - min_scaled_bounds)
+    base_scaled = x_scaler.transform(X_df.iloc[0].values.reshape(1, -1))
     
-    best_global_loss = float('inf')
-    best_x_optimal = None
-
-    for epoch in range(epochs):
-        optimizer.zero_grad()
-        predictions = model(x_optim)
-        
-        raw_preds = inverse_transform_targets_torch(predictions, y_mean_tensor, y_scale_tensor)
-        
-        pred_avg_cost = raw_preds[:, 0]
-        pred_dur      = raw_preds[:, 1]
-        pred_wait     = raw_preds[:, 2]
-        
-        loss_avg_cost = ((pred_avg_cost - TARGET_COST) / TARGET_COST) ** 2
-        loss_avg_dur  = ((pred_dur - TARGET_DURATION) / TARGET_DURATION) ** 2
-        loss_avg_wait = ((pred_wait - TARGET_WAIT_TIME) / TARGET_WAIT_TIME) ** 2
-        
-        kpi_loss = loss_avg_cost + loss_avg_dur + loss_avg_wait
-        
-        x_raw_diff = (x_optim * x_scale_tensor) + x_mean_tensor
-        res_amounts = x_raw_diff[:, res_amount_indices]
-        fractional_penalty = torch.sum(torch.sin(np.pi * res_amounts) ** 2, dim=1)
-        z_score_penalty = torch.sum(torch.relu(torch.abs(x_optim) - MAX_Z_SCORE) ** 2, dim=1)
-        
-        integer_weight = max(0.0, (epoch - (epochs // 2)) / (epochs // 2)) * 1000.0 
-        loss = (10000.0 * kpi_loss) + (integer_weight * fractional_penalty) + (0.5 * z_score_penalty)
-        
-        min_loss_in_batch, min_idx = torch.min(loss), torch.argmin(loss)
-        if min_loss_in_batch.item() < best_global_loss:
-            best_global_loss = min_loss_in_batch.item()
-            best_x_optimal = x_optim[min_idx].detach().clone()
-        
-        loss.sum().backward()
-        optimizer.step()
-        scheduler.step()
-        with torch.no_grad(): x_optim.clamp_(min_scaled_bounds, max_scaled_bounds)
-
-    optimized_x_raw = x_scaler.inverse_transform(best_x_optimal.cpu().numpy().reshape(1, -1))[0]
+    candidate_starts = np.vstack([rand_starts, base_scaled])
+    
+    preds_scaled_all = model.predict(candidate_starts)
+    preds_real_all = inverse_transform_targets(preds_scaled_all, y_scaler)
+    
+    costs_all = preds_real_all[:, 0]
+    durs_all  = preds_real_all[:, 1]
+    waits_all = preds_real_all[:, 2]
+    
+    kpi_losses_all = ((costs_all - TARGET_COST) / TARGET_COST) ** 2 + \
+                     ((durs_all - TARGET_DURATION) / TARGET_DURATION) ** 2 + \
+                     ((waits_all - TARGET_WAIT_TIME) / TARGET_WAIT_TIME) ** 2
+                     
+    best_candidate_idx = np.argmin(kpi_losses_all)
+    initial_x = candidate_starts[best_candidate_idx]
+    
+    bounds = list(zip(min_scaled_bounds, max_scaled_bounds))
+    opt_res = minimize(
+        loss_func,
+        initial_x,
+        method="Powell",
+        bounds=bounds,
+        options={"maxiter": maxiter, "ftol": 1e-5}
+    )
+    
+    best_x_optimal = opt_res.x
+    optimized_x_raw = x_scaler.inverse_transform(best_x_optimal.reshape(1, -1))[0]
 
     # STEP 3: INJECT OPTIMIZED PARAMETERS
     print("[3/4] Injecting Optimized Parameters...")
@@ -196,15 +186,13 @@ def main(
                         el["durationDistribution"]["standardDeviation"] = "0.0"
         discretized_x_raw[i] = val
 
-    discretized_tensor = torch.tensor(x_scaler.transform(discretized_x_raw.reshape(1, -1)), dtype=torch.float32, device=device)
-    with torch.no_grad(): 
-        final_pred_scaled = model(discretized_tensor).cpu().numpy()
-        
+    discretized_scaled = x_scaler.transform(discretized_x_raw.reshape(1, -1))
+    final_pred_scaled = model.predict(discretized_scaled)
     final_pred = inverse_transform_targets(final_pred_scaled, y_scaler)[0]
 
-    nn_pred_avg_cost = final_pred[0]
-    nn_pred_dur_mean = final_pred[1]
-    nn_pred_wait_mean = final_pred[2]
+    lgbm_pred_avg_cost = final_pred[0]
+    lgbm_pred_dur_mean = final_pred[1]
+    lgbm_pred_wait_mean = final_pred[2]
 
     # STEP 4: GROUND-TRUTH SIMULATION VALIDATION
     print("[4/4] Running Ground-Truth SimPy Evaluation on OPTIMIZED...")
@@ -219,7 +207,7 @@ def main(
     print("---------------------------------------------------------------------")
     print(f"TARGET GOAL     | ${TARGET_COST:<19.2f} | {TARGET_DURATION:<19.1f}s | {TARGET_WAIT_TIME:.1f}s")
     print(f"BASELINE (True) | ${base_true_cost:<19.2f} | {base_true_duration:<19.1f}s | {base_true_wait:.1f}s")
-    print(f"NN PREDICTED    | ${nn_pred_avg_cost:<19.2f} | {nn_pred_dur_mean:<19.1f}s | {nn_pred_wait_mean:.1f}s")
+    print(f"LGBM PREDICTED  | ${lgbm_pred_avg_cost:<19.2f} | {lgbm_pred_dur_mean:<19.1f}s | {lgbm_pred_wait_mean:.1f}s")
     print(f"OPTIMIZED (True)| ${opt_true_cost:<19.2f} | {opt_true_duration:<19.1f}s | {opt_true_wait:.1f}s")
     print("---------------------------------------------------------------------")
 
@@ -245,18 +233,17 @@ def main(
         print("No changes required. The baseline scenario already hits your targets.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run Complex Model Inverse Optimizer")
+    parser = argparse.ArgumentParser(description="Run LightGBM Inverse Optimizer")
     parser.add_argument("source", nargs="?", default="synthetic", help="Dataset source (default: synthetic)")
     parser.add_argument("--num_reps", type=int, default=50, help="SimPy simulation replications (default: 50)")
     parser.add_argument("--cost_pct", type=float, default=-10.0, help="Target cost %% change relative to baseline (+10 increases, -10 decreases, default: -10.0)")
     parser.add_argument("--cycle_pct", type=float, default=-10.0, help="Target cycle time %% change relative to baseline (+10 increases, -10 decreases, default: -10.0)")
     parser.add_argument("--wait_pct", type=float, default=-10.0, help="Target waiting time %% change relative to baseline (+10 increases, -10 decreases, default: -10.0)")
     parser.add_argument("--max_z_score", type=float, default=3.0, help="Max Z-score bound penalty threshold (default: 3.0)")
-    parser.add_argument("--num_starts", type=int, default=500, help="Multi-start candidate initializations (default: 500)")
-    parser.add_argument("--epochs", type=int, default=10000, help="Max optimization epochs (default: 10000)")
-    parser.add_argument("--lr", type=float, default=0.1, help="Optimizer learning rate (default: 0.1)")
+    parser.add_argument("--num_starts", type=int, default=5000, help="Multi-start candidate initializations (default: 5000)")
+    parser.add_argument("--maxiter", type=int, default=1000, help="Max optimization iterations (default: 1000)")
     args = parser.parse_args()
-
+    
     main(
         SOURCE=args.source,
         num_reps=args.num_reps,
@@ -265,6 +252,5 @@ if __name__ == "__main__":
         wait_pct=args.wait_pct,
         max_z_score=args.max_z_score,
         num_starts=args.num_starts,
-        epochs=args.epochs,
-        lr=args.lr
+        maxiter=args.maxiter
     )
